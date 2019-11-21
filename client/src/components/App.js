@@ -9,7 +9,11 @@ class App extends Component {
     return (
       <Router>
         <Fragment>
-          <LoginPage />
+          <NavBar />
+          <Route exact path="/" component={LoginPage} />
+          <Switch>
+            <Route exact path="/admin" component={NavBar} />
+          </Switch>
         </Fragment>
       </Router>
     );

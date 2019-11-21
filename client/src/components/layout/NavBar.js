@@ -8,42 +8,42 @@ class Navbar extends Component {
     return (
       <Fragment>
         <nav className="white main-nav">
-          <a href="#!" className="brand-logo light-green-text text-darken-3">
+          <Link to="#!" className="brand-logo light-green-text text-darken-3">
             Prebiotech
-          </a>
+          </Link>
           <div className="container">
             <div className="nav-wrapper">
               <ul className="right hide-on-med-and-down">
                 <li>
-                  <a href="#!" className="light-green-text text-darken-3">
+                  <Link to="#!" className="light-green-text text-darken-3">
                     Dashboard
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#!" className="light-green-text text-darken-3">
+                  <Link to="#!" className="light-green-text text-darken-3">
                     Med Rep
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#!" className="light-green-text text-darken-3">
+                  <Link to="#!" className="light-green-text text-darken-3">
                     Announcements
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#!" className="light-green-text text-darken-3">
+                  <Link to="#!" className="light-green-text text-darken-3">
                     Manage Admin
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
+                  <Link
                     className="dropdown-trigger"
-                    href="#!"
+                    to="#!"
                     data-target="dropdown1"
                     className="light-green-text text-darken-3"
                   >
                     Jimmel Ibo
                     <i className="material-icons right">arrow_drop_down</i>
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
