@@ -14,6 +14,10 @@ class Navbar extends Component {
         hover: true
       });
     });
+    document.addEventListener("DOMContentLoaded", function() {
+      var elems = document.querySelectorAll(".sidenav");
+      M.Sidenav.init(elems, {});
+    });
   }
 
   render() {
@@ -34,6 +38,10 @@ class Navbar extends Component {
                   }}
                 />
               </Link>
+
+              <a href="#" data-target="slide-out" className="sidenav-trigger">
+                <i className="material-icons green-text">menu</i>
+              </a>
               <ul className="right hide-on-med-and-down">
                 <li>
                   <Link to="#!" className="light-green-text text-darken-3">

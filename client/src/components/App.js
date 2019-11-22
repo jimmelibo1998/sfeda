@@ -2,6 +2,7 @@ import React, { Component, Fragment } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import NavBar from "./layout/NavBar";
+import SideNav from "./layout/SideNav";
 import LoginPage from "./layout/LoginPage";
 
 import AdminDashboard from "./admin/dashboard/AdminDashboard";
@@ -13,6 +14,7 @@ class App extends Component {
       <Router>
         <Fragment>
           <NavBar />
+          <SideNav />
           <Breadcrumb />
           <Route exact path="/" component={LoginPage} />
           <Switch>

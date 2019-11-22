@@ -5,7 +5,7 @@ class Breadcrumb extends Component {
     return (
       <Fragment>
         <nav
-          className="z-depth-0 light-green lighten-5 container"
+          className="z-depth-0 light-green lighten-5"
           style={{ marginTop: "3px" }}
         >
           <div className="nav-wrapper">
