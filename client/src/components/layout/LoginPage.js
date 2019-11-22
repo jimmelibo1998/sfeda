@@ -5,9 +5,9 @@ class LoginPage extends Component {
   render() {
     return (
       <Fragment>
-        <div className="row green lighten-4">
+        <div className="row" style={{ marginTop: "10px" }}>
           <div className="col s12 m6 l4 offset-m3 offset-l4">
-            <div className="card" style={{ marginTop: "10%" }}>
+            <div className="card z-depth-3" style={{ marginTop: "10%" }}>
               <div className="card-action green darken-1 white-text">
                 <h3 className="center"> Prebiotech </h3>
               </div>

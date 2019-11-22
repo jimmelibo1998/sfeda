@@ -8,7 +8,7 @@ class Navbar extends Component {
   componentDidMount() {
     document.addEventListener("DOMContentLoaded", function() {
       var elems = document.querySelectorAll(".dropdown-trigger");
-      var instances = M.Dropdown.init(elems, {
+      M.Dropdown.init(elems, {
         constrainWidth: false,
         coverTrigger: false,
         hover: true
@@ -75,17 +75,17 @@ class Navbar extends Component {
           </div>
         </nav>
 
-        <ul id="dropdown1" class="dropdown-content">
+        <ul id="dropdown1" className="dropdown-content">
           <li>
             <a href="#!" className="light-green-text text-darken-1">
-              <i class="small material-icons left">settings</i>
+              <i className="small material-icons left">settings</i>
               Account Settings
             </a>
           </li>
-          <li class="divider"></li>
+          <li className="divider"></li>
           <li>
             <a href="#!" className="light-green-text text-darken-1">
-              <i class="small material-icons left">exit_to_app</i>
+              <i className="small material-icons left">exit_to_app</i>
               Logout
             </a>
           </li>
