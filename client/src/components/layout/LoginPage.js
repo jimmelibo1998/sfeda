@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from "react";
+import { Link } from "react-router-dom";
 
 class LoginPage extends Component {
   render() {
@@ -25,12 +26,13 @@ class LoginPage extends Component {
                 <br />
 
                 <div className="form-field">
-                  <button
+                  <Link
+                    to="/admin"
                     className="btn-large waves-effect waves-light green darken-1"
                     style={{ width: "100%" }}
                   >
                     Login
-                  </button>
+                  </Link>
                 </div>
                 <br />
               </div>
