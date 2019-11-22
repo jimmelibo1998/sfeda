@@ -27,7 +27,7 @@ class Navbar extends Component {
           <div className="container">
             <div className="nav-wrapper">
               <Link
-                to="#!"
+                to="/admin"
                 className="brand-logo light-green-text text-darken-3 nav-text"
               >
                 <img
@@ -44,7 +44,7 @@ class Navbar extends Component {
               </a>
               <ul className="right hide-on-med-and-down">
                 <li>
-                  <Link to="#!" className="light-green-text text-darken-3">
+                  <Link to="/admin" className="light-green-text text-darken-3">
                     <i className="small material-icons left">insert_chart</i>
                     Dashboard
                   </Link>

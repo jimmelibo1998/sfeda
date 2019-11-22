@@ -15,11 +15,13 @@ class App extends Component {
         <Fragment>
           <NavBar />
           <SideNav />
-          <Breadcrumb />
-          <Route exact path="/" component={LoginPage} />
-          <Switch>
-            <Route exact path="/admin" component={AdminDashboard} />
-          </Switch>
+          <div style={{ fontFamily: "Noto Serif" }}>
+            <Breadcrumb />
+            <Route exact path="/" component={LoginPage} />
+            <Switch>
+              <Route exact path="/admin" component={AdminDashboard} />
+            </Switch>
+          </div>
         </Fragment>
       </Router>
     );
