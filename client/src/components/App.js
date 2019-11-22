@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import NavBar from "./layout/NavBar";
 import LoginPage from "./layout/LoginPage";
 
+import AdminDashboard from "./admin/AdminDashboard";
+
 class App extends Component {
   render() {
     return (
@@ -12,7 +14,7 @@ class App extends Component {
           <NavBar />
           <Route exact path="/" component={LoginPage} />
           <Switch>
-            <Route exact path="/admin" component={NavBar} />
+            <Route exact path="/admin" component={AdminDashboard} />
           </Switch>
         </Fragment>
       </Router>
