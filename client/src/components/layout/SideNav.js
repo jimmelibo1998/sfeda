@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from "react";
+import { Link } from "react-router-dom";
 
 class SideNav extends Component {
   render() {
@@ -10,51 +11,57 @@ class SideNav extends Component {
               <div className="background">
                 <img src="./img/cover.jpg" alt="sidenav-cover" />
               </div>
-              <a href="!#">
+              <Link to="/admin/profile">
                 <img className="circle" src="./img/profile.jpg" alt="profile" />
-              </a>
-              <a href="!#">
+              </Link>
+              <Link to="/admin/profile">
                 <span className="white-text name">John Doe</span>
-              </a>
-              <a href="!#">
+              </Link>
+              <Link to="/admin/profile">
                 <span className="white-text email">jdandturk@gmail.com</span>
-              </a>
+              </Link>
             </div>
           </li>
           <li>
-            <a href="#!" className="light-green-text text-darken-3">
+            <Link to="/admin" className="light-green-text text-darken-3">
               <i className="small material-icons left">insert_chart</i>Dashboard
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="#!" className="light-green-text text-darken-3">
+            <Link to="/admin/medrep" className="light-green-text text-darken-3">
               <i className="small material-icons left">people</i>Med Rep
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="#!" className="light-green-text text-darken-3">
+            <Link
+              to="/admin/announcements"
+              className="light-green-text text-darken-3"
+            >
               <i className="small material-icons left">announcement</i>
               Announcements
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="#!" className="light-green-text text-darken-3">
+            <Link
+              to="/admin/manageadmin"
+              className="light-green-text text-darken-3"
+            >
               <i className="small material-icons left">people_outline</i>
               Manage Admin
-            </a>
+            </Link>
           </li>
           <li className="divider"></li>
           <li>
-            <a href="#!">
+            <Link to="/admin/profile">
               <i className="small material-icons left">settings</i>
               Account Settings
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="#!">
+            <Link to="/">
               <i className="small material-icons left">exit_to_app</i>
               Logout
-            </a>
+            </Link>
           </li>
         </ul>
       </Fragment>

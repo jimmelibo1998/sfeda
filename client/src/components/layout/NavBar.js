@@ -39,7 +39,7 @@ class Navbar extends Component {
                 />
               </Link>
 
-              <a href="#" data-target="slide-out" className="sidenav-trigger">
+              <a data-target="slide-out" className="sidenav-trigger">
                 <i className="material-icons green-text">menu</i>
               </a>
               <ul className="right hide-on-med-and-down">
@@ -50,19 +50,28 @@ class Navbar extends Component {
                   </Link>
                 </li>
                 <li>
-                  <Link to="#!" className="light-green-text text-darken-3">
+                  <Link
+                    to="/admin/medrep"
+                    className="light-green-text text-darken-3"
+                  >
                     <i className="small material-icons left">people</i>
                     Med Rep
                   </Link>
                 </li>
                 <li>
-                  <Link to="#!" className="light-green-text text-darken-3">
+                  <Link
+                    to="/admin/announcements"
+                    className="light-green-text text-darken-3"
+                  >
                     <i className="small material-icons left">announcement</i>
                     Announcements
                   </Link>
                 </li>
                 <li>
-                  <Link to="#!" className="light-green-text text-darken-3">
+                  <Link
+                    to="/admin/manageadmin"
+                    className="light-green-text text-darken-3"
+                  >
                     <i className="small material-icons left">people_outline</i>
                     Manage Admin
                   </Link>
@@ -85,17 +94,20 @@ class Navbar extends Component {
 
         <ul id="dropdown1" className="dropdown-content">
           <li>
-            <a href="#!" className="light-green-text text-darken-1">
+            <Link
+              to="/admin/profile"
+              className="light-green-text text-darken-1"
+            >
               <i className="small material-icons left">settings</i>
               Account Settings
-            </a>
+            </Link>
           </li>
           <li className="divider"></li>
           <li>
-            <a href="#!" className="light-green-text text-darken-1">
+            <Link to="/" className="light-green-text text-darken-1">
               <i className="small material-icons left">exit_to_app</i>
               Logout
-            </a>
+            </Link>
           </li>
         </ul>
       </Fragment>

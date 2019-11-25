@@ -2,7 +2,8 @@ import React, { Component, Fragment } from "react";
 import M from "materialize-css/dist/js/materialize.min.js";
 
 class RegionalReport extends Component {
-  componentDidMount() {
+  constructor(props) {
+    super(props);
     document.addEventListener("DOMContentLoaded", function() {
       var elems = document.querySelectorAll("select");
       M.FormSelect.init(elems, { coverTrigger: true });
