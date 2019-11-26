@@ -8,7 +8,9 @@ import Breadcrumb from "./layout/Breadcrumb";
 
 import AdminDashboard from "./admin/dashboard/AdminDashboard";
 import Announcements from "./admin/announcements/Announcements";
+import AddEditAnnouncement from "./admin/announcements/AddEditAnnouncement";
 import ManageAdmin from "./admin/manageadmin/ManageAdmin";
+import AddEditAdmin from "./admin/manageadmin/AddEditAdmin";
 import MedReps from "./admin/medreps/MedReps";
 import NewMedRep from "./admin/medreps/NewMedRep";
 import Profile from "./admin/profile/Profile";
@@ -31,7 +33,17 @@ class App extends Component {
                 path="/admin/announcements"
                 component={Announcements}
               />
+              <Route
+                exact
+                path="/admin/announcements/edit"
+                component={AddEditAnnouncement}
+              />
               <Route exact path="/admin/manageadmin" component={ManageAdmin} />
+              <Route
+                exact
+                path="/admin/manageadmin/edit"
+                component={AddEditAdmin}
+              />
               <Route exact path="/admin/medrep" component={MedReps} />
               <Route exact path="/admin/medrep/new" component={NewMedRep} />
               <Route

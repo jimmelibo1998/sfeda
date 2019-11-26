@@ -84,7 +84,7 @@ class ViewProfile extends Component {
                 </a>
               </div>
             </div>
-            <DCR />
+            <MedRepPerfChart />
           </div>
         </div>
       </div>

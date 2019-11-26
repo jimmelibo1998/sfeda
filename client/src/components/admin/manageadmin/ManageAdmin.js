@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from "react";
+import { Link } from "react-router-dom";
 
 class ManageAdmin extends Component {
   render() {
@@ -28,9 +29,12 @@ class ManageAdmin extends Component {
                 <td>jimmel.ibo1998@yahoo.com</td>
                 <td>0998-354-5261</td>
                 <td>
-                  <a class="yellow darken-4 waves-effect waves-light btn">
+                  <Link
+                    to="/admin/manageadmin/edit"
+                    class="yellow darken-4 waves-effect waves-light btn"
+                  >
                     <i class="material-icons">edit</i>
-                  </a>
+                  </Link>
                 </td>
               </tr>
               <tr>
@@ -41,9 +45,12 @@ class ManageAdmin extends Component {
                 <td>aubrey.tizon@gmail.com</td>
                 <td>0999-345-9090</td>
                 <td>
-                  <a class="yellow darken-4 waves-effect waves-light btn">
+                  <Link
+                    to="/admin/manageadmin/edit"
+                    class="yellow darken-4 waves-effect waves-light btn"
+                  >
                     <i class="material-icons">edit</i>
-                  </a>
+                  </Link>
                 </td>
               </tr>
               <tr>
@@ -54,19 +61,25 @@ class ManageAdmin extends Component {
                 <td>Iloseo.Freida@prebiotech.com</td>
                 <td>0994-988-4056</td>
                 <td>
-                  <a class="yellow darken-4 waves-effect waves-light btn">
+                  <Link
+                    to="/admin/manageadmin/edit"
+                    class="yellow darken-4 waves-effect waves-light btn"
+                  >
                     <i class="material-icons">edit</i>
-                  </a>
+                  </Link>
                 </td>
               </tr>
             </tbody>
             <tfoot colSpan="4">
               <tr>
                 <td>
-                  <a className="waves-effect waves-light btn btn-large perf-btn green darken-1">
+                  <Link
+                    to="/admin/manageadmin/edit"
+                    className="waves-effect waves-light btn btn-large perf-btn green darken-1"
+                  >
                     <i className="material-icons left">person_add</i>
                     Add New
-                  </a>
+                  </Link>
                 </td>
               </tr>
             </tfoot>

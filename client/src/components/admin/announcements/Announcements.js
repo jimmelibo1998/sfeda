@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from "react";
+import { Link } from "react-router-dom";
 
 class Announcements extends Component {
   render() {
@@ -25,14 +26,17 @@ class Announcements extends Component {
                 <td>MM/DD/YYYY</td>
                 <td>MM/DD/YYYY</td>
                 <td>
-                  <a className="yellow darken-4 waves-effect waves-light btn">
+                  <Link
+                    to="/admin/announcements/edit"
+                    className="yellow darken-4 waves-effect waves-light btn"
+                  >
                     <i className="material-icons">edit</i>
-                  </a>
+                  </Link>
                 </td>
                 <td>
-                  <a className="red darken-4 waves-effect waves-light btn">
+                  <Link className="red darken-4 waves-effect waves-light btn">
                     <i className="material-icons">cancel</i>
-                  </a>
+                  </Link>
                 </td>
               </tr>
               <tr>
@@ -41,14 +45,17 @@ class Announcements extends Component {
                 <td>MM/DD/YYYY</td>
                 <td>MM/DD/YYYY</td>
                 <td>
-                  <a className="yellow darken-4 waves-effect waves-light btn">
+                  <Link
+                    to="/admin/announcements/edit"
+                    className="yellow darken-4 waves-effect waves-light btn"
+                  >
                     <i className="material-icons">edit</i>
-                  </a>
+                  </Link>
                 </td>
                 <td>
-                  <a className="red darken-4 waves-effect waves-light btn">
+                  <Link className="red darken-4 waves-effect waves-light btn">
                     <i className="material-icons">cancel</i>
-                  </a>
+                  </Link>
                 </td>
               </tr>
               <tr>
@@ -57,24 +64,30 @@ class Announcements extends Component {
                 <td>MM/DD/YYYY</td>
                 <td>MM/DD/YYYY</td>
                 <td>
-                  <a className="yellow darken-4 waves-effect waves-light btn">
+                  <Link
+                    to="/admin/announcements/edit"
+                    className="yellow darken-4 waves-effect waves-light btn"
+                  >
                     <i className="material-icons">edit</i>
-                  </a>
+                  </Link>
                 </td>
                 <td>
-                  <a className="red darken-4 waves-effect waves-light btn">
+                  <Link className="red darken-4 waves-effect waves-light btn">
                     <i className="material-icons">cancel</i>
-                  </a>
+                  </Link>
                 </td>
               </tr>
             </tbody>
             <tfoot colSpan="4">
               <tr>
                 <td>
-                  <a className="waves-effect waves-light btn btn-large perf-btn green darken-1">
+                  <Link
+                    to="/admin/announcements/edit"
+                    className="waves-effect waves-light btn btn-large perf-btn green darken-1"
+                  >
                     <i className="material-icons left">person_add</i>
                     Add New
-                  </a>
+                  </Link>
                 </td>
               </tr>
             </tfoot>
