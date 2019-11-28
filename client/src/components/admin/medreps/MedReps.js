@@ -11,53 +11,53 @@ class MedReps extends Component {
           </h4>
           <br />
           <div className="col s12 m2">
-            <a
+            <button
               className="waves-effect waves-light btn perf-btn teal darken-1"
               style={{ width: "100%", marginBottom: "5px" }}
               disabled
             >
               All
-            </a>
+            </button>
           </div>
           <div className="col s12 m2">
-            <a
+            <button
               className="waves-effect waves-light btn perf-btn teal darken-1"
               style={{ width: "100%", marginBottom: "5px" }}
             >
               North Luzon
-            </a>
+            </button>
           </div>
           <div className="col s12 m2">
-            <a
+            <button
               className="waves-effect waves-light btn perf-btn teal darken-1"
               style={{ width: "100%", marginBottom: "5px" }}
             >
               North GMA
-            </a>
+            </button>
           </div>
           <div className="col s12 m2">
-            <a
+            <button
               className="waves-effect waves-light btn perf-btn teal darken-1"
               style={{ width: "100%", marginBottom: "5px" }}
             >
               South GMA
-            </a>
+            </button>
           </div>
           <div className="col s12 m2">
-            <a
+            <button
               className="waves-effect waves-light btn perf-btn teal darken-1"
               style={{ width: "100%", marginBottom: "5px" }}
             >
               South Luzon I
-            </a>
+            </button>
           </div>
           <div className="col s12 m2">
-            <a
+            <button
               className="waves-effect waves-light btn perf-btn teal darken-1"
               style={{ width: "100%", marginBottom: "5px" }}
             >
               South Luzon II
-            </a>
+            </button>
           </div>
           <MedRepsTable />
         </div>

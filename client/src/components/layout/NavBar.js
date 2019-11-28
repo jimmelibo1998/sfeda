@@ -1,25 +1,9 @@
 import React, { Component, Fragment } from "react";
 import { Link } from "react-router-dom";
-import M from "materialize-css/dist/js/materialize.min.js";
 
 import "./NavBar.css";
 
 class Navbar extends Component {
-  componentDidMount() {
-    document.addEventListener("DOMContentLoaded", function() {
-      var elems = document.querySelectorAll(".dropdown-trigger");
-      M.Dropdown.init(elems, {
-        constrainWidth: false,
-        coverTrigger: false,
-        hover: true
-      });
-    });
-    document.addEventListener("DOMContentLoaded", function() {
-      var elems = document.querySelectorAll(".sidenav");
-      M.Sidenav.init(elems, {});
-    });
-  }
-
   render() {
     return (
       <Fragment>
@@ -39,9 +23,9 @@ class Navbar extends Component {
                 />
               </Link>
 
-              <a data-target="slide-out" className="sidenav-trigger">
+              <Link to="/" data-target="slide-out" className="sidenav-trigger">
                 <i className="material-icons green-text">menu</i>
-              </a>
+              </Link>
               <ul className="right hide-on-med-and-down">
                 <li>
                   <Link to="/admin" className="light-green-text text-darken-3">

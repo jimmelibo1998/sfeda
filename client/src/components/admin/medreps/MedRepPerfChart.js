@@ -52,9 +52,9 @@ class MedRepPerfChart extends Component {
                 <label htmlFor="first_name">Year</label>
               </div>
               <div className="input-field col s6">
-                <a className="waves-effect waves-light btn green darken 3">
+                <button className="waves-effect waves-light btn green darken 3">
                   Search
-                </a>
+                </button>
               </div>
             </div>
           </div>

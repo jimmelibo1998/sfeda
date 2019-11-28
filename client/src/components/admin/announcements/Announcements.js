@@ -34,9 +34,9 @@ class Announcements extends Component {
                   </Link>
                 </td>
                 <td>
-                  <Link className="red darken-4 waves-effect waves-light btn">
+                  <button className="red darken-4 waves-effect waves-light btn">
                     <i className="material-icons">cancel</i>
-                  </Link>
+                  </button>
                 </td>
               </tr>
               <tr>
@@ -53,9 +53,9 @@ class Announcements extends Component {
                   </Link>
                 </td>
                 <td>
-                  <Link className="red darken-4 waves-effect waves-light btn">
+                  <button className="red darken-4 waves-effect waves-light btn">
                     <i className="material-icons">cancel</i>
-                  </Link>
+                  </button>
                 </td>
               </tr>
               <tr>
@@ -72,9 +72,9 @@ class Announcements extends Component {
                   </Link>
                 </td>
                 <td>
-                  <Link className="red darken-4 waves-effect waves-light btn">
+                  <button className="red darken-4 waves-effect waves-light btn">
                     <i className="material-icons">cancel</i>
-                  </Link>
+                  </button>
                 </td>
               </tr>
             </tbody>

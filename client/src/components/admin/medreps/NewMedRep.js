@@ -1,14 +1,6 @@
 import React, { Component } from "react";
-import M from "materialize-css/dist/js/materialize.min.js";
 
 class NewMedRep extends Component {
-  componentDidMount() {
-    document.addEventListener("DOMContentLoaded", function() {
-      var elems = document.querySelectorAll("select");
-      M.FormSelect.init(elems, { coverTrigger: true });
-    });
-  }
-
   render() {
     return (
       <div className="container">
@@ -17,14 +9,16 @@ class NewMedRep extends Component {
           <div className="row">
             <div className="col s12 m6 offset-m3">
               <div className="input-field">
-                <select>
+                <select className="browser-default" placeholder="Select Area">
+                  <option value="" disabled>
+                    Select Area
+                  </option>
                   <option value="north-luzon">Noth Luzon</option>
                   <option value="north-gma">North GMA</option>
                   <option value="south-gma">South GMA</option>
                   <option value="south-luzon-1">South Luzon I</option>
                   <option value="south-luzon-2">South Luzon II</option>
                 </select>
-                <label>Area</label>
               </div>
               <br />
               <div className="input-field">
@@ -34,20 +28,20 @@ class NewMedRep extends Component {
               <br />
               <div className="row">
                 <div className="col s12 m6">
-                  <a
+                  <button
                     className="waves-effect waves-light btn btn-large green darken-3"
                     style={{ width: "100%" }}
                   >
                     Create Account
-                  </a>
+                  </button>
                 </div>
                 <div className="col s12 m6">
-                  <a
+                  <button
                     className="waves-effect waves-light btn btn-large red darken 3"
                     style={{ width: "100%" }}
                   >
                     cancel
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>

@@ -1,15 +1,6 @@
 import React, { Component, Fragment } from "react";
 
-import M from "materialize-css/dist/js/materialize.min.js";
-
 class AddEditAdmin extends Component {
-  componentDidMount() {
-    document.addEventListener("DOMContentLoaded", function() {
-      var elems = document.querySelectorAll("select");
-      M.FormSelect.init(elems, { coverTrigger: true });
-    });
-  }
-
   render() {
     return (
       <Fragment>
@@ -29,11 +20,10 @@ class AddEditAdmin extends Component {
                   <label htmlFor="first_name">First Name</label>
                 </div>
                 <div className="input-field">
-                  <select>
+                  <select className="browser-default">
                     <option value="super_admin">Super Admin</option>
                     <option value="admin">Admin</option>
                   </select>
-                  <label>Select Role</label>
                 </div>
                 <div className="input-field">
                   <input id="position" type="text" className="validate" />
@@ -49,20 +39,20 @@ class AddEditAdmin extends Component {
                 </div>
                 <div className="row">
                   <div className="col s12 m6">
-                    <a
+                    <button
                       className="waves-effect waves-light green btn btn-large"
                       style={{ width: "100%" }}
                     >
                       Create New Admin
-                    </a>
+                    </button>
                   </div>
                   <div className="col s12 m6">
-                    <a
+                    <button
                       className="waves-effect waves-light green yellow darken-3 btn-large"
                       style={{ width: "100%" }}
                     >
                       Clear
-                    </a>
+                    </button>
                   </div>
                 </div>
               </form>

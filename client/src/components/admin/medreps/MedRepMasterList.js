@@ -1,32 +1,23 @@
 import React, { Component, Fragment } from "react";
-import M from "materialize-css/dist/js/materialize.min.js";
-import MedRepPerfChart from "./MedRepPerfChart";
 
 class MedRepMasterList extends Component {
-  componentDidMount() {
-    document.addEventListener("DOMContentLoaded", function() {
-      var elems = document.querySelectorAll("select");
-      M.FormSelect.init(elems, { coverTrigger: true });
-    });
-  }
   render() {
     return (
       <Fragment>
         <div className="row">
           <div className="col s12 m6">
             <div className="input-field">
-              <select>
+              <select className="browser-default">
                 <option value="2019">2019</option>
                 <option value="2018">2018</option>
                 <option value="2017">2017</option>
                 <option value="2016">2016</option>
               </select>
-              <label>Year</label>
             </div>
           </div>
           <div className="col s12 m6">
             <div className="input-field">
-              <select>
+              <select className="browser-default">
                 <option value="1">January</option>
                 <option value="2">February</option>
                 <option value="3">March</option>
@@ -40,7 +31,6 @@ class MedRepMasterList extends Component {
                 <option value="11">November</option>
                 <option value="12">December</option>
               </select>
-              <label>Month</label>
             </div>
           </div>
         </div>

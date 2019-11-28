@@ -7,28 +7,28 @@ class PerformanceButtons extends Component {
         <div className="row">
           <h3 className="center light-green-text text-darken-3">Performance</h3>
           <div className="col s12 m4">
-            <a
+            <button
               className="waves-effect waves-light btn perf-btn light-green darken-1"
               style={{ width: "100%", marginBottom: "5px" }}
             >
               Call Rate
-            </a>
+            </button>
           </div>
           <div className="col s12 m4">
-            <a
+            <button
               className="waves-effect waves-light btn perf-btn green darken-1"
               style={{ width: "100%", marginBottom: "5px" }}
             >
               Call Reach
-            </a>
+            </button>
           </div>
           <div className="col s12 m4">
-            <a
+            <button
               className="waves-effect waves-light btn perf-btn teal darken-1"
               style={{ width: "100%", marginBottom: "5px" }}
             >
               Call Frequency
-            </a>
+            </button>
           </div>
         </div>
       </Fragment>
