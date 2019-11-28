@@ -28,7 +28,7 @@ const MedRepSideNav = () => {
         </li>
         <li>
           <Link to="/admin/medrep" className="light-green-text text-darken-3">
-            <i className="small material-icons left">people</i>Med Rep
+            <i className="small material-icons left">local_hospital</i>Doctors
           </Link>
         </li>
         <li>
@@ -40,13 +40,23 @@ const MedRepSideNav = () => {
             Announcements
           </Link>
         </li>
+        <li className="divider"></li>
         <li>
           <Link
             to="/admin/manageadmin"
             className="light-green-text text-darken-3"
           >
-            <i className="small material-icons left">people_outline</i>
-            Manage Admin
+            <i className="small material-icons left">format_list_bulleted</i>
+            Master List
+          </Link>
+        </li>
+        <li>
+          <Link
+            to="/admin/manageadmin"
+            className="light-green-text text-darken-3"
+          >
+            <i className="small material-icons left">today</i>
+            DCR
           </Link>
         </li>
         <li className="divider"></li>
