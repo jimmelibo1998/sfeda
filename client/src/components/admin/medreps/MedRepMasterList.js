@@ -14,7 +14,7 @@ class MedRepMasterList extends Component {
       <Fragment>
         <div className="row">
           <div className="col s12 m6">
-            <div class="input-field">
+            <div className="input-field">
               <select>
                 <option value="2019">2019</option>
                 <option value="2018">2018</option>
@@ -25,7 +25,7 @@ class MedRepMasterList extends Component {
             </div>
           </div>
           <div className="col s12 m6">
-            <div class="input-field">
+            <div className="input-field">
               <select>
                 <option value="1">January</option>
                 <option value="2">February</option>

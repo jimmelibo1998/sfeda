@@ -19,44 +19,47 @@ class AddEditAnnouncement extends Component {
             </h4>
             <div className="col s12 m6 offset-m3">
               <form>
-                <div class="input-field">
-                  <input id="title" type="text" class="validate" />
-                  <label for="title">Title</label>
+                <div className="input-field">
+                  <input id="title" type="text" className="validate" />
+                  <label htmlFor="title">Title</label>
                 </div>
-                <div class="input-field">
-                  <textarea id="desc" class="materialize-textarea"></textarea>
-                  <label for="desc">Description</label>
+                <div className="input-field">
+                  <textarea
+                    id="desc"
+                    className="materialize-textarea"
+                  ></textarea>
+                  <label htmlFor="desc">Description</label>
                 </div>
-                <div class="input-field">
+                <div className="input-field">
                   <input
                     type="text"
-                    class="datepicker"
+                    className="datepicker"
                     placeholder="Start Date"
                   />
                 </div>
-                <div class="input-field">
+                <div className="input-field">
                   <input
                     type="text"
-                    class="datepicker"
+                    className="datepicker"
                     placeholder="End Date"
                   />
                 </div>
                 <div className="row">
                   <div className="col s12 m6">
-                    <a
-                      class="waves-effect waves-light green btn btn-large"
+                    <button
+                      className="waves-effect waves-light green btn btn-large"
                       style={{ width: "100%" }}
                     >
                       Post Announcement
-                    </a>
+                    </button>
                   </div>
                   <div className="col s12 m6">
-                    <a
-                      class="waves-effect waves-light green yellow darken-3 btn-large"
+                    <button
+                      className="waves-effect waves-light green yellow darken-3 btn-large"
                       style={{ width: "100%" }}
                     >
                       Clear
-                    </a>
+                    </button>
                   </div>
                 </div>
               </form>

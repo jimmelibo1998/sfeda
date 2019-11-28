@@ -13,10 +13,10 @@ class DCR extends Component {
       <Fragment>
         <div className="row">
           <div className="col s12">
-            <div class="input-field">
+            <div className="input-field">
               <input
                 type="text"
-                class="datepicker"
+                className="datepicker"
                 placeholder="Nov 25, 2019"
               />
             </div>

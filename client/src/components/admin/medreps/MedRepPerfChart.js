@@ -41,18 +41,18 @@ class MedRepPerfChart extends Component {
       <Fragment>
         <div className="row">
           <div className="col s12">
-            <div classNam="row">
-              <div class="input-field col s6">
+            <div className="row">
+              <div className="input-field col s6">
                 <input
                   placeholder="2019"
                   id="first_name"
                   type="text"
-                  class="validate"
+                  className="validate"
                 />
-                <label for="first_name">Year</label>
+                <label htmlFor="first_name">Year</label>
               </div>
-              <div class="input-field col s6">
-                <a class="waves-effect waves-light btn green darken 3">
+              <div className="input-field col s6">
+                <a className="waves-effect waves-light btn green darken 3">
                   Search
                 </a>
               </div>

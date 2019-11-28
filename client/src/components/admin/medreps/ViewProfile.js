@@ -19,7 +19,7 @@ class ViewProfile extends Component {
               <img
                 src={ProPic}
                 alt="Image"
-                class="circle"
+                className="circle"
                 style={{ width: "200px" }}
               />
               <h5 className="white-text">Valleryn Patosa</h5>
@@ -52,7 +52,7 @@ class ViewProfile extends Component {
             <div className="row">
               <div className="col s12 m3">
                 <a
-                  class="waves-effect waves-light btn btn-large green darken 3"
+                  className="waves-effect waves-light btn btn-large green darken 3"
                   style={{ width: "100%" }}
                 >
                   Performance
@@ -60,7 +60,7 @@ class ViewProfile extends Component {
               </div>
               <div className="col s12 m3">
                 <a
-                  class="waves-effect waves-light btn btn-large blue darken 3"
+                  className="waves-effect waves-light btn btn-large blue darken 3"
                   style={{ width: "100%" }}
                 >
                   Master List
@@ -68,7 +68,7 @@ class ViewProfile extends Component {
               </div>
               <div className="col s12 m3">
                 <a
-                  class="waves-effect waves-light btn btn-large yellow darken-3"
+                  className="waves-effect waves-light btn btn-large yellow darken-3"
                   style={{ width: "100%" }}
                   disabled
                 >
@@ -77,7 +77,7 @@ class ViewProfile extends Component {
               </div>
               <div className="col s12 m3">
                 <a
-                  class="waves-effect waves-light btn btn-large teal darken 3"
+                  className="waves-effect waves-light btn btn-large teal darken 3"
                   style={{ width: "100%" }}
                 >
                   DCR

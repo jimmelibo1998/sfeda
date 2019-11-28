@@ -31,9 +31,9 @@ class ManageAdmin extends Component {
                 <td>
                   <Link
                     to="/admin/manageadmin/edit"
-                    class="yellow darken-4 waves-effect waves-light btn"
+                    className="yellow darken-4 waves-effect waves-light btn"
                   >
-                    <i class="material-icons">edit</i>
+                    <i className="material-icons">edit</i>
                   </Link>
                 </td>
               </tr>
@@ -47,9 +47,9 @@ class ManageAdmin extends Component {
                 <td>
                   <Link
                     to="/admin/manageadmin/edit"
-                    class="yellow darken-4 waves-effect waves-light btn"
+                    className="yellow darken-4 waves-effect waves-light btn"
                   >
-                    <i class="material-icons">edit</i>
+                    <i className="material-icons">edit</i>
                   </Link>
                 </td>
               </tr>
@@ -63,9 +63,9 @@ class ManageAdmin extends Component {
                 <td>
                   <Link
                     to="/admin/manageadmin/edit"
-                    class="yellow darken-4 waves-effect waves-light btn"
+                    className="yellow darken-4 waves-effect waves-light btn"
                   >
-                    <i class="material-icons">edit</i>
+                    <i className="material-icons">edit</i>
                   </Link>
                 </td>
               </tr>
