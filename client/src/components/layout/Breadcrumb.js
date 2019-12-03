@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from "react";
+import { Link } from "react-router-dom";
 
 class Breadcrumb extends Component {
   render() {
@@ -11,12 +12,12 @@ class Breadcrumb extends Component {
           <div className="nav-wrapper">
             <div className="col s12">
               <div className="container">
-                <a
-                  href="#!"
+                <Link
+                  to="/medrep"
                   className="breadcrumb light-green-text text-darken-2"
                 >
                   Dashboard
-                </a>
+                </Link>
               </div>
             </div>
           </div>

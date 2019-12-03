@@ -31,15 +31,7 @@ const MedRepSideNav = () => {
             <i className="small material-icons left">local_hospital</i>Doctors
           </Link>
         </li>
-        <li>
-          <Link
-            to="/admin/announcements"
-            className="light-green-text text-darken-3"
-          >
-            <i className="small material-icons left">announcement</i>
-            Announcements
-          </Link>
-        </li>
+
         <li className="divider"></li>
         <li>
           <Link

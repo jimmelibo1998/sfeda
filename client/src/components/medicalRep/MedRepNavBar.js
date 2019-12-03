@@ -25,33 +25,25 @@ const MedRepNavBar = () => {
             </Link>
             <ul className="right hide-on-med-and-down">
               <li>
-                <Link to="/admin" className="light-green-text text-darken-3">
+                <Link to="/medrep" className="light-green-text text-darken-3">
                   <i className="small material-icons left">insert_chart</i>
                   Dashboard
                 </Link>
               </li>
               <li>
                 <Link
-                  to="/admin/medrep"
+                  to="/medrep/doctors"
                   className="light-green-text text-darken-3"
                 >
                   <i className="small material-icons left">local_hospital</i>
                   Doctors
                 </Link>
               </li>
-              <li>
-                <Link
-                  to="/admin/announcements"
-                  className="light-green-text text-darken-3"
-                >
-                  <i className="small material-icons left">announcement</i>
-                  Announcements
-                </Link>
-              </li>
+
               <li>
                 <Link
                   className="dropdown-trigger light-green-text text-darken-3"
-                  to="#!"
+                  to="medrep/perform"
                   data-target="dropdown2"
                 >
                   <i className="small material-icons left">work</i>
@@ -62,7 +54,7 @@ const MedRepNavBar = () => {
               <li>
                 <Link
                   className="dropdown-trigger light-green-text text-darken-3"
-                  to="#!"
+                  to="/medrep/account"
                   data-target="dropdown1"
                 >
                   <i className="small material-icons left">account_circle</i>
@@ -77,7 +69,7 @@ const MedRepNavBar = () => {
 
       <ul id="dropdown1" className="dropdown-content">
         <li>
-          <Link to="/admin/profile" className="light-green-text text-darken-1">
+          <Link to="/medrep/account" className="light-green-text text-darken-1">
             <i className="small material-icons left">settings</i>
             Account Settings
           </Link>
@@ -92,14 +84,20 @@ const MedRepNavBar = () => {
       </ul>
       <ul id="dropdown2" className="dropdown-content">
         <li>
-          <Link to="/admin/profile" className="light-green-text text-darken-1">
+          <Link
+            to="/medrep/perform/masterlist"
+            className="light-green-text text-darken-1"
+          >
             <i className="small material-icons left">format_list_bulleted</i>
             Master List
           </Link>
         </li>
         <li className="divider"></li>
         <li>
-          <Link to="/" className="light-green-text text-darken-1">
+          <Link
+            to="/medrep/perform/dcrs"
+            className="light-green-text text-darken-1"
+          >
             <i className="small material-icons left">today</i>
             DCR
           </Link>
