@@ -6,6 +6,7 @@ import SideNav from "./layout/SideNav";
 import LoginPage from "./layout/LoginPage";
 import Breadcrumb from "./layout/Breadcrumb";
 
+// FOR ADMIN
 import AdminDashboard from "./admin/dashboard/AdminDashboard";
 import Announcements from "./admin/announcements/Announcements";
 import AddEditAnnouncement from "./admin/announcements/AddEditAnnouncement";
@@ -15,6 +16,12 @@ import MedReps from "./admin/medreps/MedReps";
 import NewMedRep from "./admin/medreps/NewMedRep";
 import Profile from "./admin/profile/Profile";
 import ViewProfile from "./admin/medreps/ViewProfile";
+
+// FOR MEDREP
+import MAccount from "./medicalRep/maccount/MAccount";
+import MDashboard from "./medicalRep/mdashboard/MDashboard";
+import MDoctors from "./medicalRep/mdoctors/MDoctors";
+import MPerform from "./medicalRep/mperform/MPerform";
 
 class App extends Component {
   render() {
@@ -27,6 +34,7 @@ class App extends Component {
             <Breadcrumb />
             <Route exact path="/" component={LoginPage} />
             <Switch>
+              {/* Admins */}
               <Route exact path="/admin" component={AdminDashboard} />
               <Route
                 exact
@@ -52,6 +60,11 @@ class App extends Component {
                 component={ViewProfile}
               />
               <Route exact path="/admin/profile" component={Profile} />
+              {/* Medreps */}
+              <Route exact path="/medrep" component={MDashboard} />
+              <Route exact path="/medrep/account" component={MAccount} />
+              <Route exact path="/medrep/doctors" component={MDoctors} />
+              <Route exact path="/medrep/perform" component={MPerform} />
             </Switch>
           </div>
         </Fragment>

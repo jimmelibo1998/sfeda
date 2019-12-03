@@ -27,7 +27,7 @@ class LoginPage extends Component {
 
                 <div className="form-field">
                   <Link
-                    to="/admin"
+                    to="/medrep"
                     className="btn-large waves-effect waves-light green darken-1"
                     style={{ width: "100%" }}
                   >
