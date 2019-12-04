@@ -30,9 +30,12 @@ class MDoctors extends React.Component {
                   <td>Ospital Manila</td>
                   <td>kmc.jimmel@gmail.com</td>
                   <td>
-                    <button className="waves-effect waves-light btn yellow darken-3">
+                    <Link
+                      to="/medrep/doctors/new"
+                      className="waves-effect waves-light btn yellow darken-3"
+                    >
                       <i className="material-icons left">edit</i>Edit
-                    </button>
+                    </Link>
                   </td>
                 </tr>
                 <tr>
@@ -43,9 +46,12 @@ class MDoctors extends React.Component {
                   <td>Ospital Manila</td>
                   <td>kmc.jimmel@gmail.com</td>
                   <td>
-                    <button className="waves-effect waves-light btn yellow darken-3">
+                    <Link
+                      to="/medrep/doctors/new"
+                      className="waves-effect waves-light btn yellow darken-3"
+                    >
                       <i className="material-icons left">edit</i>Edit
-                    </button>
+                    </Link>
                   </td>
                 </tr>
                 <tr>
@@ -56,9 +62,12 @@ class MDoctors extends React.Component {
                   <td>Ospital Manila</td>
                   <td>kmc.jimmel@gmail.com</td>
                   <td>
-                    <button className="waves-effect waves-light btn yellow darken-3">
+                    <Link
+                      to="/medrep/doctors/new"
+                      className="waves-effect waves-light btn yellow darken-3"
+                    >
                       <i className="material-icons left">edit</i>Edit
-                    </button>
+                    </Link>
                   </td>
                 </tr>
                 <tr>

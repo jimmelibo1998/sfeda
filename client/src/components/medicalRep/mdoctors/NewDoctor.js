@@ -10,6 +10,29 @@ class NewDoctor extends React.Component {
           <div className="row">
             <div className="col s12 m6 offset-m3">
               <div className="input-field">
+                <input id="lastname" type="text" className="validate" />
+                <label htmlFor="lastname">Last Name</label>
+              </div>
+              <div className="input-field">
+                <input id="firstname" type="text" className="validate" />
+                <label htmlFor="firstname">First Name</label>
+              </div>
+              <div className="input-field">
+                <select className="browser-default">
+                  <option value="A">A</option>
+                  <option value="B">B</option>
+                  <option value="C">C</option>
+                </select>
+              </div>
+              <div className="input-field">
+                <input id="sc" type="text" className="validate" />
+                <label htmlFor="sc">Specialization Code</label>
+              </div>
+              <div className="input-field">
+                <input id="institution" type="text" className="validate" />
+                <label htmlFor="institution">Institution</label>
+              </div>
+              <div className="input-field">
                 <input id="email" type="email" className="validate" />
                 <label htmlFor="email">Email</label>
               </div>
