@@ -1,10 +1,12 @@
 import React from "react";
 
-class MDcrs extends React.Component {
+class AddMasterList extends React.Component {
   render() {
     return (
       <div className="container">
-        <h3 className="flow-text light-green-text text-darken-3">Add DCR</h3>
+        <h3 className="flow-text light-green-text text-darken-3">
+          Add Master List
+        </h3>
         <div className="row">
           <div className="input-field col s4">
             <input
@@ -52,18 +54,15 @@ class MDcrs extends React.Component {
             <label htmlFor="first_name">Institution Name</label>
           </div>
           <div className="input-field col s12">
-            <button className="green darken-3 btn">
+            <button className="green darken-3 waves-effect waves-light btn btn-large">
               <i className="material-icons left">add</i>Add Doctor
-            </button>{" "}
-            <button className="yellow darken-4 btn">
+            </button>
+            <button className="yellow darken-4 waves-effect waves-light btn btn-large">
               <i className="material-icons left">repeat</i>Clear
-            </button>{" "}
-            <button className="green darken-3 btn">
-              <i className="material-icons left">send</i>Submit DCR
-            </button>{" "}
-            <button className="red darken-3 btn">
-              <i className="material-icons left">cancel</i>No Coverage
-            </button>{" "}
+            </button>
+            <button className="green darken-3 waves-effect waves-light btn btn-large">
+              <i className="material-icons left">send</i>submit master list
+            </button>
           </div>
           <div className="col s12">
             <table>
@@ -74,8 +73,6 @@ class MDcrs extends React.Component {
                   <th>Class Code</th>
                   <th>Specialization Code</th>
                   <th>Institution Name</th>
-                  <th>Visited</th>
-                  <th>Add Comment</th>
                   <th>Remove</th>
                 </tr>
               </thead>
@@ -88,17 +85,6 @@ class MDcrs extends React.Component {
                   <td>PEDIA2</td>
                   <td>MMC</td>
                   <td>
-                    <label>
-                      <input type="checkbox" />
-                      <span>Yes</span>
-                    </label>
-                  </td>
-                  <td>
-                    <button className="green darken-3 waves-effect waves-light btn">
-                      <i className="material-icons">add</i>
-                    </button>
-                  </td>
-                  <td>
                     <button className="red darken-4 waves-effect waves-light btn btn-small">
                       <i className="material-icons">cancel</i>
                     </button>
@@ -111,17 +97,6 @@ class MDcrs extends React.Component {
                   <td>PEDIA2</td>
                   <td>MMC</td>
                   <td>
-                    <label>
-                      <input type="checkbox" />
-                      <span>Yes</span>
-                    </label>
-                  </td>
-                  <td>
-                    <button className="green darken-3 waves-effect waves-light btn">
-                      <i className="material-icons">add</i>
-                    </button>
-                  </td>
-                  <td>
                     <button className="red darken-4 waves-effect waves-light btn btn-small">
                       <i className="material-icons">cancel</i>
                     </button>
@@ -133,17 +108,6 @@ class MDcrs extends React.Component {
                   <td>B</td>
                   <td>PEDIA2</td>
                   <td>MMC</td>
-                  <td>
-                    <label>
-                      <input type="checkbox" />
-                      <span>Yes</span>
-                    </label>
-                  </td>
-                  <td>
-                    <button className="green darken-3 waves-effect waves-light btn">
-                      <i className="material-icons">add</i>
-                    </button>
-                  </td>
                   <td>
                     <button className="red darken-4 waves-effect waves-light btn btn-small">
                       <i className="material-icons">cancel</i>
@@ -159,4 +123,4 @@ class MDcrs extends React.Component {
   }
 }
 
-export default MDcrs;
+export default AddMasterList;

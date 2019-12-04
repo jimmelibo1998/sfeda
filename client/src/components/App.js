@@ -21,7 +21,10 @@ import ViewProfile from "./admin/medreps/ViewProfile";
 import MAccount from "./medicalRep/maccount/MAccount";
 import MDashboard from "./medicalRep/mdashboard/MDashboard";
 import MDoctors from "./medicalRep/mdoctors/MDoctors";
+import NewDoctor from "./medicalRep/mdoctors/NewDoctor";
 import MMasterList from "./medicalRep/mperform/MMasterList";
+import AddMasterList from "./medicalRep/mperform/AddMasterList";
+import MDcrsList from "./medicalRep/mperform/MDcrsList";
 import MDcrs from "./medicalRep/mperform/MDcrs";
 
 class App extends Component {
@@ -65,12 +68,19 @@ class App extends Component {
               <Route exact path="/medrep" component={MDashboard} />
               <Route exact path="/medrep/account" component={MAccount} />
               <Route exact path="/medrep/doctors" component={MDoctors} />
+              <Route exact path="/medrep/doctors/new" component={NewDoctor} />
               <Route
                 exact
                 path="/medrep/perform/masterlist"
                 component={MMasterList}
               />
-              <Route exact path="/medrep/perform/dcrs" component={MDcrs} />
+              <Route
+                exact
+                path="/medrep/perform/masterlist/add"
+                component={AddMasterList}
+              />
+              <Route exact path="/medrep/perform/dcrs" component={MDcrsList} />
+              <Route exact path="/medrep/perform/dcrs/add" component={MDcrs} />
             </Switch>
           </div>
         </Fragment>

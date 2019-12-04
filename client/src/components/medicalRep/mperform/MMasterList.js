@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 class MMasterList extends React.Component {
   render() {
@@ -13,12 +14,18 @@ class MMasterList extends React.Component {
             <button className="waves-effect waves-light btn">
               <i className="material-icons left">list</i>Current
             </button>
-            <button className="yellow darken-3 waves-effect waves-light btn">
+            <Link
+              to="/medrep/perform/masterlist/add"
+              className="yellow darken-3 waves-effect waves-light btn"
+            >
               <i className="material-icons left">edit</i>Edit
-            </button>
-            <button className="green darken-3 waves-effect waves-light btn">
+            </Link>
+            <Link
+              to="/medrep/perform/masterlist/add"
+              className="green darken-3 waves-effect waves-light btn"
+            >
               <i className="material-icons left">add</i>Add
-            </button>
+            </Link>
           </div>
           <div className="input-field col s4">
             <select className="browser-default">

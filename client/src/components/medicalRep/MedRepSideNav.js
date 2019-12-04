@@ -22,12 +22,12 @@ const MedRepSideNav = () => {
           </div>
         </li>
         <li>
-          <Link to="/admin" className="light-green-text text-darken-3">
+          <Link to="/medrep" className="light-green-text text-darken-3">
             <i className="small material-icons left">insert_chart</i>Dashboard
           </Link>
         </li>
         <li>
-          <Link to="/admin/medrep" className="light-green-text text-darken-3">
+          <Link to="/medrep/doctors" className="light-green-text text-darken-3">
             <i className="small material-icons left">local_hospital</i>Doctors
           </Link>
         </li>
@@ -35,7 +35,7 @@ const MedRepSideNav = () => {
         <li className="divider"></li>
         <li>
           <Link
-            to="/admin/manageadmin"
+            to="/medrep/perform/masterlist"
             className="light-green-text text-darken-3"
           >
             <i className="small material-icons left">format_list_bulleted</i>
@@ -44,7 +44,7 @@ const MedRepSideNav = () => {
         </li>
         <li>
           <Link
-            to="/admin/manageadmin"
+            to="/medrep/perform/dcr"
             className="light-green-text text-darken-3"
           >
             <i className="small material-icons left">today</i>
@@ -53,7 +53,7 @@ const MedRepSideNav = () => {
         </li>
         <li className="divider"></li>
         <li>
-          <Link to="/admin/profile">
+          <Link to="/medrep/account">
             <i className="small material-icons left">settings</i>
             Account Settings
           </Link>
