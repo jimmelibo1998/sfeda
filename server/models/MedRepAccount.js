@@ -17,7 +17,7 @@ module.exports = MedRep = mongoose.model(
     },
     password: {
       type: String,
-      default: this.lastName + this.firstName
+      required: true
     },
     area: {
       type: String,

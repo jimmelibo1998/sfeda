@@ -30,10 +30,7 @@ module.exports = MdCalls = mongoose.model(
     },
     currentScore: {
       type: Number,
-      default: (() => {
-        let total = 0;
-        return this.dates.scores.map(score => (total += score));
-      })()
+      default: 0
     },
     callRate: {
       type: Number,

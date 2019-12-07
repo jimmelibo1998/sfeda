@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-module.exports = Doctor = mongoose.model(
+module.exports = DoctorAccount = mongoose.model(
   "doctor",
   new mongoose.Schema({
     lastName: {
