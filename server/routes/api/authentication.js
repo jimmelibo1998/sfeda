@@ -1,8 +1,95 @@
 const express = require("express");
 const router = express.Router();
+const jwt = require("jsonwebtoken");
+const config = require("config");
+const bcrypt = require("bcryptjs");
+const { check, validationResult } = require("express-validator");
 
-router.get("/", (req, res) => {
-  res.send("Authentication Api");
-});
+const Admin = require("../../models/AdminAccount");
+const MedRepAccount = require("../../models/MedRepAccount");
+
+//@route POST /api/auth
+//@desc  Login MedRep and Admin
+//@access Public
+router.post(
+  "/",
+  [
+    check("email", "Must enter a valid email").isEmail(),
+    check("password", "Password is required")
+  ],
+  async (req, res) => {
+    const validationErrors = validationResult(req);
+    if (!validationErrors.isEmpty())
+      return res.status(400).json({ errors: validationErrors.array() });
+
+    const { email, password } = req.body;
+    try {
+      let admin = await Admin.findOne({ email });
+
+      if (admin) {
+        const isMatch = await bcrypt.compare(password, admin.password);
+
+        if (!isMatch)
+          return res
+            .status(400)
+            .json({ errors: [{ msg: "Invalid Credentials" }] });
+
+        const payload = {
+          user: {
+            id: admin._id,
+            role: admin.adminType
+          }
+        };
+
+        jwt.sign(
+          payload,
+          config.get("jwtSecret"),
+          { expiresIn: 360000 },
+          (err, token) => {
+            if (err) throw err;
+            res.json({ token });
+          }
+        );
+
+        return;
+      }
+
+      let medrep = await MedRepAccount.findOne({ email });
+
+      if (medrep) {
+        const isMatch = await bcrypt.compare(password, medrep.password);
+
+        if (!isMatch)
+          return res
+            .status(400)
+            .json({ errors: [{ msg: "Invalid Credentials" }] });
+
+        const payload = {
+          user: {
+            id: medrep._id,
+            role: "medrep"
+          }
+        };
+
+        jwt.sign(
+          payload,
+          config.get("jwtSecret"),
+          { expiresIn: 360000 },
+          (err, token) => {
+            if (err) throw err;
+            res.json({ token });
+          }
+        );
+
+        return;
+      }
+
+      res.status(400).json({ errors: [{ msg: "Invalid Credentials" }] });
+    } catch (err) {
+      console.error(err.message);
+      res.send("Server Error");
+    }
+  }
+);
 
 module.exports = router;
