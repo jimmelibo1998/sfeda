@@ -5,11 +5,13 @@ module.exports = MasterListDoctor = mongoose.model(
   new mongoose.Schema({
     masterlist: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "masterlist"
+      ref: "masterlist",
+      required: true
     },
     doctor: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "doctor"
+      ref: "doctor",
+      required: true
     },
     weekOne: {
       dates: [{ type: Date }],
