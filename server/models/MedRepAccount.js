@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-module.exports = MedRep = mongoose.model(
+module.exports = MedRepAccount = mongoose.model(
   "medrep",
   new mongoose.Schema({
     firstName: {
