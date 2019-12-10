@@ -90,4 +90,37 @@ router.post("/add/:masterlist/:doctor", async (req, res) => {
     res.send("Server Error");
   }
 });
+
+//@route POST /api/masterlist/send/:id
+//@desc  Send masterlist
+//@access Private
+router.put("/send/:id", async (req, res) => {
+  const { id } = req.params;
+
+  const validId = mongoose.Types.ObjectId.isValid(id);
+  if (validId === false)
+    return res.status(400).json({ errors: [{ msg: "ObjectId not valid" }] });
+
+  try {
+    let masterlist = await MasterList.findById(id);
+    if (!masterlist)
+      return res
+        .status(400)
+        .json({ errors: [{ msg: "Masterlist not found" }] });
+
+    masterlist = await MasterList.findOneAndUpdate(
+      { _id: id },
+      { $set: { sent: true } },
+      { new: true },
+      (err, doc) => {
+        if (err) throw errl;
+        return doc;
+      }
+    );
+    res.json(masterlist);
+  } catch (err) {
+    console.error(err.message);
+    res.send("Server Error");
+  }
+});
 module.exports = router;
