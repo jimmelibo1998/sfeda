@@ -7,26 +7,12 @@ module.exports = MdCalls = mongoose.model(
   new mongoose.Schema({
     masterlist: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "masterlist"
+      ref: "masterlist",
+      unique: true
     },
-    dates: [
-      {
-        date: {
-          type: Date,
-          required: true,
-          unique: true
-        },
-        scores: [
-          {
-            type: Number,
-            default: 0
-          }
-        ]
-      }
-    ],
     goalScore: {
       type: Number,
-      default: this.dates.length * 15
+      default: 0
     },
     currentScore: {
       type: Number,
@@ -34,7 +20,7 @@ module.exports = MdCalls = mongoose.model(
     },
     callRate: {
       type: Number,
-      default: (this.goalScore / this.currentScore) * 100
+      default: 0
     }
   })
 );

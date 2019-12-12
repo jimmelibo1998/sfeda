@@ -6,6 +6,9 @@ const { check, validationResult } = require("express-validator");
 const DCR = require("../../models/DCR");
 const DCRDoctor = require("../../models/DCRDoctor");
 const MasterList = require("../../models/MasterList");
+const MdCalls = require("../../models/MdCalls");
+const MdCallsScore = require("../../models/MdCallsScore");
+const DoctorAccount = require("../../models/DoctorAccount");
 
 //@route POST /api/dcr/:masterlist
 //@desc  Create DCR
@@ -82,6 +85,7 @@ router.post(
         firstName,
         registered
       });
+
       if (dcrDoctor)
         return res
           .status(400)
@@ -102,5 +106,9 @@ router.post(
     }
   }
 );
+
+//@route PUT /api/dcr/visit/:dcrdoctor
+//@desc  Set DCR's doctor to visited: true
+//@access Private
 
 module.exports = router;

@@ -21,14 +21,6 @@ module.exports = DCR = mongoose.model(
       type: Date,
       default: Date.now()
     },
-    registeredDoctors: {
-      type: Number,
-      default: 0
-    },
-    regularCustomers: {
-      type: Number,
-      default: 0
-    },
     totalPoints: {
       type: Number,
       default: 0

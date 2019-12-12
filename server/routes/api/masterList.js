@@ -40,6 +40,7 @@ router.post("/:medrep", async (req, res) => {
     });
 
     await masterlist.save();
+
     res.json(masterlist);
   } catch (err) {
     console.error(err.message);
