@@ -25,6 +25,22 @@ module.exports = DCR = mongoose.model(
       type: Number,
       default: 0
     },
+    doctors: [
+      {
+        lastName: {
+          type: String
+        },
+        firstName: {
+          type: String
+        },
+        inMasterlist: {
+          type: Boolean
+        },
+        score: {
+          type: Number
+        }
+      }
+    ],
     submited: {
       type: Boolean,
       default: false

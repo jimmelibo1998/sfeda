@@ -16,7 +16,7 @@ module.exports = DCRDoctor = mongoose.model(
       type: String,
       required: true
     },
-    registered: {
+    inMasterlist: {
       type: Boolean,
       required: true
     },

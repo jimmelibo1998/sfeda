@@ -2,10 +2,12 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const { check, validationResult } = require("express-validator");
+const mongoose = require("mongoose");
 
 const AdminAccount = require("../../models/AdminAccount");
 const MedRepAccount = require("../../models/MedRepAccount");
 const DoctorAccount = require("../../models/DoctorAccount");
+const RegularCustomer = require("../../models/RegularCustomer");
 
 //@route POST /api/accounts/admin
 //@desc  Register admin
@@ -50,7 +52,7 @@ router.post(
       admin.password = await bcrypt.hash(password, salt);
 
       await admin.save();
-      res.send("New admin account created");
+      res.send(admin);
     } catch (err) {
       console.error(err.message);
       res.send("Server Error");
@@ -104,7 +106,7 @@ router.post(
       medrep.password = await bcrypt.hash(password, salt);
 
       await medrep.save();
-      res.send("New medrep account created");
+      res.send(medrep);
     } catch (err) {
       console.error(err);
       res.send("Server Error");
@@ -151,8 +153,58 @@ router.post(
       doctor.password = await bcrypt.hash(email, salt);
 
       await doctor.save();
-      console.log(doctor);
-      res.send("New Doctor Account Created");
+      console.log("Doctor Account Created");
+      res.send(doctor);
+    } catch (err) {
+      console.error(err.message);
+      res.send("Server Error");
+    }
+  }
+);
+
+//@route POST /api/accounts/customer
+//@desc  add regular customer
+//@access Private
+router.post(
+  "/customer",
+  [
+    check("firstName", "FirstName is required").exists(),
+    check("lastName", "Last Name is required").exists(),
+    check("contact", "Contact Number is required and must be valid")
+      .exists()
+      .isLength({ min: 7 }),
+    check("email", "Must be a valid email")
+      .if((value, { req }) => req.body.email)
+      .isEmail()
+  ],
+  async (req, res) => {
+    const validationErrors = validationResult(req);
+    if (!validationErrors.isEmpty())
+      return res.status(400).json({ errors: validationErrors.array() });
+
+    const { lastName, firstName, contact } = req.body;
+
+    try {
+      let customer = await RegularCustomer.findOne({ contact });
+      if (customer)
+        return res
+          .status(400)
+          .json({ errors: [{ msg: "Customer already exists" }] });
+      let email = null;
+
+      if (req.body.email) {
+        email = req.body.email;
+      }
+
+      customer = new RegularCustomer({
+        lastName,
+        firstName,
+        contact,
+        email
+      });
+
+      await customer.save();
+      res.json(customer);
     } catch (err) {
       console.error(err.message);
       res.send("Server Error");

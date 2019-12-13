@@ -94,7 +94,7 @@ router.post(
 );
 
 //@route POST /api/auth/doctor
-//@desc  Login MedRep and Admin
+//@desc  Login Doctor
 //@access Public
 router.post(
   "/doctor",

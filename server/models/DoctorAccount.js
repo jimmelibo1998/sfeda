@@ -10,21 +10,21 @@ module.exports = DoctorAccount = mongoose.model(
       type: String,
       required: true
     },
-    registered: {
-      type: Boolean,
+    email: {
+      type: String,
       required: true
     },
-    email: {
-      type: String
-    },
     password: {
-      type: String
+      type: String,
+      required: true
     },
     specialityCode: {
-      type: String
+      type: String,
+      required: true
     },
     classCode: {
-      type: String
+      type: String,
+      required: true
     }
   })
 );

@@ -1,52 +1,85 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
+const { check, validationResult } = require("express-validator");
+const moment = require("moment");
 
 const MasterList = require("../../models/MasterList");
 const DoctorAccount = require("../../models/DoctorAccount");
 const MedRepAccount = require("../../models/MedRepAccount");
 const MasterListDoctor = require("../../models/MasterListDoctor");
+const NoCallDays = require("../../models/NoCallDays");
+
+const getAllDatesInMonth = require("../../functions/getAllDatesInMonth");
+const arrayDiff = require("../../functions/arrayDiff");
 
 //@route POST /api/masterlist/:medrep
 //@desc  Add MasterList
 //@access Private
-router.post("/:medrep", async (req, res) => {
-  const d = new Date();
-  let monthYear = d.getMonth().toString() + "-" + d.getFullYear().toString();
-  try {
+router.post(
+  "/:medrep",
+  [check("date", "Date is required").exists()],
+  async (req, res) => {
+    let d = new Date();
+    let errors = validationResult(req);
+    if (!errors.isEmpty())
+      return req.status(400).json({ errors: errors.array() });
+
     //check if object id is valid
     const valid = mongoose.Types.ObjectId.isValid(req.params.medrep);
     if (valid === false)
       return res.status(400).json({ errors: [{ msg: "Invalid ObjectId" }] });
-
-    const medrepExists = await MedRepAccount.findById(req.params.medrep);
-    if (!medrepExists)
-      return res
-        .status(400)
-        .json({ errors: [{ msg: "Medrep doesn't exist" }] });
-
-    let masterlist = await MasterList.findOne({
-      month: monthYear,
-      medrep: req.params.medrep
-    });
-
-    if (masterlist)
-      return res.status(400).json({
-        errors: [{ msg: "Already have a masterlist for the current month" }]
+    let monthYear = moment(req.body.date).format("MMMM YYYY");
+    let inputDate = moment(req.body.date).format("YYYY-MM-DD");
+    try {
+      let nocalldays = await NoCallDays.findOne({
+        month: monthYear
       });
 
-    masterlist = new MasterList({
-      medrep: req.params.medrep
-    });
+      if (!nocalldays)
+        return res
+          .status(400)
+          .json({ errors: [{ msg: "No Call Days not set" }] });
 
-    await masterlist.save();
+      const medrepExists = await MedRepAccount.findById(req.params.medrep);
+      if (!medrepExists)
+        return res
+          .status(400)
+          .json({ errors: [{ msg: "Medrep doesn't exist" }] });
 
-    res.json(masterlist);
-  } catch (err) {
-    console.error(err.message);
-    res.send("Server error");
+      let masterlist = await MasterList.findOne({
+        month: monthYear,
+        medrep: req.params.medrep
+      });
+
+      if (masterlist)
+        return res.status(400).json({
+          errors: [{ msg: "Already have a masterlist for the current month" }]
+        });
+
+      let datesInMonth = getAllDatesInMonth(
+        new Date(inputDate).getMonth(),
+        new Date(inputDate).getFullYear()
+      );
+
+      let datesExcluded = nocalldays.dates;
+
+      let goalScore = arrayDiff(datesInMonth, datesExcluded).length * 15;
+      masterlist = new MasterList({
+        medrep: req.params.medrep,
+        month: monthYear,
+        goalScore
+      });
+
+      await masterlist.save();
+
+      res.json(masterlist);
+    } catch (err) {
+      console.error(err.message);
+      res.send("Server error");
+    }
   }
-});
+);
 
 //@route POST /api/masterlist/add/:masterlist/:doctor
 //@desc  Add Doctor to masterlist
@@ -86,6 +119,41 @@ router.post("/add/:masterlist/:doctor", async (req, res) => {
 
     listdoctor.save();
     res.json(listdoctor);
+  } catch (err) {
+    console.error(err.message);
+    res.send("Server Error");
+  }
+});
+
+//@route POST /api/masterlist/delete/:masterlist/:doctor
+//@desc  Rmove Doctor in masterlist
+//@access Private
+router.delete("/delete/:masterlist/:doctor", async (req, res) => {
+  const validMasterlist = mongoose.Types.ObjectId.isValid(
+    req.params.masterlist
+  );
+  if (validMasterlist === false)
+    return res.status(400).json({ errors: [{ msg: "ObjectId not valid" }] });
+
+  const validDoctor = mongoose.Types.ObjectId.isValid(req.params.doctor);
+  if (validDoctor === false)
+    return res.status(400).json({ errors: [{ msg: "ObjectId not valid" }] });
+
+  try {
+    let masterlistdoctor = await MasterListDoctor.findOne({
+      masterlist: req.params.masterlist,
+      doctor: req.params.doctor
+    });
+
+    if (!masterlistdoctor)
+      return res.status(400).json({ errors: [{ msg: "No doctor to delete" }] });
+
+    masterlistdoctor = await MasterListDoctor.findOneAndRemove({
+      masterlist: req.params.masterlist,
+      doctor: req.params.doctor
+    });
+    console.log("Doctor removed from masterlist");
+    res.send(masterlistdoctor);
   } catch (err) {
     console.error(err.message);
     res.send("Server Error");

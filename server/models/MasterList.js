@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const moment = require("moment");
 
 const d = new Date();
 
@@ -11,7 +12,7 @@ module.exports = Masterlist = mongoose.model(
     },
     month: {
       type: String,
-      default: d.getMonth().toString() + "-" + d.getFullYear().toString(),
+      required: true,
       unique: true
     },
     callFreq: {
@@ -19,6 +20,18 @@ module.exports = Masterlist = mongoose.model(
       default: 0
     },
     callReach: {
+      type: Number,
+      default: 0
+    },
+    goalScore: {
+      type: Number,
+      default: 0
+    },
+    currentScore: {
+      type: Number,
+      default: 0
+    },
+    callRate: {
       type: Number,
       default: 0
     },
