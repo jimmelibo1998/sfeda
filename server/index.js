@@ -1,6 +1,7 @@
 const express = require("express");
 const connectDB = require("./config/db");
 const moment = require("moment");
+const cors = require("cors");
 
 const app = express();
 const bodyParser = require("body-parser");
@@ -12,6 +13,8 @@ connectDB();
 //body parser
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+app.use(cors());
 
 app.get("/", (req, res) => res.send("API Running"));
 

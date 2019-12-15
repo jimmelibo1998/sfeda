@@ -1,5 +1,7 @@
-import React, { Component, Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+
+import { loadUser } from "../actions/auth";
 
 import NavBar from "./layout/NavBar";
 import SideNav from "./layout/SideNav";
@@ -26,10 +28,22 @@ import MMasterList from "./medicalRep/mperform/MMasterList";
 import AddMasterList from "./medicalRep/mperform/AddMasterList";
 import MDcrsList from "./medicalRep/mperform/MDcrsList";
 import MDcrs from "./medicalRep/mperform/MDcrs";
+import setAuthToken from "../utils/setAuthToken";
+//Redux
+import { Provider } from "react-redux";
+import store from "../store";
 
-class App extends Component {
-  render() {
-    return (
+if (localStorage.token) {
+  setAuthToken(localStorage.token);
+}
+
+const App = () => {
+  useEffect(() => {
+    store.dispatch(loadUser());
+  }, []);
+
+  return (
+    <Provider store={store}>
       <Router>
         <Fragment>
           <NavBar />
@@ -85,8 +99,8 @@ class App extends Component {
           </div>
         </Fragment>
       </Router>
-    );
-  }
-}
+    </Provider>
+  );
+};
 
 export default App;

@@ -1,10 +1,11 @@
 import React, { Component, Fragment } from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
 class Breadcrumb extends Component {
-  render() {
-    return (
-      <Fragment>
+  displayBreadcrumb() {
+    if (this.props.isAuthenticated === true) {
+      return (
         <nav
           className="z-depth-0 light-green lighten-5"
           style={{ marginTop: "3px" }}
@@ -22,9 +23,17 @@ class Breadcrumb extends Component {
             </div>
           </div>
         </nav>
-      </Fragment>
-    );
+      );
+    }
+  }
+
+  render() {
+    return <Fragment>{this.displayBreadcrumb()}</Fragment>;
   }
 }
 
-export default Breadcrumb;
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
+
+export default connect(mapStateToProps, {})(Breadcrumb);

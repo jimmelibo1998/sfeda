@@ -18,7 +18,7 @@ module.exports = Admin = mongoose.model(
       type: String,
       required: true
     },
-    adminType: {
+    role: {
       type: String,
       default: "admin"
     }

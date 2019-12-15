@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
+const moment = require("moment");
 
-const d = new Date();
 module.exports = DCR = mongoose.model(
   "dcr",
   new mongoose.Schema({
@@ -8,39 +8,14 @@ module.exports = DCR = mongoose.model(
       type: mongoose.Schema.Types.ObjectId,
       ref: "masterlist"
     },
-    dateId: {
-      type: String,
-      default:
-        (d.getMonth() + 1).toString() +
-        "/" +
-        d.getDate().toString() +
-        "/" +
-        d.getFullYear().toString()
-    },
     date: {
-      type: Date,
-      default: Date.now()
+      type: String,
+      default: moment().format("YYYY-MM-DD")
     },
     totalPoints: {
       type: Number,
       default: 0
     },
-    doctors: [
-      {
-        lastName: {
-          type: String
-        },
-        firstName: {
-          type: String
-        },
-        inMasterlist: {
-          type: Boolean
-        },
-        score: {
-          type: Number
-        }
-      }
-    ],
     submited: {
       type: Boolean,
       default: false

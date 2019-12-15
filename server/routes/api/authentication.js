@@ -4,10 +4,28 @@ const jwt = require("jsonwebtoken");
 const config = require("config");
 const bcrypt = require("bcryptjs");
 const { check, validationResult } = require("express-validator");
+const auth = require("../../middleware/auth");
 
 const Admin = require("../../models/AdminAccount");
 const MedRepAccount = require("../../models/MedRepAccount");
 const DoctorAccount = require("../../models/DoctorAccount");
+
+//@route GET /api/auth
+//@desc  Get currently logged in Admin or user
+//@access Private
+router.get("/", auth, async (req, res) => {
+  if (req.user.role === "admin" || req.user.role === "super-admin") {
+    let user = await Admin.findById(req.user.id).select("-password");
+    if (!user)
+      return res.status(400).json({ errors: [{ msg: "user not found" }] });
+    res.json(user);
+  } else if (req.user.role === "medrep") {
+    let user = await MedRepAccount.findById(req.user.id).select("-password");
+    if (!user)
+      return res.status(400).json({ errors: [{ msg: "user not found" }] });
+    res.json(user);
+  }
+});
 
 //@route POST /api/auth
 //@desc  Login MedRep and Admin
@@ -38,7 +56,7 @@ router.post(
         const payload = {
           user: {
             id: admin._id,
-            role: admin.adminType
+            role: admin.role
           }
         };
 

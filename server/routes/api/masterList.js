@@ -10,6 +10,8 @@ const MedRepAccount = require("../../models/MedRepAccount");
 const MasterListDoctor = require("../../models/MasterListDoctor");
 const NoCallDays = require("../../models/NoCallDays");
 
+const auth = require("../../middleware/auth");
+
 const getAllDatesInMonth = require("../../functions/getAllDatesInMonth");
 const arrayDiff = require("../../functions/arrayDiff");
 
@@ -18,7 +20,7 @@ const arrayDiff = require("../../functions/arrayDiff");
 //@access Private
 router.post(
   "/:medrep",
-  [check("date", "Date is required").exists()],
+  [auth, [check("date", "Date is required").exists()]],
   async (req, res) => {
     let d = new Date();
     let errors = validationResult(req);
@@ -84,7 +86,7 @@ router.post(
 //@route POST /api/masterlist/add/:masterlist/:doctor
 //@desc  Add Doctor to masterlist
 //@access Private
-router.post("/add/:masterlist/:doctor", async (req, res) => {
+router.post("/add/:masterlist/:doctor", auth, async (req, res) => {
   const { masterlist, doctor } = req.params;
   //check if object id is valid
   const validMasterlist = mongoose.Types.ObjectId.isValid(masterlist);
@@ -128,7 +130,7 @@ router.post("/add/:masterlist/:doctor", async (req, res) => {
 //@route POST /api/masterlist/delete/:masterlist/:doctor
 //@desc  Rmove Doctor in masterlist
 //@access Private
-router.delete("/delete/:masterlist/:doctor", async (req, res) => {
+router.delete("/delete/:masterlist/:doctor", auth, async (req, res) => {
   const validMasterlist = mongoose.Types.ObjectId.isValid(
     req.params.masterlist
   );
@@ -163,7 +165,7 @@ router.delete("/delete/:masterlist/:doctor", async (req, res) => {
 //@route POST /api/masterlist/send/:id
 //@desc  Send masterlist
 //@access Private
-router.put("/send/:id", async (req, res) => {
+router.put("/send/:id", auth, async (req, res) => {
   const { id } = req.params;
 
   const validId = mongoose.Types.ObjectId.isValid(id);

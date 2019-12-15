@@ -4,6 +4,8 @@ const mongoose = require("mongoose");
 const { check, validationResult } = require("express-validator");
 const moment = require("moment");
 
+const auth = require("../../middleware/auth");
+
 const MdCalls = require("../../models/MdCalls");
 const Masterlist = require("../../models/MasterList");
 const MdCallsScore = require("../../models/MdCallsScore");
@@ -78,7 +80,7 @@ const DCR = require("../../models/DCR");
 //@access Private
 router.post(
   "/nocalls",
-  [check("date", "Date is required").exists()],
+  [auth, [check("date", "Date is required").exists()]],
   async (req, res) => {
     const validationErrors = validationResult(req);
     if (!validationErrors.isEmpty())

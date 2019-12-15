@@ -22,6 +22,10 @@ module.exports = MedRepAccount = mongoose.model(
     area: {
       type: String,
       required: true
+    },
+    role: {
+      type: String,
+      role: "medrep"
     }
   })
 );

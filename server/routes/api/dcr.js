@@ -2,6 +2,9 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const { check, validationResult } = require("express-validator");
+const moment = require("moment");
+
+const auth = require("../../middleware/auth");
 
 const DCR = require("../../models/DCR");
 const DCRDoctor = require("../../models/DCRDoctor");
@@ -9,19 +12,13 @@ const MasterList = require("../../models/MasterList");
 const MdCalls = require("../../models/MdCalls");
 const MdCallsScore = require("../../models/MdCallsScore");
 const DoctorAccount = require("../../models/DoctorAccount");
+const RegularCustomer = require("../../models/RegularCustomer");
 
 //@route POST /api/dcr/:masterlist
 //@desc  Create DCR
 //@access Private
-router.post("/:masterlist", async (req, res) => {
-  const d = new Date();
-
-  const dateToday =
-    (d.getMonth() + 1).toString() +
-    "/" +
-    d.getDate().toString() +
-    "/" +
-    d.getFullYear().toString();
+router.post("/:masterlist", auth, async (req, res) => {
+  const dateToday = moment().format("YYYY-MM-DD");
 
   const valid = mongoose.Types.ObjectId.isValid(req.params.masterlist);
   if (valid === false)
@@ -37,7 +34,7 @@ router.post("/:masterlist", async (req, res) => {
     if (masterlist.sent === false)
       return res.status(400).json({ errors: [{ msg: "Masterlist not sent" }] });
 
-    let dcr = await DCR.findOne({ dateId: dateToday });
+    let dcr = await DCR.findOne({ date: dateToday });
     if (dcr)
       return res
         .status(400)
@@ -52,25 +49,30 @@ router.post("/:masterlist", async (req, res) => {
   }
 });
 
-//@route POST /api/dcr/add/:dcr
+//@route POST /api/dcr/add/:id
 //@desc  Add Doctor to DCR
 //@access Private
 router.post(
-  "/add/:dcr",
+  "/add/:dcr/:id",
   [
-    check("lastName", "Last Name is required").exists(),
-    check("firstName", "First Name is required").exists(),
-    check(
-      "registered",
-      "Please specify if registered or not(true or false)"
-    ).isBoolean()
+    auth,
+    [
+      check(
+        "inMasterlist",
+        "Please specify if registered or not(true or false)"
+      ).isBoolean()
+    ]
   ],
   async (req, res) => {
     const validationErrors = validationResult(req);
     if (!validationErrors.isEmpty())
       return res.status(400).json({ errors: validationErrors.array() });
 
-    const valid = mongoose.Types.ObjectId.isValid(req.params.dcr);
+    let valid = mongoose.Types.ObjectId.isValid(req.params.dcr);
+    if (valid === false)
+      return res.status(400).json({ errors: [{ msg: "Invalid ObjectId" }] });
+
+    valid = mongoose.Types.ObjectId.isValid(req.params.id);
     if (valid === false)
       return res.status(400).json({ errors: [{ msg: "Invalid ObjectId" }] });
 
@@ -79,7 +81,6 @@ router.post(
       if (!dcr)
         return res.status(400).json({ errors: [{ msg: "DCR not found" }] });
 
-      const { lastName, firstName, registered } = req.body;
       let dcrDoctor = await DCRDoctor.findOne({
         lastName,
         firstName,
@@ -91,10 +92,23 @@ router.post(
           .status(400)
           .json({ errors: [{ msg: "Doctor already in the list" }] });
 
+      let user = await DoctorAccount.findById(req.params.id);
+      if (!user) {
+        user = await RegularCustomer.findById(req.params.id);
+        if (!user)
+          return res.status(400).json({ errors: [{ msg: "User not found" }] });
+      }
+
+      let registered = false;
+      if (user.classCode) {
+        registered = true;
+      }
+
       dcrDoctor = new DCRDoctor({
         dcr: req.params.dcr,
-        lastName,
-        firstName,
+        lastName: user.lastName,
+        firstName: user.firstName,
+        id: user._id,
         registered
       });
 
