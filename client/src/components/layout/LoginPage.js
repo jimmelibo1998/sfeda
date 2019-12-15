@@ -20,12 +20,6 @@ const LoginPage = ({ login, user, isAuthenticated, loadUser }) => {
     login(email, password);
   };
 
-  // if (isAuthenticated && user.role === "medrep")
-  //   return <Redirect to="/medrep" />;
-
-  // if (isAuthenticated && (user.role === "admin" || user.role === "super-admin"))
-  //   return <Redirect to="/admin" />;
-
   return (
     <Fragment>
       <div className="row" style={{ marginTop: "10px" }}>

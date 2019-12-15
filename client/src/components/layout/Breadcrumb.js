@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 
 class Breadcrumb extends Component {
   displayBreadcrumb() {
-    if (this.props.isAuthenticated === true) {
+    if (this.props.isAuthenticated) {
       return (
         <nav
           className="z-depth-0 light-green lighten-5"

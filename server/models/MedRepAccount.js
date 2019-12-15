@@ -25,7 +25,7 @@ module.exports = MedRepAccount = mongoose.model(
     },
     role: {
       type: String,
-      role: "medrep"
+      default: "medrep"
     }
   })
 );
