@@ -7,6 +7,8 @@ import {
 } from "./types";
 import myServer from "../apis/myServer";
 import setAuthToken from "../utils/setAuthToken";
+import setAlert from "./alert";
+import history from "../history";
 
 // Load User
 export const loadUser = () => async dispatch => {
@@ -20,7 +22,7 @@ export const loadUser = () => async dispatch => {
         payload: res.data
       });
     } catch (err) {
-      dispatch({
+      await dispatch({
         type: AUTH_ERROR
       });
     }
@@ -42,15 +44,17 @@ export const login = (email, password) => async dispatch => {
       type: LOGIN_SUCCESS,
       payload: res.data
     });
-
+    dispatch(setAlert("Log In is Successful", "green"));
     dispatch(loadUser());
   } catch (err) {
     console.error(err.message);
     dispatch({ type: LOGIN_FAILED });
+    dispatch(setAlert("Invalid Credentials", "deep-orange accent-1"));
   }
 };
 
 // Logout / Clear
 export const logout = () => dispatch => {
   dispatch({ type: LOG_OUT });
+  history.push("/");
 };

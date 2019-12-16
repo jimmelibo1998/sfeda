@@ -2,8 +2,7 @@ import React, { Fragment, useState } from "react";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { login, loadUser } from "../../actions/auth";
-
-const LoginPage = ({ login, role, isAuthenticated }) => {
+const LoginPage = ({ login, role, isAuthenticated, alerts }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: ""
@@ -18,6 +17,8 @@ const LoginPage = ({ login, role, isAuthenticated }) => {
   const onSubmit = async e => {
     e.preventDefault();
     login(email, password);
+    setFormData({ email: "", password: "" });
+    console.clear();
   };
 
   if (isAuthenticated && role === "medrep") {
@@ -46,6 +47,7 @@ const LoginPage = ({ login, role, isAuthenticated }) => {
                     name="email"
                     value={email}
                     onChange={e => onChange(e)}
+                    required
                   />
                 </div>
                 <br />
@@ -58,6 +60,7 @@ const LoginPage = ({ login, role, isAuthenticated }) => {
                     name="password"
                     value={password}
                     onChange={e => onChange(e)}
+                    required
                   />
                 </div>
                 <br />
@@ -82,7 +85,8 @@ const LoginPage = ({ login, role, isAuthenticated }) => {
 
 const maptStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
-  role: state.auth.role
+  role: state.auth.role,
+  alerts: state.alerts
 });
 
 export default connect(maptStateToProps, { login, loadUser })(LoginPage);

@@ -6,7 +6,9 @@ class ManageAdmin extends Component {
     return (
       <Fragment>
         <div>
-          <h4 className="light-green-text text-darken-3">Administrators</h4>
+          <h4 className="light-green-text text-darken-3 center">
+            Administrators
+          </h4>
           <table className="responsive-table centered striped">
             <thead>
               <tr>

@@ -39,32 +39,16 @@ class MedRepPerfChart extends Component {
   render() {
     return (
       <Fragment>
-        <div className="row">
-          <div className="col s12">
-            <div className="row">
-              <div className="input-field col s6">
-                <input
-                  placeholder="2019"
-                  id="first_name"
-                  type="text"
-                  className="validate"
-                />
-                <label htmlFor="first_name">Year</label>
-              </div>
-              <div className="input-field col s6">
-                <button className="waves-effect waves-light btn green darken 3">
-                  Search
-                </button>
-              </div>
-            </div>
-          </div>
-          <div className="col s12">
-            <Line
-              data={this.state.chartData}
-              options={this.state.chartOption}
-            />
-          </div>
-        </div>
+        <select className="browser-default">
+          <option disabled value="">
+            Select Year
+          </option>
+          <option value="2019">2019</option>
+          <option value="2018">2018</option>
+          <option value="2017">2017</option>
+        </select>
+
+        <Line data={this.state.chartData} options={this.state.chartOption} />
       </Fragment>
     );
   }

@@ -1,14 +1,15 @@
 import React, { Fragment, useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import history from "../history";
 import "materialize-css/dist/css/materialize.min.css";
 import "materialize-css/dist/js/materialize.min.js";
 
 import { loadUser } from "../actions/auth";
 
 import NavBar from "./layout/NavBar";
-import SideNav from "./layout/SideNav";
+import SideNavs from "./layout/SideNav";
 import LoginPage from "./layout/LoginPage";
-import Breadcrumb1 from "./layout/Breadcrumb";
+import Alert from "./layout/Alert";
 
 import PrivateRoute from "./routing/PrivateRoute";
 
@@ -34,122 +35,145 @@ import MDcrsList from "./medicalRep/mperform/MDcrsList";
 import MDcrs from "./medicalRep/mperform/MDcrs";
 import setAuthToken from "../utils/setAuthToken";
 //Redux
-import { Provider } from "react-redux";
 import store from "../store";
+import { connect } from "react-redux";
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
 }
 
-const App = () => {
+const App = ({ auth: { isAuthenticated }, alerts }) => {
   useEffect(() => {
     store.dispatch(loadUser());
   }, []);
 
+  const applyPadding = () => {
+    if (isAuthenticated) {
+      return (
+        <style>
+          {
+            " .nothing {padding-left: 300px} @media only screen and (max-width: 992px) {.nothing{padding-left: 0;}}"
+          }
+        </style>
+      );
+    }
+  };
+
+  const renderSideNav = () => {
+    if (isAuthenticated) {
+      return (
+        <div>
+          <SideNavs />
+        </div>
+      );
+    }
+  };
+
+  const renderAlert = () => {
+    if (alerts !== null && alerts.length > 0)
+      return (
+        <div>
+          {alerts.map(alert => (
+            <Alert color={alert.alertType} message={alert.msg} />
+          ))}
+        </div>
+      );
+  };
+
   return (
-    <Provider store={store}>
-      <Router>
-        <Fragment>
-          <div className="row">
-            <div>
-              <SideNav />
-            </div>
-            <div style={{ paddingLeft: "300px" }}>
-              <NavBar />
-              <div style={{ fontFamily: "Noto Serif" }}>
-                <Route exact path="/" component={LoginPage} />
-                <Switch>
-                  {/* Admins */}
-                  <PrivateRoute
-                    exact
-                    path="/admin"
-                    component={AdminDashboard}
-                  />
-                  <PrivateRoute
-                    exact
-                    path="/admin/announcements"
-                    component={Announcements}
-                  />
-                  <PrivateRoute
-                    exact
-                    path="/admin/announcements/edit"
-                    component={AddEditAnnouncement}
-                  />
-                  <PrivateRoute
-                    exact
-                    path="/admin/manageadmin"
-                    component={ManageAdmin}
-                  />
-                  <PrivateRoute
-                    exact
-                    path="/admin/manageadmin/edit"
-                    component={AddEditAdmin}
-                  />
-                  <PrivateRoute
-                    exact
-                    path="/admin/medrep"
-                    component={MedReps}
-                  />
-                  <PrivateRoute
-                    exact
-                    path="/admin/medrep/new"
-                    component={NewMedRep}
-                  />
-                  <PrivateRoute
-                    exact
-                    path="/admin/medrep/profile"
-                    component={ViewProfile}
-                  />
-                  <PrivateRoute
-                    exact
-                    path="/admin/profile"
-                    component={Profile}
-                  />
-                  {/* Medreps */}
-                  <PrivateRoute exact path="/medrep" component={MDashboard} />
-                  <PrivateRoute
-                    exact
-                    path="/medrep/account"
-                    component={MAccount}
-                  />
-                  <PrivateRoute
-                    exact
-                    path="/medrep/doctors"
-                    component={MDoctors}
-                  />
-                  <PrivateRoute
-                    exact
-                    path="/medrep/doctors/new"
-                    component={NewDoctor}
-                  />
-                  <PrivateRoute
-                    exact
-                    path="/medrep/perform/masterlist"
-                    component={MMasterList}
-                  />
-                  <PrivateRoute
-                    exact
-                    path="/medrep/perform/masterlist/add"
-                    component={AddMasterList}
-                  />
-                  <PrivateRoute
-                    exact
-                    path="/medrep/perform/dcrs"
-                    component={MDcrsList}
-                  />
-                  <PrivateRoute
-                    exact
-                    path="/medrep/perform/dcrs/add"
-                    component={MDcrs}
-                  />
-                </Switch>
-              </div>
+    <Router history={history}>
+      {applyPadding()}
+      {renderSideNav()}
+      <Fragment>
+        <div className="row nothing">
+          <div>
+            <NavBar />
+            <div style={{ fontFamily: "Noto Serif" }}>
+              {renderAlert()}
+              <Route exact path="/" component={LoginPage} />
+              <Switch>
+                <PrivateRoute exact path="/admin" component={AdminDashboard} />
+                <PrivateRoute
+                  exact
+                  path="/admin/announcements"
+                  component={Announcements}
+                />
+                <PrivateRoute
+                  exact
+                  path="/admin/announcements/edit"
+                  component={AddEditAnnouncement}
+                />
+                <PrivateRoute
+                  exact
+                  path="/admin/manageadmin"
+                  component={ManageAdmin}
+                />
+                <PrivateRoute
+                  exact
+                  path="/admin/manageadmin/edit"
+                  component={AddEditAdmin}
+                />
+                <PrivateRoute exact path="/admin/medrep" component={MedReps} />
+                <PrivateRoute
+                  exact
+                  path="/admin/medrep/new"
+                  component={NewMedRep}
+                />
+                <PrivateRoute
+                  exact
+                  path="/admin/medrep/profile"
+                  component={ViewProfile}
+                />
+                <PrivateRoute exact path="/admin/profile" component={Profile} />
+                {/* Medreps */}
+                <PrivateRoute exact path="/medrep" component={MDashboard} />
+                <PrivateRoute
+                  exact
+                  path="/medrep/account"
+                  component={MAccount}
+                />
+                <PrivateRoute
+                  exact
+                  path="/medrep/doctors"
+                  component={MDoctors}
+                />
+                <PrivateRoute
+                  exact
+                  path="/medrep/doctors/new"
+                  component={NewDoctor}
+                />
+                <PrivateRoute
+                  exact
+                  path="/medrep/perform/masterlist"
+                  component={MMasterList}
+                />
+                <PrivateRoute
+                  exact
+                  path="/medrep/perform/masterlist/add"
+                  component={AddMasterList}
+                />
+                <PrivateRoute
+                  exact
+                  path="/medrep/perform/dcrs"
+                  component={MDcrsList}
+                />
+                <PrivateRoute
+                  exact
+                  path="/medrep/perform/dcrs/add"
+                  component={MDcrs}
+                />
+              </Switch>
             </div>
           </div>
-        </Fragment>
-      </Router>
-    </Provider>
+        </div>
+      </Fragment>
+    </Router>
   );
 };
 
-export default App;
+const mapStateToProps = state => ({
+  auth: state.auth,
+  alerts: state.alerts
+});
+
+export default connect(mapStateToProps)(App);

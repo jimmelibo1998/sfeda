@@ -1,7 +1,6 @@
 import React from "react";
 import RegionPerformance from "./RegionPerformance";
 import RegionMedRepPerf from "./RegionMedRepPerf";
-import Announcements from "./Announcements";
 
 class MDashboard extends React.Component {
   render() {

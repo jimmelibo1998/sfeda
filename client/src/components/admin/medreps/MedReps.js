@@ -6,7 +6,7 @@ class MedReps extends Component {
     return (
       <Fragment>
         <div className="row">
-          <h4 className="light-green-text text-darken-3">
+          <h4 className="light-green-text text-darken-3 center">
             Medical Representatives
           </h4>
           <br />

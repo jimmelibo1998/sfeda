@@ -1,0 +1,9 @@
+.padding {
+  background-color: blue;
+}
+
+/* @media only screen and (max-width: 992px) {
+  .padding {
+    padding-left: 0;
+  }
+} */

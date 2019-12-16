@@ -19,9 +19,8 @@ const ViewProfile = () => {
   };
   return (
     <div>
-      <h4 className="light-green-text text-darken-3">Profile</h4>
+      <h4 className="light-green-text text-darken-3 center">Profile</h4>
       <div className="row">
-        <h6 className="light-green-text text-darken-3">Information</h6>
         <div className="col s12 m4 green darken-3">
           <div style={{ textAlign: "center" }}>
             <br />
