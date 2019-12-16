@@ -2,7 +2,8 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAILED,
   USER_LOADED,
-  AUTH_ERROR
+  AUTH_ERROR,
+  LOG_OUT
 } from "../actions/types";
 import jwtDecode from "jwt-decode";
 
@@ -35,6 +36,7 @@ export default function(state = initialState, action) {
       };
     case LOGIN_FAILED:
     case AUTH_ERROR:
+    case LOG_OUT:
       localStorage.removeItem("token");
       return {
         ...state,

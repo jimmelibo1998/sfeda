@@ -4,7 +4,7 @@ class AddEditAdmin extends Component {
   render() {
     return (
       <Fragment>
-        <div className="container">
+        <div>
           <div className="row">
             <h4 className="light-green-text text-darken-3 center">
               New Administrator

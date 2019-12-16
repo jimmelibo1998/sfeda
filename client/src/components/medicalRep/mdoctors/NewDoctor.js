@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 class NewDoctor extends React.Component {
   render() {
     return (
-      <div className="container">
+      <div>
         <h4 className="light-green-text text-darken-3 center">New Doctor</h4>
         <form>
           <div className="row">

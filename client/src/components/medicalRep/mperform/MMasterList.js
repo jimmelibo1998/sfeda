@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 class MMasterList extends React.Component {
   render() {
     return (
-      <div className="container">
+      <div>
         <h3 className="flow-text light-green-text text-darken-3">
           Master List
         </h3>

@@ -1,13 +1,6 @@
 import React, { Component, Fragment } from "react";
-import M from "materialize-css/dist/js/materialize.min.js";
 
 class DCR extends Component {
-  componentDidMount() {
-    document.addEventListener("DOMContentLoaded", function() {
-      var elems = document.querySelectorAll(".datepicker");
-      M.Datepicker.init(elems, {});
-    });
-  }
   render() {
     return (
       <Fragment>

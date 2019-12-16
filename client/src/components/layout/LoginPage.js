@@ -3,7 +3,7 @@ import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { login, loadUser } from "../../actions/auth";
 
-const LoginPage = ({ login, user, isAuthenticated, loadUser }) => {
+const LoginPage = ({ login, role, isAuthenticated }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: ""
@@ -20,13 +20,21 @@ const LoginPage = ({ login, user, isAuthenticated, loadUser }) => {
     login(email, password);
   };
 
+  if (isAuthenticated && role === "medrep") {
+    return <Redirect to="/medrep" />;
+  }
+
+  if (isAuthenticated && (role === "admin" || role === "super-admin")) {
+    return <Redirect to="/admin" />;
+  }
+
   return (
     <Fragment>
       <div className="row" style={{ marginTop: "10px" }}>
         <div className="col s12 m6 l4 offset-m3 offset-l4">
           <div className="card z-depth-3" style={{ marginTop: "10%" }}>
             <div className="card-action green darken-1 white-text">
-              <h3 className="center"> Prebiotech </h3>
+              <h3 className="center"> Login </h3>
             </div>
             <form onSubmit={e => onSubmit(e)}>
               <div className="card-content">
@@ -74,7 +82,7 @@ const LoginPage = ({ login, user, isAuthenticated, loadUser }) => {
 
 const maptStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
-  user: state.auth.user
+  role: state.auth.role
 });
 
 export default connect(maptStateToProps, { login, loadUser })(LoginPage);

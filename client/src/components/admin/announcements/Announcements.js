@@ -5,7 +5,7 @@ class Announcements extends Component {
   render() {
     return (
       <Fragment>
-        <div className="container">
+        <div>
           <h4 className="light-green-text text-darken-3">Announcements</h4>
           <table className="responsive-table centered striped">
             <thead>

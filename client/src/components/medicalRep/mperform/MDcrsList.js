@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 class MDcrsList extends React.Component {
   render() {
     return (
-      <div className="container">
+      <div>
         <h3 className="flow-text light-green-text text-darken-3">
           Daily Coverage Reports
         </h3>

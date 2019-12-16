@@ -5,7 +5,7 @@ class ManageAdmin extends Component {
   render() {
     return (
       <Fragment>
-        <div className="container">
+        <div>
           <h4 className="light-green-text text-darken-3">Administrators</h4>
           <table className="responsive-table centered striped">
             <thead>

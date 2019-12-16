@@ -9,14 +9,12 @@ class AdminDashboard extends Component {
   render() {
     return (
       <Fragment>
-        <div className="container">
-          <PerformanceButtons />
-          <div className="divider"></div>
-          <RegionalReport />
-          <RegionalChart />
-          <div className="divider"></div>
-          <IndividualChart />
-        </div>
+        <PerformanceButtons />
+        <div className="divider"></div>
+        <RegionalReport />
+        <RegionalChart />
+        <div className="divider"></div>
+        <IndividualChart />
       </Fragment>
     );
   }

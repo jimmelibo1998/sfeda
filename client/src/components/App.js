@@ -1,12 +1,16 @@
 import React, { Fragment, useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import "materialize-css/dist/css/materialize.min.css";
+import "materialize-css/dist/js/materialize.min.js";
 
 import { loadUser } from "../actions/auth";
 
 import NavBar from "./layout/NavBar";
 import SideNav from "./layout/SideNav";
 import LoginPage from "./layout/LoginPage";
-import Breadcrumb from "./layout/Breadcrumb";
+import Breadcrumb1 from "./layout/Breadcrumb";
+
+import PrivateRoute from "./routing/PrivateRoute";
 
 // FOR ADMIN
 import AdminDashboard from "./admin/dashboard/AdminDashboard";
@@ -46,56 +50,101 @@ const App = () => {
     <Provider store={store}>
       <Router>
         <Fragment>
-          <NavBar />
-          <SideNav />
-          <div style={{ fontFamily: "Noto Serif" }}>
-            <Breadcrumb />
-            <Route exact path="/" component={LoginPage} />
-            <Switch>
-              {/* Admins */}
-              <Route exact path="/admin" component={AdminDashboard} />
-              <Route
-                exact
-                path="/admin/announcements"
-                component={Announcements}
-              />
-              <Route
-                exact
-                path="/admin/announcements/edit"
-                component={AddEditAnnouncement}
-              />
-              <Route exact path="/admin/manageadmin" component={ManageAdmin} />
-              <Route
-                exact
-                path="/admin/manageadmin/edit"
-                component={AddEditAdmin}
-              />
-              <Route exact path="/admin/medrep" component={MedReps} />
-              <Route exact path="/admin/medrep/new" component={NewMedRep} />
-              <Route
-                exact
-                path="/admin/medrep/profile"
-                component={ViewProfile}
-              />
-              <Route exact path="/admin/profile" component={Profile} />
-              {/* Medreps */}
-              <Route exact path="/medrep" component={MDashboard} />
-              <Route exact path="/medrep/account" component={MAccount} />
-              <Route exact path="/medrep/doctors" component={MDoctors} />
-              <Route exact path="/medrep/doctors/new" component={NewDoctor} />
-              <Route
-                exact
-                path="/medrep/perform/masterlist"
-                component={MMasterList}
-              />
-              <Route
-                exact
-                path="/medrep/perform/masterlist/add"
-                component={AddMasterList}
-              />
-              <Route exact path="/medrep/perform/dcrs" component={MDcrsList} />
-              <Route exact path="/medrep/perform/dcrs/add" component={MDcrs} />
-            </Switch>
+          <div className="row">
+            <div>
+              <SideNav />
+            </div>
+            <div style={{ paddingLeft: "300px" }}>
+              <NavBar />
+              <div style={{ fontFamily: "Noto Serif" }}>
+                <Route exact path="/" component={LoginPage} />
+                <Switch>
+                  {/* Admins */}
+                  <PrivateRoute
+                    exact
+                    path="/admin"
+                    component={AdminDashboard}
+                  />
+                  <PrivateRoute
+                    exact
+                    path="/admin/announcements"
+                    component={Announcements}
+                  />
+                  <PrivateRoute
+                    exact
+                    path="/admin/announcements/edit"
+                    component={AddEditAnnouncement}
+                  />
+                  <PrivateRoute
+                    exact
+                    path="/admin/manageadmin"
+                    component={ManageAdmin}
+                  />
+                  <PrivateRoute
+                    exact
+                    path="/admin/manageadmin/edit"
+                    component={AddEditAdmin}
+                  />
+                  <PrivateRoute
+                    exact
+                    path="/admin/medrep"
+                    component={MedReps}
+                  />
+                  <PrivateRoute
+                    exact
+                    path="/admin/medrep/new"
+                    component={NewMedRep}
+                  />
+                  <PrivateRoute
+                    exact
+                    path="/admin/medrep/profile"
+                    component={ViewProfile}
+                  />
+                  <PrivateRoute
+                    exact
+                    path="/admin/profile"
+                    component={Profile}
+                  />
+                  {/* Medreps */}
+                  <PrivateRoute exact path="/medrep" component={MDashboard} />
+                  <PrivateRoute
+                    exact
+                    path="/medrep/account"
+                    component={MAccount}
+                  />
+                  <PrivateRoute
+                    exact
+                    path="/medrep/doctors"
+                    component={MDoctors}
+                  />
+                  <PrivateRoute
+                    exact
+                    path="/medrep/doctors/new"
+                    component={NewDoctor}
+                  />
+                  <PrivateRoute
+                    exact
+                    path="/medrep/perform/masterlist"
+                    component={MMasterList}
+                  />
+                  <PrivateRoute
+                    exact
+                    path="/medrep/perform/masterlist/add"
+                    component={AddMasterList}
+                  />
+                  <PrivateRoute
+                    exact
+                    path="/medrep/perform/dcrs"
+                    component={MDcrsList}
+                  />
+                  <PrivateRoute
+                    exact
+                    path="/medrep/perform/dcrs/add"
+                    component={MDcrs}
+                  />
+                </Switch>
+              </div>
+            </div>
           </div>
         </Fragment>
       </Router>

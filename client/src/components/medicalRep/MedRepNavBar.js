@@ -5,7 +5,7 @@ const MedRepNavBar = () => {
   return (
     <Fragment>
       <nav className="white main-nav">
-        <div className="container">
+        <div>
           <div className="nav-wrapper">
             <Link
               to="/admin"

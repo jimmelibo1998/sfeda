@@ -1,18 +1,15 @@
 import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
-import { connect } from "react-redux";
 
-import "./NavBar.css";
-
-const Navbar = ({ role }) => {
+const LoginNav = () => {
   return (
     <Fragment>
       <nav className="white main-nav">
         <div className="container">
           <div className="nav-wrapper">
             <Link
-              to="/admin"
-              className="brand-logo light-green-text text-darken-3 nav-text center"
+              to="/"
+              className="brand-logo light-green-text text-darken-3 nav-text"
             >
               <img
                 src="./img/company-logo.png"
@@ -29,8 +26,4 @@ const Navbar = ({ role }) => {
   );
 };
 
-const mapStateToProps = state => ({
-  role: state.auth.role
-});
-
-export default connect(mapStateToProps, {})(Navbar);
+export default LoginNav;

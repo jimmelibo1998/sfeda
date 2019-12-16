@@ -3,7 +3,7 @@ import React from "react";
 class MDcrs extends React.Component {
   render() {
     return (
-      <div className="container">
+      <div>
         <h3 className="flow-text light-green-text text-darken-3">Add DCR</h3>
         <div className="row">
           <div className="input-field col s4">

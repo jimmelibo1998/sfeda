@@ -1,4 +1,10 @@
-import { LOGIN_SUCCESS, LOGIN_FAILED, USER_LOADED, AUTH_ERROR } from "./types";
+import {
+  LOGIN_SUCCESS,
+  LOGIN_FAILED,
+  USER_LOADED,
+  AUTH_ERROR,
+  LOG_OUT
+} from "./types";
 import myServer from "../apis/myServer";
 import setAuthToken from "../utils/setAuthToken";
 
@@ -42,4 +48,9 @@ export const login = (email, password) => async dispatch => {
     console.error(err.message);
     dispatch({ type: LOGIN_FAILED });
   }
+};
+
+// Logout / Clear
+export const logout = () => dispatch => {
+  dispatch({ type: LOG_OUT });
 };

@@ -3,7 +3,7 @@ import React, { Component } from "react";
 class NewMedRep extends Component {
   render() {
     return (
-      <div className="container">
+      <div>
         <h4 className="light-green-text text-darken-3 center">New Med Rep</h4>
         <form>
           <div className="row">

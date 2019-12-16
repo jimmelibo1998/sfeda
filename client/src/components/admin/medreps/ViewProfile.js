@@ -18,7 +18,7 @@ const ViewProfile = () => {
     return <div>No data to return</div>;
   };
   return (
-    <div className="container">
+    <div>
       <h4 className="light-green-text text-darken-3">Profile</h4>
       <div className="row">
         <h6 className="light-green-text text-darken-3">Information</h6>

@@ -5,7 +5,7 @@ class Profile extends Component {
   render() {
     return (
       <Fragment>
-        <div className="container">
+        <div>
           <div className="card-panel  green" style={{ textAlign: "center" }}>
             <img
               src={ProPic}
