@@ -1,7 +1,17 @@
+// Alerts
 export const SET_ALERT = "SET_ALERT";
 export const REMOVE_ALERT = "REMOVE_ALERT";
+
+//Auth
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAILED = "LOGIN_FAILED";
 export const USER_LOADED = "USER_LOADED";
 export const AUTH_ERROR = "AUTH_ERROR";
 export const LOG_OUT = "LOG_OUT";
+
+//MAasterlist
+export const CURRENT_ML_FETCHED = "CURRENT_ML_FETCHED";
+export const NO_CURRENT_ML = "NO_CURRENT_ML";
+export const ML_DOCTORS_FETCHED = "ML_DOCTORS_FETCHED";
+export const NO_ML_DOCTORS = "NO_ML_DOCTORS";
+export const ML_CLEARED = "ML_CLEARED";

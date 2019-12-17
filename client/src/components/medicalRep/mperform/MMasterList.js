@@ -1,31 +1,95 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import myServer from "../../../apis/myServer";
+
+import {
+  getCurrentMasterlist,
+  clearMasterlist
+} from "../../../actions/masterlist";
 
 class MMasterList extends React.Component {
+  async componentDidMount() {
+    await this.props.getCurrentMasterlist(this.props.user._id);
+    this.setState({
+      masterlist: this.props.masterlist,
+      doctors: this.props.doctors
+    });
+  }
+
+  state = {
+    masterlist: null,
+    doctors: null
+  };
+
+  componentWillUnmount() {
+    this.props.clearMasterlist();
+  }
+
+  // async renderDoctor(doctorId) {
+  //   let doctorData = [];
+  //   try {
+  //     let res = await myServer.get(`/api/doctors/${doctorId}`);
+  //     doctorData.push(res.data.lastName);
+  //     doctorData.push(res.data.firstName);
+  //     doctorData.push(res.data.classCode);
+  //     console.log(doctorData);
+  //     return doctorData;
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // }
+
+  // renderDoctors() {
+  //   if (this.props.doctors) {
+  //     return this.props.doctors.map(async doctor => {
+  //       let doctorData = await this.renderDoctor(doctor.doctor);
+  //       // return (
+  //       //   <tr key={doctor._id}>
+  //       //     {doctorData.map(data => (
+  //       //       <td>{data}</td>
+  //       //     ))}
+  //       //     <td>{doctorData.lastname}</td>
+  //       //     <td>{doctorData.firstname}</td>
+  //       //     <td>{doctorData.classcode}</td>
+  //       //     <td>{doctor.weekOne.score}</td>
+  //       //     <td>{doctor.weekTwo.score}</td>
+  //       //     <td>{doctor.weekThree.score}</td>
+  //       //     <td>{doctor.weekFour.score}</td>
+  //       //     <td>{doctor.total}</td>
+  //       //   </tr>
+  //       // );
+
+  //       return;
+  //     });
+  //   }
+  // }
+
   render() {
+    console.log(this.state);
     return (
       <div>
-        <h3 className="flow-text light-green-text text-darken-3">
-          Master List
-        </h3>
-
+        <h3 className="light-green-text text-darken-3 center">Master List</h3>
         <div className="row">
           <div className="col s12">
-            <button className="waves-effect waves-light btn">
-              <i className="material-icons left">list</i>Current
-            </button>
-            <Link
-              to="/medrep/perform/masterlist/add"
-              className="yellow darken-3 waves-effect waves-light btn"
-            >
-              <i className="material-icons left">edit</i>Edit
-            </Link>
-            <Link
-              to="/medrep/perform/masterlist/add"
-              className="green darken-3 waves-effect waves-light btn"
-            >
-              <i className="material-icons left">add</i>Add
-            </Link>
+            <div className="col s12 m6">
+              <button
+                style={{ width: "100%" }}
+                className="waves-effect waves-light btn btn-large"
+              >
+                <i className="material-icons left">list</i>Current
+              </button>
+            </div>
+
+            <div className="col s12 m6">
+              <Link
+                style={{ width: "100%" }}
+                to="/medrep/perform/masterlist/add"
+                className="green darken-3 waves-effect waves-light btn btn-large"
+              >
+                <i className="material-icons left">add</i>Add
+              </Link>
+            </div>
           </div>
           <div className="input-field col s4">
             <select className="browser-default">
@@ -87,39 +151,7 @@ class MMasterList extends React.Component {
                   <th>Total</th>
                 </tr>
               </thead>
-
-              <tbody>
-                <tr>
-                  <td>Go</td>
-                  <td>Renz</td>
-                  <td>B</td>
-                  <td></td>
-                  <td>1</td>
-                  <td></td>
-                  <td>2</td>
-                  <td>3</td>
-                </tr>
-                <tr>
-                  <td>Go</td>
-                  <td>Renz</td>
-                  <td>B</td>
-                  <td></td>
-                  <td>1</td>
-                  <td></td>
-                  <td>2</td>
-                  <td>3</td>
-                </tr>
-                <tr>
-                  <td>Go</td>
-                  <td>Renz</td>
-                  <td>B</td>
-                  <td></td>
-                  <td>1</td>
-                  <td></td>
-                  <td>2</td>
-                  <td>3</td>
-                </tr>
-              </tbody>
+              {/* <tbody>{this.renderDoctors()}</tbody> */}
             </table>
           </div>
         </div>
@@ -128,4 +160,13 @@ class MMasterList extends React.Component {
   }
 }
 
-export default MMasterList;
+const mapStateToProps = state => ({
+  masterlist: state.masterlist.masterlist,
+  doctors: state.masterlist.doctors,
+  user: state.auth.user
+});
+
+export default connect(mapStateToProps, {
+  clearMasterlist,
+  getCurrentMasterlist
+})(MMasterList);

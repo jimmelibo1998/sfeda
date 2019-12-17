@@ -113,7 +113,6 @@ router.post("/add/:masterlist/:doctor", auth, async (req, res) => {
       return res
         .status(400)
         .json({ errors: [{ msg: "Doctor already in the masterlist" }] });
-
     listdoctor = new MasterListDoctor({
       masterlist,
       doctor
@@ -194,4 +193,51 @@ router.put("/send/:id", auth, async (req, res) => {
     res.send("Server Error");
   }
 });
+
+//@route GET/api/masterlist/:medrep
+//@desc  Fetch Current Masterlist
+//@access Private
+router.get("/:medrep", auth, async (req, res) => {
+  let isValid = mongoose.Types.ObjectId.isValid(req.params.medrep);
+  if (isValid === false)
+    return res.status(400).json({ errors: [{ msg: "ObjectId not valid" }] });
+
+  let monthYear = moment().format("MMMM YYYY");
+  try {
+    let masterlist = await MasterList.findOne({
+      month: monthYear,
+      medrep: req.params.medrep
+    });
+    if (!masterlist)
+      return res
+        .status(400)
+        .json({ errors: [{ msg: "Masterlist not found" }] });
+
+    res.json(masterlist);
+  } catch (err) {
+    console.error(err.message);
+    res.send("Server Error");
+  }
+});
+
+//@route GET/api/masterlist/doctors/:masterlist
+//@desc  Get Masterlist Doctors
+//@access Private
+router.get("/doctors/:masterlist", auth, async (req, res) => {
+  try {
+    let masterlistdoctors = await MasterListDoctor.find({
+      masterlist: req.params.masterlist
+    });
+    if (!masterlistdoctors)
+      return res
+        .status(400)
+        .json({ errors: [{ msg: "No doctors in masterlist" }] });
+
+    res.json(masterlistdoctors);
+  } catch (err) {
+    console.error(err.message);
+    res.send("Server Error");
+  }
+});
+
 module.exports = router;
