@@ -1,72 +1,58 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import myServer from "../../../apis/myServer";
+import moment from "moment";
 
 import {
   getCurrentMasterlist,
+  getMasterlistDoctors,
+  getDoctorDetails,
   clearMasterlist
 } from "../../../actions/masterlist";
 
 class MMasterList extends React.Component {
+  state = {
+    month: moment().format("MMMM"),
+    year: moment().format("YYYY"),
+    classCode: "All",
+    addButtonDisabled: false,
+    currentButtonDisabled: false
+  };
+
   async componentDidMount() {
     await this.props.getCurrentMasterlist(this.props.user._id);
-    this.setState({
-      masterlist: this.props.masterlist,
-      doctors: this.props.doctors
-    });
   }
-
-  state = {
-    masterlist: null,
-    doctors: null
-  };
 
   componentWillUnmount() {
     this.props.clearMasterlist();
   }
 
-  // async renderDoctor(doctorId) {
-  //   let doctorData = [];
-  //   try {
-  //     let res = await myServer.get(`/api/doctors/${doctorId}`);
-  //     doctorData.push(res.data.lastName);
-  //     doctorData.push(res.data.firstName);
-  //     doctorData.push(res.data.classCode);
-  //     console.log(doctorData);
-  //     return doctorData;
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }
+  getDoctorDetails = doctorId => {
+    return this.props.doctorDetails
+      .filter(details => doctorId === details._id)
+      .map(doc => (
+        <Fragment key={doc._id}>
+          <td>{doc.lastName}</td>
+          <td>{doc.firstName}</td>
+          <td>{doc.classCode}</td>
+        </Fragment>
+      ));
+  };
 
-  // renderDoctors() {
-  //   if (this.props.doctors) {
-  //     return this.props.doctors.map(async doctor => {
-  //       let doctorData = await this.renderDoctor(doctor.doctor);
-  //       // return (
-  //       //   <tr key={doctor._id}>
-  //       //     {doctorData.map(data => (
-  //       //       <td>{data}</td>
-  //       //     ))}
-  //       //     <td>{doctorData.lastname}</td>
-  //       //     <td>{doctorData.firstname}</td>
-  //       //     <td>{doctorData.classcode}</td>
-  //       //     <td>{doctor.weekOne.score}</td>
-  //       //     <td>{doctor.weekTwo.score}</td>
-  //       //     <td>{doctor.weekThree.score}</td>
-  //       //     <td>{doctor.weekFour.score}</td>
-  //       //     <td>{doctor.total}</td>
-  //       //   </tr>
-  //       // );
-
-  //       return;
-  //     });
-  //   }
-  // }
+  renderDoctors = () => {
+    return this.props.doctors.map(doctor => (
+      <tr key={doctor._id}>
+        {this.getDoctorDetails(doctor.doctor)}
+        <td>{doctor.weekOne.score}</td>
+        <td>{doctor.weekTwo.score}</td>
+        <td>{doctor.weekThree.score}</td>
+        <td>{doctor.weekFour.score}</td>
+        <td>{doctor.total}</td>
+      </tr>
+    ));
+  };
 
   render() {
-    console.log(this.state);
     return (
       <div>
         <h3 className="light-green-text text-darken-3 center">Master List</h3>
@@ -76,39 +62,48 @@ class MMasterList extends React.Component {
               <button
                 style={{ width: "100%" }}
                 className="waves-effect waves-light btn btn-large"
+                disabled={this.state.currentButtonDisabled}
               >
                 <i className="material-icons left">list</i>Current
               </button>
             </div>
 
             <div className="col s12 m6">
-              <Link
+              <button
                 style={{ width: "100%" }}
-                to="/medrep/perform/masterlist/add"
                 className="green darken-3 waves-effect waves-light btn btn-large"
+                disabled={this.state.addButtonDisabled}
               >
                 <i className="material-icons left">add</i>Add
-              </Link>
+              </button>
             </div>
           </div>
           <div className="input-field col s4">
-            <select className="browser-default">
-              <option value="1">January</option>
-              <option value="1">February</option>
-              <option value="2">March</option>
-              <option value="3">April</option>
-              <option value="1">May</option>
-              <option value="2">June</option>
-              <option value="3">July</option>
-              <option value="1">August</option>
-              <option value="2">September</option>
-              <option value="3">October</option>
-              <option value="2">November</option>
-              <option value="3">December</option>
+            <select
+              className="browser-default"
+              onChange={e => this.setState({ month: e.target.value })}
+              value={this.state.month}
+            >
+              <option value="January">January</option>
+              <option value="February">February</option>
+              <option value="March">March</option>
+              <option value="April">April</option>
+              <option value="May">May</option>
+              <option value="June">June</option>
+              <option value="July">July</option>
+              <option value="August">August</option>
+              <option value="September">September</option>
+              <option value="October">October</option>
+              <option value="November">November</option>
+              <option value="December">December</option>
             </select>
           </div>
           <div className="input-field col s4">
-            <select className="browser-default">
+            <select
+              className="browser-default"
+              onChange={e => this.setState({ year: e.target.value })}
+              value={this.state.year}
+            >
               <option value="2019">2019</option>
               <option value="2018">2018</option>
               <option value="2017">2017</option>
@@ -130,8 +125,12 @@ class MMasterList extends React.Component {
             </select>
           </div>
           <div className="input-field col s4">
-            <select className="browser-default">
-              <option value="ALL">All</option>
+            <select
+              className="browser-default"
+              onChange={e => this.setState({ classCode: e.target.value })}
+              value={this.state.classCode}
+            >
+              <option value="All">All</option>
               <option value="A">A</option>
               <option value="B">B</option>
               <option value="C">C</option>
@@ -151,7 +150,7 @@ class MMasterList extends React.Component {
                   <th>Total</th>
                 </tr>
               </thead>
-              {/* <tbody>{this.renderDoctors()}</tbody> */}
+              <tbody>{this.renderDoctors()}</tbody>
             </table>
           </div>
         </div>
@@ -163,10 +162,13 @@ class MMasterList extends React.Component {
 const mapStateToProps = state => ({
   masterlist: state.masterlist.masterlist,
   doctors: state.masterlist.doctors,
+  doctorDetails: state.masterlist.doctorDetails,
   user: state.auth.user
 });
 
 export default connect(mapStateToProps, {
   clearMasterlist,
-  getCurrentMasterlist
+  getCurrentMasterlist,
+  getMasterlistDoctors,
+  getDoctorDetails
 })(MMasterList);
