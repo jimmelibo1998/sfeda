@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Router, Route, Switch } from "react-router-dom";
 import history from "../history";
 import "materialize-css/dist/css/materialize.min.css";
 import "materialize-css/dist/js/materialize.min.js";
@@ -74,7 +74,7 @@ const App = ({ auth: { isAuthenticated }, alerts }) => {
       return (
         <div>
           {alerts.map(alert => (
-            <Alert color={alert.alertType} message={alert.msg} />
+            <Alert color={alert.alertType} message={alert.msg} key={alert.id} />
           ))}
         </div>
       );

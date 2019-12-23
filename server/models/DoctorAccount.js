@@ -25,6 +25,10 @@ module.exports = DoctorAccount = mongoose.model(
     classCode: {
       type: String,
       required: true
+    },
+    Area: {
+      type: String,
+      required: true
     }
   })
 );

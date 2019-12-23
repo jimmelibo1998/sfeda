@@ -1,11 +1,103 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { fetchAllDoctors, clearDoctors } from "../../../actions/doctors";
+import { Autocomplete, Select } from "react-materialize";
 
 class MDoctors extends React.Component {
+  async componentDidMount() {
+    await this.props.fetchAllDoctors();
+  }
+
+  componentWillUnmount() {
+    this.props.clearDoctors();
+  }
+
+  renderDoctors = () => {
+    if (this.props.doctors !== null) {
+      return this.props.doctors.map(doctor => (
+        <tr key={doctor._id}>
+          <td>{doctor.lastName}</td>
+          <td>{doctor.firstName}</td>
+          <td>{doctor.classCode}</td>
+          <td>{doctor.specialityCode}</td>
+          <td>{doctor.email}</td>
+          <td>
+            <Link
+              to="/medrep/doctors/new"
+              className="waves-effect waves-light btn yellow darken-3"
+            >
+              <i className="material-icons left">edit</i>Edit
+            </Link>
+          </td>
+        </tr>
+      ));
+    }
+  };
+
   render() {
     return (
       <div>
-        <h3 className="flow-text light-green-text text-darken-3">Doctors</h3>
+        <h3 className="flow-text light-green-text text-darken-3 center">
+          Doctors
+        </h3>
+        <div className="row">
+          <Autocomplete
+            s={12}
+            m={4}
+            options={{
+              data: {
+                "Gus Fring": null,
+                "Saul Goodman": null,
+                "Tuco Salamanca": "https://placehold.it/250x250"
+              }
+            }}
+            placeholder="Search Names"
+          />
+          <Autocomplete
+            s={12}
+            m={4}
+            options={{
+              data: {
+                "Gus Fring": null,
+                "Saul Goodman": null,
+                "Tuco Salamanca": "https://placehold.it/250x250"
+              }
+            }}
+            placeholder="Search Email"
+          />
+          <Select
+            s={12}
+            m={4}
+            onChange={function noRefCheck() {}}
+            options={{
+              classes: "",
+              dropdownOptions: {
+                alignment: "left",
+                autoTrigger: true,
+                closeOnClick: true,
+                constrainWidth: true,
+                container: null,
+                coverTrigger: true,
+                hover: false,
+                inDuration: 150,
+                onCloseEnd: null,
+                onCloseStart: null,
+                onOpenEnd: null,
+                onOpenStart: null,
+                outDuration: 250
+              }
+            }}
+            value=""
+          >
+            <option disabled value="">
+              Class Code
+            </option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+          </Select>
+        </div>
         <div className="row">
           <div className="col s12">
             <table className="responsive-table">
@@ -15,105 +107,30 @@ class MDoctors extends React.Component {
                   <th>First Name</th>
                   <th>Class Code</th>
                   <th>Specialization Code</th>
-                  <th>Institution Name</th>
                   <th>Email</th>
                   <th>Account</th>
                 </tr>
               </thead>
-
               <tbody>
-                <tr>
-                  <td>Nunez</td>
-                  <td>Carlos</td>
-                  <td>B</td>
-                  <td>PEDIA2</td>
-                  <td>Ospital Manila</td>
-                  <td>kmc.jimmel@gmail.com</td>
-                  <td>
-                    <Link
-                      to="/medrep/doctors/new"
-                      className="waves-effect waves-light btn yellow darken-3"
-                    >
-                      <i className="material-icons left">edit</i>Edit
-                    </Link>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Nunez</td>
-                  <td>Carlos</td>
-                  <td>B</td>
-                  <td>PEDIA2</td>
-                  <td>Ospital Manila</td>
-                  <td>kmc.jimmel@gmail.com</td>
-                  <td>
-                    <Link
-                      to="/medrep/doctors/new"
-                      className="waves-effect waves-light btn yellow darken-3"
-                    >
-                      <i className="material-icons left">edit</i>Edit
-                    </Link>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Nunez</td>
-                  <td>Carlos</td>
-                  <td>B</td>
-                  <td>PEDIA2</td>
-                  <td>Ospital Manila</td>
-                  <td>kmc.jimmel@gmail.com</td>
-                  <td>
-                    <Link
-                      to="/medrep/doctors/new"
-                      className="waves-effect waves-light btn yellow darken-3"
-                    >
-                      <i className="material-icons left">edit</i>Edit
-                    </Link>
-                  </td>
-                </tr>
-                <tr>
-                  <td colSpan="7">
-                    <div className="row">
-                      <div className="col s12 m6">
-                        <ul className="pagination">
-                          <li className="disabled">
-                            <Link to="/medrep/doctors">
-                              <i className="material-icons">chevron_left</i>
-                            </Link>
-                          </li>
-                          <li className="active green">
-                            <Link to="/medrep/doctors">1</Link>
-                          </li>
-                          <li className="waves-effect">
-                            <Link to="/medrep/doctors">2</Link>
-                          </li>
-                          <li className="waves-effect">
-                            <Link to="/medrep/doctors">3</Link>
-                          </li>
-                          <li className="waves-effect">
-                            <Link to="/medrep/doctors">4</Link>
-                          </li>
-                          <li className="waves-effect">
-                            <Link to="/medrep/doctors">5</Link>
-                          </li>
-                          <li className="waves-effect">
-                            <Link to="/medrep/doctors">
-                              <i className="material-icons">chevron_right</i>
-                            </Link>
-                          </li>
-                        </ul>
-                      </div>
-                      <div className="col s12 m6">
-                        <Link
-                          to="/medrep/doctors/new"
-                          className="waves-effect waves-light btn right green"
-                        >
-                          <i className="material-icons left">add</i>Add New
-                        </Link>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
+                {this.props.doctors !== null ? (
+                  this.renderDoctors()
+                ) : (
+                  <tr>
+                    <td colSpan="6">
+                      <p className="center grey-text">No Doctors</p>
+                    </td>
+                  </tr>
+                )}
               </tbody>
+              <tfoot>
+                <tr>
+                  <td colSpan="6">
+                    <Link to="/medrep/doctors/new" className="btn right green">
+                      Add New
+                    </Link>
+                  </td>
+                </tr>
+              </tfoot>
             </table>
           </div>
         </div>
@@ -122,4 +139,10 @@ class MDoctors extends React.Component {
   }
 }
 
-export default MDoctors;
+const mapStateToProps = state => ({
+  doctors: state.doctors
+});
+
+export default connect(mapStateToProps, { fetchAllDoctors, clearDoctors })(
+  MDoctors
+);

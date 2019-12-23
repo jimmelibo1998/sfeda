@@ -12,7 +12,7 @@ class Alert extends React.Component {
         }}
         className={`card-panel z-depth-0 ${this.props.color}`}
       >
-        <span class="white-text">{this.props.message}</span>
+        <span className="white-text">{this.props.message}</span>
       </div>
     );
   }

@@ -18,6 +18,7 @@ app.use(cors());
 
 app.get("/", (req, res) => res.send("API Running"));
 
+app.use("/api/medreps", require("./routes/api/medreps"));
 app.use("/api/doctors", require("./routes/api/doctors"));
 app.use("/api/accounts", require("./routes/api/accounts"));
 app.use("/api/masterlist", require("./routes/api/masterList"));

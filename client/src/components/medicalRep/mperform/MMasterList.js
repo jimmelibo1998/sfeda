@@ -69,13 +69,14 @@ class MMasterList extends React.Component {
             </div>
 
             <div className="col s12 m6">
-              <button
+              <Link
                 style={{ width: "100%" }}
                 className="green darken-3 waves-effect waves-light btn btn-large"
                 disabled={this.state.addButtonDisabled}
+                to="/medrep/perform/masterlist/add"
               >
                 <i className="material-icons left">add</i>Add
-              </button>
+              </Link>
             </div>
           </div>
           <div className="input-field col s4">

@@ -76,15 +76,12 @@ router.post(
       check("firstName", "First name is required").exists(),
       check("lastName", "Last Name is required").exists(),
       check("email", "Must be have a valid email").exists(),
-      check("password", "Password must be atleast 6 characters long").isLength({
-        min: 6
-      }),
       check("area", "Please privide a valid area").isIn([
-        "North Luzon",
-        "North GMA",
+        "NORTH LUZON",
+        "NORTH GMA",
         "SOUTH GMA",
-        "SOUTH LUZON I",
-        "SOUTH LUZON II"
+        "SOUTH LUZON 1",
+        "SOUTH LUZON 2"
       ])
     ]
   ],
@@ -93,7 +90,7 @@ router.post(
     if (!validationErrors.isEmpty())
       return res.status(400).json({ errors: validationErrors.array() });
 
-    const { firstName, lastName, email, password, area } = req.body;
+    const { firstName, lastName, email, area } = req.body;
 
     try {
       let medrep = await MedRepAccount.findOne({ email });
@@ -106,12 +103,12 @@ router.post(
         firstName,
         lastName,
         email,
-        password,
+        password: email,
         area
       });
 
       const salt = await bcrypt.genSalt(10);
-      medrep.password = await bcrypt.hash(password, salt);
+      medrep.password = await bcrypt.hash(email, salt);
 
       await medrep.save();
       res.send(medrep);

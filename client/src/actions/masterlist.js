@@ -43,7 +43,6 @@ export const getMasterlistDoctors = () => async (dispatch, getState) => {
 //   );
 
 export const getDoctorDetails = doctorId => async dispatch => {
-  console.log("HEHEHEKADJASJD");
   try {
     let res = await myServer.get(`/api/doctors/${doctorId}`);
     dispatch({ type: DOCTOR_DETAILS_FETCHED, payload: res.data });
