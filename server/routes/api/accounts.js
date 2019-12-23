@@ -131,7 +131,15 @@ router.post(
       check("firstName", "Firstname is required").exists(),
       check("email", "Must ba a valid email").isEmail(),
       check("specialityCode", "Speciality Code is required").exists(),
-      check("classCode", "Class code is only A, B, or C").isIn(["A", "B", "C"])
+      check("classCode", "Class code is only A, B, or C").isIn(["A", "B", "C"]),
+      check("area", "Please privide a valid area").isIn([
+        "NORTH LUZON",
+        "NORTH GMA",
+        "SOUTH GMA",
+        "SOUTH LUZON 1",
+        "SOUTH LUZON 2"
+      ]),
+      check("institution", "Institution is required is required").exists()
     ]
   ],
   async (req, res) => {
@@ -139,7 +147,15 @@ router.post(
     if (!validationErrors.isEmpty())
       return res.status(400).json({ errors: validationErrors.array() });
 
-    const { lastName, firstName, email, specialityCode, classCode } = req.body;
+    const {
+      institution,
+      lastName,
+      firstName,
+      email,
+      area,
+      specialityCode,
+      classCode
+    } = req.body;
 
     try {
       let doctor = await DoctorAccount.findOne({ email });
@@ -152,6 +168,8 @@ router.post(
         lastName,
         firstName,
         email,
+        institution,
+        area,
         password: null,
         specialityCode,
         classCode

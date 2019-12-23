@@ -1,35 +1,92 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Select } from "react-materialize";
+import { connect } from "react-redux";
+import { addDoctor } from "../../../actions/doctors";
 
 class NewDoctor extends React.Component {
+  state = {
+    lastname: "",
+    firstname: "",
+    classcode: "A",
+    area: this.props.user.area,
+    specializationcode: "",
+    institution: "",
+    email: ""
+  };
+
+  onChange = e => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
+  onSubmit = e => {
+    const {
+      lastname,
+      firstname,
+      classcode,
+      area,
+      specializationcode,
+      institution,
+      email
+    } = this.state;
+    e.preventDefault();
+    this.props.addDoctor(
+      lastname,
+      firstname,
+      classcode,
+      area,
+      specializationcode,
+      institution,
+      email
+    );
+
+    this.setState({
+      lastname: "",
+      firstname: "",
+      classcode: "A",
+      area: this.props.user.area,
+      specializationcode: "",
+      institution: "",
+      email: ""
+    });
+  };
+
   render() {
     return (
       <div>
         <h4 className="light-green-text text-darken-3 center">New Doctor</h4>
-        <form>
+        <form onSubmit={e => this.onSubmit(e)}>
           <div className="row">
             <div className="col s12 m6 offset-m3">
               <div className="row">
                 <div className="input-field col s12">
                   <input
+                    value={this.state.lastname}
                     id="lastname"
                     type="text"
+                    name="lastname"
                     className="validate"
+                    onChange={e => this.onChange(e)}
                     required
+                    placeholder="Last Name"
                   />
-                  <label htmlFor="lastname">Last Name</label>
                 </div>
                 <div className="input-field col s12">
                   <input
+                    value={this.state.firstname}
                     id="firstname"
                     type="text"
+                    name="firstname"
                     className="validate"
+                    onChange={e => this.onChange(e)}
+                    placeholder="First Name"
                     required
                   />
-                  <label htmlFor="firstname">First Name</label>
                 </div>
                 <Select
+                  onChange={e => this.onChange(e)}
+                  value={this.state.classcode}
+                  name="classcode"
                   s={12}
                   label="Class Code"
                   options={{
@@ -56,6 +113,9 @@ class NewDoctor extends React.Component {
                   <option value="C">C</option>
                 </Select>
                 <Select
+                  name="area"
+                  onChange={e => this.onChange(e)}
+                  value={this.state.area}
                   s={12}
                   label="Area"
                   options={{
@@ -84,26 +144,40 @@ class NewDoctor extends React.Component {
                   <option value="SOUTH LUZON 2">SOUTH LUZON 2</option>
                 </Select>
                 <div className="input-field col s12">
-                  <input id="sc" type="text" className="validate" required />
-                  <label htmlFor="sc">Specialization Code</label>
+                  <input
+                    value={this.state.specializationcode}
+                    onChange={e => this.onChange(e)}
+                    id="sc"
+                    type="text"
+                    name="specializationcode"
+                    className="validate"
+                    required
+                    placeholder="Specialization Code"
+                  />
                 </div>
                 <div className="input-field col s12">
                   <input
+                    value={this.state.institution}
+                    onChange={e => this.onChange(e)}
                     id="institution"
                     type="text"
                     className="validate"
+                    placeholder="Institution"
+                    name="institution"
                     required
                   />
-                  <label htmlFor="institution">Institution</label>
                 </div>
                 <div className="input-field col s12">
                   <input
+                    value={this.state.email}
+                    onChange={e => this.onChange(e)}
                     id="email"
                     type="email"
+                    name="email"
                     className="validate"
+                    placeholder="Email"
                     required
                   />
-                  <label htmlFor="email">Email</label>
                 </div>
               </div>
 
@@ -136,4 +210,8 @@ class NewDoctor extends React.Component {
   }
 }
 
-export default NewDoctor;
+const mapStateToProps = state => ({
+  user: state.auth.user
+});
+
+export default connect(mapStateToProps, { addDoctor })(NewDoctor);

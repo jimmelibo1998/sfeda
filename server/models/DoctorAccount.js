@@ -26,7 +26,11 @@ module.exports = DoctorAccount = mongoose.model(
       type: String,
       required: true
     },
-    Area: {
+    institution: {
+      type: String,
+      required: true
+    },
+    area: {
       type: String,
       required: true
     }

@@ -1,10 +1,48 @@
 import {
   DOCTORS_LOADED,
   LOAD_DOCTORS_FAILED,
-  DOCTORS_CLEARED
+  DOCTORS_CLEARED,
+  DOCTOR_ADDED,
+  DOCTOR_ADD_FAILED
 } from "../actions/types";
 import myServer from "../apis/myServer";
-import alert from "./alert";
+import setAlert from "./alert";
+
+export const addDoctor = (
+  lastName,
+  firstName,
+  classCode,
+  area,
+  specialityCode,
+  institution,
+  email
+) => async dispatch => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+
+  const body = JSON.stringify({
+    firstName,
+    lastName,
+    area,
+    email,
+    classCode,
+    specialityCode,
+    institution
+  });
+
+  try {
+    let res = await myServer.post("/api/accounts/doctor", body, config);
+    dispatch({ type: DOCTOR_ADDED, payload: [res.data] });
+    dispatch(setAlert("New Doctor Created!", "green"));
+  } catch (err) {
+    console.error(err);
+    dispatch({ type: DOCTOR_ADD_FAILED });
+    dispatch(setAlert("Not Created", "deep-orange accent-1"));
+  }
+};
 
 export const fetchAllDoctors = () => async dispatch => {
   try {
