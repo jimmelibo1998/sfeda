@@ -16,7 +16,9 @@ class NewDoctor extends React.Component {
   };
 
   onChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
+    this.setState({
+      [e.target.name]: e.target.value
+    });
   };
 
   onSubmit = e => {
@@ -52,6 +54,7 @@ class NewDoctor extends React.Component {
   };
 
   render() {
+    console.log(this.state.email);
     return (
       <div>
         <h4 className="light-green-text text-darken-3 center">New Doctor</h4>
@@ -176,7 +179,6 @@ class NewDoctor extends React.Component {
                     name="email"
                     className="validate"
                     placeholder="Email"
-                    required
                   />
                 </div>
               </div>

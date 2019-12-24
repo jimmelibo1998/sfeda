@@ -21,6 +21,7 @@ class MDoctors extends React.Component {
           <td>{doctor.firstName}</td>
           <td>{doctor.classCode}</td>
           <td>{doctor.specialityCode}</td>
+          <td>{doctor.area}</td>
           <td>{doctor.email}</td>
           <td>
             <Link
@@ -107,6 +108,7 @@ class MDoctors extends React.Component {
                   <th>First Name</th>
                   <th>Class Code</th>
                   <th>Specialization Code</th>
+                  <th>Area</th>
                   <th>Email</th>
                   <th>Account</th>
                 </tr>
@@ -124,7 +126,7 @@ class MDoctors extends React.Component {
               </tbody>
               <tfoot>
                 <tr>
-                  <td colSpan="6">
+                  <td colSpan="7">
                     <Link to="/medrep/doctors/new" className="btn right green">
                       Add New
                     </Link>

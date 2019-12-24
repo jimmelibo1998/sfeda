@@ -25,9 +25,9 @@ export const addMedrep = (
   try {
     let res = await myServer.post("/api/accounts/medrep", body, config);
     dispatch({ type: MEDREP_ADDED, payload: [res.data] });
-    dispatch(setAlert("New Doctor Created!", "green"));
+    dispatch(setAlert("New Medrep Created!", "green"));
   } catch (err) {
-    dispatch(setAlert("No Created", "deep-orange accent-1"));
+    dispatch(setAlert("Not Created", "deep-orange accent-1"));
     dispatch({ type: ADD_MEDREP_FAILED });
   }
 };

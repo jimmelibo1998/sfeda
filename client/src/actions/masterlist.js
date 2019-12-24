@@ -4,14 +4,21 @@ import {
   ML_DOCTORS_FETCHED,
   NO_ML_DOCTORS,
   ML_CLEARED,
-  DOCTOR_DETAILS_FETCHED
+  DOCTOR_DETAILS_FETCHED,
+  MASTERLIST_ADDED,
+  ADD_MASTERLIST_FAILED
 } from "./types";
 
 import myServer from "../apis/myServer";
 
+// export const addMasterlist = () => async dispatch => {
+
+// };
+
 export const clearMasterlist = () => dispatch => {
   dispatch({ type: ML_CLEARED });
 };
+
 export const getCurrentMasterlist = id => async (dispatch, getState) => {
   try {
     let res = await myServer.get(`/api/masterlist/${id}`);

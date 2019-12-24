@@ -23,6 +23,7 @@ import MedReps from "./admin/medreps/MedReps";
 import NewMedRep from "./admin/medreps/NewMedRep";
 import Profile from "./admin/profile/Profile";
 import ViewProfile from "./admin/medreps/ViewProfile";
+import Performance from "./admin/performance/Performance";
 
 // FOR MEDREP
 import MAccount from "./medicalRep/maccount/MAccount";
@@ -125,6 +126,11 @@ const App = ({ auth: { isAuthenticated }, alerts }) => {
                   component={ViewProfile}
                 />
                 <PrivateRoute exact path="/admin/profile" component={Profile} />
+                <PrivateRoute
+                  exact
+                  path="/admin/performance"
+                  component={Performance}
+                />
                 {/* Medreps */}
                 <PrivateRoute exact path="/medrep" component={MDashboard} />
                 <PrivateRoute

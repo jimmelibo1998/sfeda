@@ -125,6 +125,15 @@ const SideNavs = ({ logout, role, user }) => {
           </li>
           <li>
             <Link
+              to="/admin/performance"
+              className="light-green-text text-darken-3"
+            >
+              <i className="small material-icons left">show_chart</i>
+              Performance
+            </Link>
+          </li>
+          <li>
+            <Link
               to="/admin/manageadmin"
               className="light-green-text text-darken-3"
             >

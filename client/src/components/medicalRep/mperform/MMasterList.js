@@ -151,7 +151,17 @@ class MMasterList extends React.Component {
                   <th>Total</th>
                 </tr>
               </thead>
-              <tbody>{this.renderDoctors()}</tbody>
+              <tbody>
+                {this.props.masterlist !== null ? (
+                  this.renderDoctors()
+                ) : (
+                  <tr>
+                    <td colSpan="8">
+                      <p className="center grey-text">No Masterlist</p>
+                    </td>
+                  </tr>
+                )}
+              </tbody>
             </table>
           </div>
         </div>
