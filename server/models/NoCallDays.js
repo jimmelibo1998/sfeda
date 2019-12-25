@@ -7,6 +7,15 @@ module.exports = NoCallDays = mongoose.model(
       type: String,
       unique: true
     },
-    dates: [{ type: String }]
+    dates: [
+      {
+        date: {
+          type: String
+        },
+        desc: {
+          type: String
+        }
+      }
+    ]
   })
 );

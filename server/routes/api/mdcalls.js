@@ -80,7 +80,13 @@ const DCR = require("../../models/DCR");
 //@access Private
 router.post(
   "/nocalls",
-  [auth, [check("date", "Date is required").exists()]],
+  [
+    auth,
+    [
+      check("date", "Date is required").exists(),
+      check("desc", "Description is required").exists()
+    ]
+  ],
   async (req, res) => {
     const validationErrors = validationResult(req);
     if (!validationErrors.isEmpty())
@@ -94,7 +100,12 @@ router.post(
       if (!nocalldays) {
         nocalldays = new NoCallDays({
           month: monthYear,
-          dates: [moment(req.body.date).format("YYYY-MM-DD")]
+          dates: [
+            {
+              date: moment(req.body.date).format("YYYY-MM-DD"),
+              desc: req.params.desc
+            }
+          ]
         });
 
         await nocalldays.save();
@@ -102,12 +113,15 @@ router.post(
       }
 
       let dates = nocalldays.dates.filter(
-        date => date === moment(req.body.date).format("YYYY-MM-DD")
+        date => date.date === moment(req.body.date).format("YYYY-MM-DD")
       );
       if (dates.length > 0)
         return res.status(400).json({ errors: [{ msg: "Date exists" }] });
 
-      nocalldays.dates.push(moment(req.body.date).format("YYYY-MM-DD"));
+      nocalldays.dates.push({
+        date: moment(req.body.date).format("YYYY-MM-DD"),
+        desc: req.params.desc
+      });
       nocalldays.save();
       res.json(nocalldays);
     } catch (err) {
