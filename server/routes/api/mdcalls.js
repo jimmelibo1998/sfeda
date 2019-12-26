@@ -12,68 +12,50 @@ const MdCallsScore = require("../../models/MdCallsScore");
 const NoCallDays = require("../../models/NoCallDays");
 const DCR = require("../../models/DCR");
 
-//@route POST /api/mdcalls/:masterlist
-//@desc  Add MdCalls
+//@route GET /api/mdcalls/nocalls/:month
+//@desc  Get current masterlist  no call days
 //@access Private
-// router.post("/:masterlist", async (req, res) => {
-//   let valid = mongoose.Types.ObjectId.isValid(req.params.masterlist);
-//   if (valid === false)
-//     return res.status(400).json({ errors: [{ msg: "Object Id not valid" }] });
+router.get("/nocalls/:month", auth, async (req, res) => {
+  const validationErrors = validationResult(req);
+  if (!validationErrors.isEmpty())
+    return res.status(400).json({ errors: validationErrors.array() });
+  console.log(req.params.month);
+  try {
+    let nocalls = await NoCallDays.findOne({
+      month: moment(req.params.month).format("MMMM YYYY")
+    });
+    if (!nocalls) return res.send("No call days not set for the month");
 
-//   try {
-//     let masterlist = await Masterlist.findById(req.params.masterlist);
-//     if (!masterlist)
-//       return res
-//         .status(400)
-//         .json({ errors: [{ msg: "Masterlist not found" }] });
+    res.json(nocalls);
+  } catch (err) {
+    console.error(err.message);
+    res.send("Server Error");
+  }
+});
 
-//     let mdcalls = await MdCalls.findOne({ masterlist: req.params.masterlist });
-//     if (mdcalls)
-//       return res.status(400).json({
-//         errors: [{ msg: "Md Calls already created for the masterlist" }]
-//       });
-//     mdcalls = new MdCalls({
-//       masterlist: req.params.masterlist
-//     });
-
-//     await mdcalls.save();
-//     res.json(mdcalls);
-//   } catch (err) {
-//     console.error(err.message);
-//     res.send("Server Error");
-//   }
-// });
-
-//@route POST /api/mdcalls/score/:mdcalls
-//@desc  Add mdcalls Score
+//@route PUT /api/mdcalls/nocalls/:nocallid/:dateid
+//@desc  Remove date from docalldays
 //@access Private
-// router.post("/score/:dcr", async (req, res) => {
-//   let valid = mongoose.Types.ObjectId.isValid(req.params.dcr);
-//   if (valid === false)
-//     return res.status(400).json({ errors: [{ msg: "Object Id not valid" }] });
+router.put("/nocalls/:nocallid/:date", auth, async (req, res) => {
+  let validNoCall = mongoose.Types.ObjectId.isValid(req.params.nocallid);
+  if (validNoCall === false)
+    return res.status(400).json({ errors: [{ msg: "ObjectId not valid" }] });
 
-//   try {
-//     let dcr = await DCR.findById(req.params.dcr);
-//     if (!dcr)
-//       return res.status(400).json({ errors: [{ msg: "DCR not found" }] });
+  try {
+    let nocalls = await NoCallDays.findOne({ _id: req.params.nocallid });
+    if (!nocalls)
+      return res.status(400).json({ errors: [{ msg: "No colls not found" }] });
 
-//     let mdcallscore = await MdCallsScore.findOne({ dcr: req.params.dcr });
-//     if (mdcallscore)
-//       return res
-//         .status(400)
-//         .json({ errors: [{ msg: "Md Calls Score already created for DCR" }] });
+    let dates = nocalls.dates.filter(date => date.date !== req.params.date);
 
-//     mdcallscore = new MdCallsScore({
-//       dcr: req.params.dcr
-//     });
-
-//     await mdcallscore.save();
-//     res.json(mdcallscore);
-//   } catch (err) {
-//     console.error(err.message);
-//     res.send("Server Error");
-//   }
-// });
+    nocalls.dates = dates;
+    await nocalls.save();
+    res.json(nocalls);
+  } catch (err) {
+    console.error(err.message);
+    res.send("Server Error");
+  }
+});
 
 //@route POST /api/mdcalls/nocalls
 //@desc  Add no call days
@@ -91,6 +73,7 @@ router.post(
     const validationErrors = validationResult(req);
     if (!validationErrors.isEmpty())
       return res.status(400).json({ errors: validationErrors.array() });
+
     let monthYear = moment(req.body.date).format("MMMM YYYY");
     try {
       let nocalldays = await NoCallDays.findOne({
@@ -103,7 +86,7 @@ router.post(
           dates: [
             {
               date: moment(req.body.date).format("YYYY-MM-DD"),
-              desc: req.params.desc
+              desc: req.body.desc
             }
           ]
         });
@@ -120,8 +103,9 @@ router.post(
 
       nocalldays.dates.push({
         date: moment(req.body.date).format("YYYY-MM-DD"),
-        desc: req.params.desc
+        desc: req.body.desc
       });
+
       nocalldays.save();
       res.json(nocalldays);
     } catch (err) {
@@ -130,12 +114,5 @@ router.post(
     }
   }
 );
-
-//@route PUT /api/mdcalls/:masterlist
-//@desc  Set mdcalls goal score
-//@access Private
-// router.put('/:masterlist', (req, res) => {
-
-// });
 
 module.exports = router;

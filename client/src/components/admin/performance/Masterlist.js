@@ -1,21 +1,39 @@
 import React from "react";
 import { DatePicker, Select } from "react-materialize";
 import { connect } from "react-redux";
-import { excludeDate } from "../../../actions/noCalls";
+import {
+  excludeDate,
+  fetchMasterlistCall,
+  removeExcludedDate
+} from "../../../actions/noCalls";
 import moment from "moment";
-import M from "materialize-css/dist/js/materialize";
 
 class Masterlist extends React.Component {
   state = {
     year: moment().format("YYYY"),
     month: moment().format("MMMM"),
-    datetoexclude: "2019/12/12",
+    datetoexclude: "",
     desc: ""
   };
 
-  onSubmit = e => {
+  async componentDidMount() {
+    await this.props.fetchMasterlistCall(
+      this.state.year + " " + this.state.month
+    );
+  }
+  onFilter = e => {
     e.preventDefault();
-    this.props.excludeDate();
+    console.log(this.state.month + " " + this.state.year);
+    this.props.fetchMasterlistCall(this.state.month + " " + this.state.year);
+  };
+
+  onSubmit = async e => {
+    e.preventDefault();
+    await this.props.excludeDate(this.state.datetoexclude, this.state.desc);
+    this.setState({
+      year: moment(this.props.nocall.month).format("YYYY"),
+      month: moment(this.props.nocall.month).format("MMMM")
+    });
   };
 
   onChange = e => {
@@ -24,94 +42,128 @@ class Masterlist extends React.Component {
   onChangeDate(e) {
     this.setState({ datetoexclude: e.target.value });
   }
+  renderExcludedDates = () => {
+    return this.props.nocall.dates.map(date => (
+      <tr key={date._id}>
+        <td>{date.date}</td>
+        <td>{date.desc}</td>
+        <td>
+          <button
+            onClick={() =>
+              this.props.removeExcludedDate(this.props.nocall._id, date.date)
+            }
+            className="btn red"
+          >
+            <i className="material-icons center">remove</i>
+          </button>
+        </td>
+      </tr>
+    ));
+  };
   render() {
     console.log(this.state);
     return (
       <div>
-        <Select
-          value={this.state.year}
-          s={12}
-          m={6}
-          options={{
-            classes: "",
-            dropdownOptions: {
-              alignment: "left",
-              autoTrigger: true,
-              closeOnClick: true,
-              constrainWidth: true,
-              container: null,
-              coverTrigger: true,
-              hover: false,
-              inDuration: 150,
-              onCloseEnd: null,
-              onCloseStart: null,
-              onOpenEnd: null,
-              onOpenStart: null,
-              outDuration: 250
-            }
-          }}
-        >
-          <option disabled value="">
-            Year
-          </option>
-          <option value="2019">2019</option>
-          <option value="2018">2018</option>
-          <option value="2017">2017</option>
-          <option value="2016">2016</option>
-          <option value="2015">2015</option>
-          <option value="2014">2014</option>
-          <option value="2013">2013</option>
-          <option value="2012">2012</option>
-          <option value="2011">2011</option>
-          <option value="2010">2010</option>
-          <option value="2009">2009</option>
-          <option value="2008">2008</option>
-          <option value="2007">2007</option>
-          <option value="2006">2006</option>
-          <option value="2005">2005</option>
-          <option value="2004">2004</option>
-          <option value="2003">2003</option>
-          <option value="2002">2002</option>
-        </Select>
-        <Select
-          value={this.state.month}
-          s={12}
-          m={6}
-          options={{
-            classes: "",
-            dropdownOptions: {
-              alignment: "left",
-              autoTrigger: true,
-              closeOnClick: true,
-              constrainWidth: true,
-              container: null,
-              coverTrigger: true,
-              hover: false,
-              inDuration: 150,
-              onCloseEnd: null,
-              onCloseStart: null,
-              onOpenEnd: null,
-              onOpenStart: null,
-              outDuration: 250
-            }
-          }}
-        >
-          <option disabled value="">
-            Month
-          </option>
-          <option value="January">January</option>
-          <option value="February">February</option>
-          <option value="March">March</option>
-          <option value="April">April</option>
-          <option value="May">May</option>
-          <option value="June">June</option>
-          <option value="July">July</option>
-          <option value="August">August</option>
-          <option value="September">September</option>
-          <option value="October">October</option>
-          <option value="November">November</option>
-          <option value="December">December</option>
-        </Select>
+        <form onSubmit={e => this.onFilter(e)}>
+          <Select
+            onChange={e => this.onChange(e)}
+            name="year"
+            value={this.state.year}
+            s={12}
+            m={5}
+            options={{
+              classes: "",
+              dropdownOptions: {
+                alignment: "left",
+                autoTrigger: true,
+                closeOnClick: true,
+                constrainWidth: true,
+                container: null,
+                coverTrigger: true,
+                hover: false,
+                inDuration: 150,
+                onCloseEnd: null,
+                onCloseStart: null,
+                onOpenEnd: null,
+                onOpenStart: null,
+                outDuration: 250
+              }
+            }}
+          >
+            <option disabled value="">
+              Year
+            </option>
+            <option value="2019">2019</option>
+            <option value="2018">2018</option>
+            <option value="2017">2017</option>
+            <option value="2016">2016</option>
+            <option value="2015">2015</option>
+            <option value="2014">2014</option>
+            <option value="2013">2013</option>
+            <option value="2012">2012</option>
+            <option value="2011">2011</option>
+            <option value="2010">2010</option>
+            <option value="2009">2009</option>
+            <option value="2008">2008</option>
+            <option value="2007">2007</option>
+            <option value="2006">2006</option>
+            <option value="2005">2005</option>
+            <option value="2004">2004</option>
+            <option value="2003">2003</option>
+            <option value="2002">2002</option>
+          </Select>
+          <Select
+            onChange={e => this.onChange(e)}
+            name="month"
+            value={this.state.month}
+            s={12}
+            m={5}
+            options={{
+              classes: "",
+              dropdownOptions: {
+                alignment: "left",
+                autoTrigger: true,
+                closeOnClick: true,
+                constrainWidth: true,
+                container: null,
+                coverTrigger: true,
+                hover: false,
+                inDuration: 150,
+                onCloseEnd: null,
+                onCloseStart: null,
+                onOpenEnd: null,
+                onOpenStart: null,
+                outDuration: 250
+              }
+            }}
+          >
+            <option disabled value="">
+              Month
+            </option>
+            <option value="January">January</option>
+            <option value="February">February</option>
+            <option value="March">March</option>
+            <option value="April">April</option>
+            <option value="May">May</option>
+            <option value="June">June</option>
+            <option value="July">July</option>
+            <option value="August">August</option>
+            <option value="September">September</option>
+            <option value="October">October</option>
+            <option value="November">November</option>
+            <option value="December">December</option>
+          </Select>
+          <div className="col s2">
+            <button
+              type="submit"
+              className="waves-effect waves-light btn btn-large perf-btn green"
+              style={{ width: "100%", marginBottom: "5px" }}
+            >
+              <i className="material-icons left">search</i>
+              search
+            </button>
+          </div>
+        </form>
         <form onSubmit={e => this.onSubmit(e)}>
           <DatePicker
             onChange={newDate => {
@@ -207,40 +259,40 @@ class Masterlist extends React.Component {
               placeholder="Description"
             />
           </div>
+
+          <div className="col s2">
+            <button
+              type="submit"
+              className="waves-effect waves-light btn btn-large perf-btn green"
+              style={{ width: "100%", marginBottom: "5px" }}
+            >
+              <i className="material-icons left">add</i>
+              Add
+            </button>
+          </div>
         </form>
-        <div className="col s2">
-          <button
-            type="submit"
-            className="waves-effect waves-light btn btn-large perf-btn green"
-            style={{ width: "100%", marginBottom: "5px" }}
-          >
-            <i className="material-icons left">add</i>
-            Add
-          </button>
-        </div>
         <table className="col s12">
           <thead>
             <tr>
               <th>Date</th>
               <th>Decription</th>
+              <th>Remove</th>
             </tr>
           </thead>
 
           <tbody>
+            {typeof this.props.nocall === "object" &&
+            this.props.nocall !== null ? (
+              this.renderExcludedDates()
+            ) : (
+              <tr>
+                <td colSpan="3">
+                  <p className="center grey-text">No Calls not set</p>
+                </td>
+              </tr>
+            )}
             <tr>
-              <td>Alvin</td>
-              <td>Eclair</td>
-            </tr>
-            <tr>
-              <td>Alan</td>
-              <td>Jellybean</td>
-            </tr>
-            <tr>
-              <td>Jonathan</td>
-              <td>Lollipop</td>
-            </tr>
-            <tr>
-              <td colSpan="2">
+              <td colSpan="3">
                 <h4 className="center green-text text-darken-1">
                   Goal Score:{" "}
                   <span className="green-text text-darken-3"> 340 </span>
@@ -258,4 +310,8 @@ const mapStateToProps = state => ({
   nocall: state.nocall
 });
 
-export default connect(mapStateToProps, { excludeDate })(Masterlist);
+export default connect(mapStateToProps, {
+  excludeDate,
+  fetchMasterlistCall,
+  removeExcludedDate
+})(Masterlist);
