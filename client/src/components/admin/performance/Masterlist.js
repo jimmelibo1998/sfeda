@@ -4,7 +4,8 @@ import { connect } from "react-redux";
 import {
   excludeDate,
   fetchMasterlistCall,
-  removeExcludedDate
+  removeExcludedDate,
+  updateAllMasterlistGoalScore
 } from "../../../actions/noCalls";
 import moment from "moment";
 
@@ -65,14 +66,17 @@ class Masterlist extends React.Component {
   };
 
   getGoalScore = () => {
+    let month = this.state.month + " " + this.state.year;
     let datesInMonth = getAllDatesInMonth(
-      new Date(this.state.month + " " + this.state.year).getMonth(),
-      new Date(this.state.month + " " + this.state.year).getFullYear()
+      new Date(month).getMonth(),
+      new Date(month).getFullYear()
     );
 
     let excludedDates = this.props.nocall.dates.map(date => date.date);
+    let gc = arrayDiff(datesInMonth, excludedDates).length * 15;
+    this.props.updateAllMasterlistGoalScore(gc, month);
 
-    return arrayDiff(datesInMonth, excludedDates).length * 15;
+    return gc;
   };
   render() {
     console.log(this.state);
@@ -333,5 +337,6 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, {
   excludeDate,
   fetchMasterlistCall,
-  removeExcludedDate
+  removeExcludedDate,
+  updateAllMasterlistGoalScore
 })(Masterlist);

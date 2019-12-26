@@ -12,8 +12,7 @@ module.exports = Masterlist = mongoose.model(
     },
     month: {
       type: String,
-      required: true,
-      unique: true
+      required: true
     },
     callFreq: {
       type: Number,

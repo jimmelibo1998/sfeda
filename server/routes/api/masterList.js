@@ -48,13 +48,14 @@ router.post(
         return res
           .status(400)
           .json({ errors: [{ msg: "Medrep doesn't exist" }] });
-
-      let masterlist = await MasterList.findOne({
-        month: monthYear,
+      console.log(req.params.medrep);
+      let masterlist = await MasterList.find({
         medrep: req.params.medrep
       });
 
-      if (masterlist)
+      console.log(masterlist.length);
+
+      if (masterlist.length > 0)
         return res.status(400).json({
           errors: [{ msg: "Already have a masterlist for the current month" }]
         });
@@ -64,7 +65,7 @@ router.post(
         new Date(inputDate).getFullYear()
       );
 
-      let datesExcluded = nocalldays.dates;
+      let datesExcluded = nocalldays.dates.map(date => date.date);
 
       let goalScore = arrayDiff(datesInMonth, datesExcluded).length * 15;
       masterlist = new MasterList({
@@ -77,7 +78,7 @@ router.post(
 
       res.json(masterlist);
     } catch (err) {
-      console.error(err.message);
+      console.error(err);
       res.send("Server error");
     }
   }
@@ -239,5 +240,29 @@ router.get("/doctors/:masterlist", auth, async (req, res) => {
     res.send("Server Error");
   }
 });
+
+//@route PUT /api/masterlist/goalscore/:score
+//@desc  Update Goal Scores
+//@access Private
+router.put(
+  "/goalscore/:score",
+  [auth, [check("month", "Date is required").exists()]],
+  async (req, res) => {
+    const validationErrors = validationResult(req);
+    if (!validationErrors.isEmpty())
+      return res.status(400).json({ errors: validationErrors.array() });
+
+    try {
+      let res = await MasterList.updateMany(
+        { month: req.body.month },
+        { goalScore: req.params.score }
+      );
+      console.log(res.n + " " + res.nModified);
+    } catch (err) {
+      console.error(err.message);
+      res.send("Server Error");
+    }
+  }
+);
 
 module.exports = router;

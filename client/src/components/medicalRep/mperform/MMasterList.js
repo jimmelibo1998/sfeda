@@ -7,7 +7,8 @@ import {
   getCurrentMasterlist,
   getMasterlistDoctors,
   getDoctorDetails,
-  clearMasterlist
+  clearMasterlist,
+  addMasterlist
 } from "../../../actions/masterlist";
 
 class MMasterList extends React.Component {
@@ -52,6 +53,39 @@ class MMasterList extends React.Component {
     ));
   };
 
+  renderButton = () => {
+    if (this.props.masterlist === null) {
+      return (
+        <Link
+          onClick={() => this.onClick()}
+          style={{ width: "100%" }}
+          className="green darken-3 waves-effect waves-light btn btn-large"
+          disabled={this.state.addButtonDisabled}
+          to="/medrep/perform/masterlist/add"
+        >
+          <i className="material-icons left">add</i>Add
+        </Link>
+      );
+    }
+
+    if (this.props.masterlist !== null) {
+      return (
+        <Link
+          style={{ width: "100%" }}
+          className="yellow darken-3 waves-effect waves-light btn btn-large"
+          disabled={this.state.addButtonDisabled}
+          to="/medrep/perform/masterlist/add"
+        >
+          <i className="material-icons left">edit</i>Edit
+        </Link>
+      );
+    }
+  };
+
+  onClick = () => {
+    this.props.addMasterlist(this.props.user._id, moment().format("MMMM YYYY"));
+  };
+
   render() {
     return (
       <div>
@@ -68,16 +102,7 @@ class MMasterList extends React.Component {
               </button>
             </div>
 
-            <div className="col s12 m6">
-              <Link
-                style={{ width: "100%" }}
-                className="green darken-3 waves-effect waves-light btn btn-large"
-                disabled={this.state.addButtonDisabled}
-                to="/medrep/perform/masterlist/add"
-              >
-                <i className="material-icons left">add</i>Add
-              </Link>
-            </div>
+            <div className="col s12 m6">{this.renderButton()}</div>
           </div>
           <div className="input-field col s4">
             <select
@@ -138,6 +163,68 @@ class MMasterList extends React.Component {
             </select>
           </div>
           <div className="col s12">
+            <div className="row">
+              <div className="col s12 m4">
+                <div class="card-panel white">
+                  <h5 className="green-text center"> Call Frequency </h5>
+                  <h2 className="green-text center">
+                    {" "}
+                    {this.props.masterlist !== null
+                      ? this.props.masterlist.callFreq
+                      : 0}
+                    %{" "}
+                  </h2>
+                </div>
+              </div>
+              <div className="col s12 m4">
+                <div class="card-panel white">
+                  <h5 className="green-text center"> Call Reach </h5>
+                  <h2 className="green-text center">
+                    {" "}
+                    {this.props.masterlist !== null
+                      ? this.props.masterlist.callReach
+                      : 0}
+                    %{" "}
+                  </h2>
+                </div>
+              </div>
+              <div className="col s12 m4">
+                <div class="card-panel white">
+                  <h5 className="green-text center"> Call Rate </h5>
+                  <h2 className="green-text center">
+                    {" "}
+                    {this.props.masterlist !== null
+                      ? this.props.masterlist.callRate
+                      : 0}
+                    %{" "}
+                  </h2>
+                </div>
+              </div>
+              <div className="col s12 m6">
+                <div class="card-panel white">
+                  <h5 className="green-text center"> Goal Score </h5>
+                  <h2 className="green-text center">
+                    {" "}
+                    {this.props.masterlist !== null
+                      ? this.props.masterlist.goalScore
+                      : 0}{" "}
+                  </h2>
+                </div>
+              </div>
+              <div className="col s12 m6">
+                <div class="card-panel white">
+                  <h5 className="green-text center"> Current Score </h5>
+                  <h2 className="green-text center">
+                    {" "}
+                    {this.props.masterlist !== null
+                      ? this.props.masterlist.currentScore
+                      : 0}{" "}
+                  </h2>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col s12">
             <table>
               <thead>
                 <tr>
@@ -181,5 +268,6 @@ export default connect(mapStateToProps, {
   clearMasterlist,
   getCurrentMasterlist,
   getMasterlistDoctors,
-  getDoctorDetails
+  getDoctorDetails,
+  addMasterlist
 })(MMasterList);

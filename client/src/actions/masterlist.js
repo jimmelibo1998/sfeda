@@ -8,12 +8,29 @@ import {
   MASTERLIST_ADDED,
   ADD_MASTERLIST_FAILED
 } from "./types";
+import setAlert from "./alert";
 
 import myServer from "../apis/myServer";
 
-// export const addMasterlist = () => async dispatch => {
+export const addMasterlist = (medrep, date) => async dispatch => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
 
-// };
+  const body = JSON.stringify({ date });
+
+  try {
+    let res = await myServer.post(`/api/masterlist/${medrep}`, body, config);
+    dispatch({ type: MASTERLIST_ADDED, payload: res.data });
+    dispatch(setAlert("Masterlist Added!", "green"));
+  } catch (err) {
+    console.log(err);
+    dispatch({ type: ADD_MASTERLIST_FAILED });
+    dispatch(setAlert("Add Masterlist Failed", "deep-orange accent-1"));
+  }
+};
 
 export const clearMasterlist = () => dispatch => {
   dispatch({ type: ML_CLEARED });

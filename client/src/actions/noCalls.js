@@ -9,6 +9,27 @@ import {
 import myServer from "../apis/myServer";
 import setAlert from "./alert";
 
+export const updateAllMasterlistGoalScore = (
+  goalscore,
+  month
+) => async dispatch => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+
+  const body = JSON.stringify({ month });
+
+  try {
+    await myServer.put(`/api/masterlist/goalscore/${goalscore}`, body, config);
+    dispatch(setAlert("Goal Score Updated!", "green"));
+  } catch (err) {
+    console.log(err);
+    dispatch(setAlert("Goal not changed", "deep-orange accent-1"));
+  }
+};
+
 export const removeExcludedDate = (nocallid, dateid) => async dispatch => {
   try {
     let res = await myServer.put(`/api/mdcalls/nocalls/${nocallid}/${dateid}`);
