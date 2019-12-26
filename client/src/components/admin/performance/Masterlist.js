@@ -8,6 +8,9 @@ import {
 } from "../../../actions/noCalls";
 import moment from "moment";
 
+import { getAllDatesInMonth } from "../../../functions/getAllDatesInMonth";
+import { arrayDiff } from "../../../functions/arrayDiff";
+
 class Masterlist extends React.Component {
   state = {
     year: moment().format("YYYY"),
@@ -59,6 +62,17 @@ class Masterlist extends React.Component {
         </td>
       </tr>
     ));
+  };
+
+  getGoalScore = () => {
+    let datesInMonth = getAllDatesInMonth(
+      new Date(this.state.month + " " + this.state.year).getMonth(),
+      new Date(this.state.month + " " + this.state.year).getFullYear()
+    );
+
+    let excludedDates = this.props.nocall.dates.map(date => date.date);
+
+    return arrayDiff(datesInMonth, excludedDates).length * 15;
   };
   render() {
     console.log(this.state);
@@ -295,7 +309,13 @@ class Masterlist extends React.Component {
               <td colSpan="3">
                 <h4 className="center green-text text-darken-1">
                   Goal Score:{" "}
-                  <span className="green-text text-darken-3"> 340 </span>
+                  <span className="green-text text-darken-3">
+                    {" "}
+                    {typeof this.props.nocall === "object" &&
+                    this.props.nocall !== null
+                      ? this.getGoalScore()
+                      : 0}{" "}
+                  </span>
                 </h4>
               </td>
             </tr>
