@@ -48,14 +48,13 @@ router.post(
         return res
           .status(400)
           .json({ errors: [{ msg: "Medrep doesn't exist" }] });
-      console.log(req.params.medrep);
-      let masterlist = await MasterList.find({
+
+      let masterlist = await MasterList.findOne({
+        month: monthYear,
         medrep: req.params.medrep
       });
 
-      console.log(masterlist.length);
-
-      if (masterlist.length > 0)
+      if (masterlist)
         return res.status(400).json({
           errors: [{ msg: "Already have a masterlist for the current month" }]
         });

@@ -165,7 +165,7 @@ class MMasterList extends React.Component {
           <div className="col s12">
             <div className="row">
               <div className="col s12 m4">
-                <div class="card-panel white">
+                <div className="card-panel white">
                   <h5 className="green-text center"> Call Frequency </h5>
                   <h2 className="green-text center">
                     {" "}
@@ -177,7 +177,7 @@ class MMasterList extends React.Component {
                 </div>
               </div>
               <div className="col s12 m4">
-                <div class="card-panel white">
+                <div className="card-panel white">
                   <h5 className="green-text center"> Call Reach </h5>
                   <h2 className="green-text center">
                     {" "}
@@ -189,7 +189,7 @@ class MMasterList extends React.Component {
                 </div>
               </div>
               <div className="col s12 m4">
-                <div class="card-panel white">
+                <div className="card-panel white">
                   <h5 className="green-text center"> Call Rate </h5>
                   <h2 className="green-text center">
                     {" "}
@@ -201,7 +201,7 @@ class MMasterList extends React.Component {
                 </div>
               </div>
               <div className="col s12 m6">
-                <div class="card-panel white">
+                <div className="card-panel white">
                   <h5 className="green-text center"> Goal Score </h5>
                   <h2 className="green-text center">
                     {" "}
@@ -212,7 +212,7 @@ class MMasterList extends React.Component {
                 </div>
               </div>
               <div className="col s12 m6">
-                <div class="card-panel white">
+                <div className="card-panel white">
                   <h5 className="green-text center"> Current Score </h5>
                   <h2 className="green-text center">
                     {" "}

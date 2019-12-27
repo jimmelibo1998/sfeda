@@ -8,6 +8,35 @@ import {
 import myServer from "../apis/myServer";
 import setAlert from "./alert";
 
+export const searchByName = doctors => dispatch => {
+  dispatch({ type: DOCTORS_LOADED, payload: doctors });
+};
+
+export const loadAggregateDoctors = area => async dispatch => {
+  console.log("Aggrrr");
+  try {
+    let res = await myServer.get(`/api/doctors/area/${area}`);
+    dispatch({ type: DOCTORS_LOADED, payload: res.data });
+  } catch (err) {
+    console.error(err);
+    dispatch({ type: LOAD_DOCTORS_FAILED });
+  }
+};
+
+export const loadAggregateDoctorsClassCode = (
+  classcode,
+  area
+) => async dispatch => {
+  console.log("Aggrrr");
+  try {
+    let res = await myServer.get(`/api/doctors/classcode/${classcode}/${area}`);
+    dispatch({ type: DOCTORS_LOADED, payload: res.data });
+  } catch (err) {
+    console.error(err);
+    dispatch({ type: LOAD_DOCTORS_FAILED });
+  }
+};
+
 export const addDoctor = (
   lastName,
   firstName,

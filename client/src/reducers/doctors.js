@@ -6,16 +6,16 @@ import {
   DOCTOR_ADDED
 } from "../actions/types";
 
-export default function(state = null, action) {
+export default function(state = [], action) {
   const { type, payload } = action;
   switch (type) {
     case DOCTORS_LOADED:
     case DOCTOR_ADDED:
-      return payload.length > 0 ? payload : null;
+      return payload.length > 0 ? payload : [];
     case LOAD_DOCTORS_FAILED:
     case DOCTORS_CLEARED:
     case DOCTOR_ADD_FAILED:
-      return null;
+      return [];
     default:
       return state;
   }

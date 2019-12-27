@@ -14,7 +14,68 @@ router.get("/", auth, async (req, res) => {
     let doctors = await DoctorAccount.find().select("-password");
     if (!doctors)
       return res.status(400).json({ errors: [{ msg: "No Doctor found" }] });
+
     res.json(doctors);
+  } catch (err) {
+    console.error(err.message);
+    res.send("Server Error");
+  }
+});
+
+//@route GET /api/doctors/area/:area
+//@desc  Fetch Doctors by Area
+//@access Private
+router.get("/area/:area", auth, async (req, res) => {
+  try {
+    let docs = await DoctorAccount.aggregate([
+      {
+        $match: { area: req.params.area }
+      },
+      {
+        $project: {
+          fullName: { $concat: ["$firstName", " ", "$lastName"] },
+          email: "$email",
+          specialityCode: "$specialityCode",
+          classCode: "$classCode",
+          institution: "$institution",
+          area: "$area"
+        }
+      }
+    ]);
+
+    if (!docs) return console.log("No doctors found");
+
+    res.send(docs);
+  } catch (err) {
+    console.error(err.message);
+    res.send("Server Error");
+  }
+});
+
+//@route GET /api/doctors/classcode/:classcode
+//@desc  Fetch Doctors by Area
+//@access Private
+router.get("/classcode/:classcode/:area", auth, async (req, res) => {
+  try {
+    let docs = await DoctorAccount.aggregate([
+      {
+        $match: { classCode: req.params.classcode, area: req.params.area }
+      },
+      {
+        $project: {
+          fullName: { $concat: ["$firstName", " ", "$lastName"] },
+          email: "$email",
+          specialityCode: "$specialityCode",
+          classCode: "$classCode",
+          institution: "$institution",
+          area: "$area"
+        }
+      }
+    ]);
+
+    if (!docs) return console.log("No doctors found");
+
+    res.send(docs);
   } catch (err) {
     console.error(err.message);
     res.send("Server Error");

@@ -1,84 +1,231 @@
 import React from "react";
-import { Autocomplete } from "react-materialize";
+import { Select } from "react-materialize";
+import { connect } from "react-redux";
+import {
+  loadAggregateDoctors,
+  searchByName,
+  loadAggregateDoctorsClassCode
+} from "../../../actions/doctors";
+import { getCurrentMasterlist } from "../../../actions/masterlist";
 
 class AddMasterList extends React.Component {
-  getData = () => {
-    const data = { name: {}, id: {}, email: {} };
-    const myArray = [
-      { name: "Jimmel Ibo", email: "jimmelibo@yahoo.com", id: 1 },
-      {
-        name: "Kimberly Banares",
-        email: "kimbanares@yahoo.com",
-        id: 2
-      },
-      { name: "Ivory Cinco", email: "ivorycinco@yahoo.com", id: 3 },
-      { name: "wtf wt", email: "wt@yahoo.com", id: 3 }
-    ];
-    myArray.map(array => {
-      data.id[array.id] = null;
-      data.name[array.name] = null;
-      data.email[array.email] = null;
-    });
+  state = {
+    name: "",
+    email: "",
+    classcode: ""
+  };
+  async componentDidMount() {
+    await this.props.loadAggregateDoctors(this.props.user.area);
+    await this.props.getCurrentMasterlist(this.props.user._id);
+  }
 
-    return data;
+  renderAggregatedDoctors = () => {
+    return this.props.doctors.map(doctor => (
+      <li className="collection-item" key={doctor._id}>
+        <div>
+          {doctor.fullName} /{" "}
+          <span className="green-text text-darken-2">{doctor.email}</span> /{" "}
+          {doctor.classCode}
+          <a href="#!" className="secondary-content">
+            <i className="material-icons green-text">send</i>
+          </a>
+        </div>
+      </li>
+    ));
   };
 
+  onChangeEmail = async e => {
+    await this.setState({ [e.target.id]: e.target.value });
+    if (this.props.doctors === null || this.state.email === "") {
+      return this.props.loadAggregateDoctors(this.props.user.area);
+    }
+
+    let data = this.state.email;
+    let regexs = [RegExp(data, "i")];
+    console.log(regexs);
+    let filtered = this.props.doctors.filter(doctor => {
+      return regexs.some(regex => {
+        return regex.test(doctor.email);
+      });
+    });
+
+    console.log(filtered);
+
+    return this.props.searchByName(filtered);
+  };
+  onChangeName = async e => {
+    await this.setState({ [e.target.id]: e.target.value });
+    if (this.props.doctors === null || this.state.name === "") {
+      return this.props.loadAggregateDoctors(this.props.user.area);
+    }
+
+    let data = this.state.name;
+    let regexs = [RegExp(data, "i")];
+    console.log(regexs);
+    let filtered = this.props.doctors.filter(doctor => {
+      return regexs.some(regex => {
+        return regex.test(doctor.fullName);
+      });
+    });
+
+    return this.props.searchByName(filtered);
+  };
+
+  onChangeClassCode = async e => {
+    await this.setState({ classcode: e.target.value });
+    if (this.state.classcode === "") {
+      return this.props.loadAggregateDoctors(this.props.user.area);
+    }
+    this.props.loadAggregateDoctorsClassCode(
+      this.state.classcode,
+      this.props.user.area
+    );
+  };
   render() {
     return (
       <div>
         <h3 className="flow-text light-green-text text-darken-3 center">
-          Add Master List
+          ADD MASTERLIST
         </h3>
         <div className="row">
-          <Autocomplete
-            className="s8"
-            options={{
-              data: this.getData().name
-            }}
-            placeholder="Full Name"
-          />
+          <div className="col s12 m3">
+            <form onSubmit={e => e.preventDefault()}>
+              <div className="input-field col s12">
+                <input
+                  onChange={e => this.onChangeName(e)}
+                  value={this.state.name}
+                  id="name"
+                  type="text"
+                  className="validate"
+                  placeholder="Name"
+                />
+              </div>
+            </form>
+            <form>
+              <div className="input-field col s12">
+                <input
+                  onChange={e => this.onChangeEmail(e)}
+                  value={this.state.email}
+                  id="email"
+                  type="text"
+                  className="validate"
+                  placeholder="Email"
+                />
+              </div>
+            </form>
+            <Select
+              s={12}
+              onChange={e => this.onChangeClassCode(e)}
+              value={this.state.classCode}
+              id="classcode"
+              options={{
+                classes: "",
+                dropdownOptions: {
+                  alignment: "left",
+                  autoTrigger: true,
+                  closeOnClick: true,
+                  constrainWidth: true,
+                  container: null,
+                  coverTrigger: true,
+                  hover: false,
+                  inDuration: 150,
+                  onCloseEnd: null,
+                  onCloseStart: null,
+                  onOpenEnd: null,
+                  onOpenStart: null,
+                  outDuration: 250
+                }
+              }}
+            >
+              <option value="">Choose your option</option>
+              <option value="A">A</option>
+              <option value="B">B</option>
+              <option value="C">C</option>
+            </Select>
+            <form>
+              <div className="input-field col s12">
+                <input
+                  id="sp_code"
+                  type="text"
+                  className="validate"
+                  placeholder="Specialization Code"
+                />
+              </div>
+            </form>
+            <form>
+              <div className="input-field col s12">
+                <input
+                  id="institution_name"
+                  type="text"
+                  className="validate"
+                  placeholder="Institution Name"
+                />
+              </div>
+            </form>
+          </div>
+          <div className="col s12 m9">
+            <ul
+              className="collection with-header"
+              style={{
+                maxHeight: "407px",
+                minHeight: "407px",
+                overflowY: "scroll"
+              }}
+            >
+              <li className="collection-header">
+                <h6 className="green-text center">Doctors </h6>
+              </li>
+              {this.props.doctors.length > 0 ? (
+                this.renderAggregatedDoctors()
+              ) : (
+                <li className="collection-header">
+                  <p className="grey-text text-darken-3 center">No Doctors </p>
+                </li>
+              )}
+            </ul>
+          </div>
 
-          <Autocomplete
-            className="s4"
-            options={{
-              data: this.getData().email
-            }}
-            placeholder="Email"
-          />
-          <div className="input-field col s4">
-            <input
-              id="class_code"
-              type="text"
-              className="validate"
-              placeholder="Class Code"
-            />
-          </div>
-          <div className="input-field col s4">
-            <input
-              id="sp_code"
-              type="text"
-              className="validate"
-              placeholder="Specialization Code"
-            />
-          </div>
-          <div className="input-field col s4">
-            <input
-              id="institution_name"
-              type="text"
-              className="validate"
-              placeholder="Institution Name"
-            />
-          </div>
           <div className="input-field col s12">
-            <button className="green darken-3 waves-effect waves-light btn btn-large">
-              <i className="material-icons left">add</i>Add Doctor
-            </button>
-            <button className="yellow darken-4 waves-effect waves-light btn btn-large">
-              <i className="material-icons left">repeat</i>Clear
-            </button>
-            <button className="green darken-3 waves-effect waves-light btn btn-large">
-              <i className="material-icons left">send</i>submit master list
-            </button>
+            <div className="row">
+              <div className="col s12 m3">
+                {" "}
+                <button
+                  style={{ width: "100%" }}
+                  className="teal darken-3 waves-effect waves-light btn btn-large"
+                >
+                  <i className="material-icons left">arrow_back</i>Go Back
+                </button>
+              </div>
+              <div className="col s12 m3">
+                {" "}
+                <button
+                  style={{ width: "100%" }}
+                  className="green darken-3 waves-effect waves-light btn btn-large"
+                >
+                  <i className="material-icons left">add</i>Add Doctor
+                </button>
+              </div>
+              <div className="col s12 m3">
+                {" "}
+                <button
+                  onClick={() =>
+                    this.props.loadAggregateDoctors(this.props.user.area)
+                  }
+                  style={{ width: "100%" }}
+                  className="yellow darken-4 waves-effect waves-light btn btn-large"
+                >
+                  <i className="material-icons left">repeat</i>Clear
+                </button>
+              </div>
+              <div className="col s12 m3">
+                <button
+                  style={{ width: "100%" }}
+                  className="green darken-3 waves-effect waves-light btn btn-large"
+                >
+                  <i className="material-icons left">send</i>submit master list
+                </button>
+              </div>
+            </div>
           </div>
           <div className="col s12">
             <table>
@@ -138,5 +285,14 @@ class AddMasterList extends React.Component {
     );
   }
 }
+const mapStateToProps = state => ({
+  user: state.auth.user,
+  doctors: state.doctors
+});
 
-export default AddMasterList;
+export default connect(mapStateToProps, {
+  loadAggregateDoctors,
+  searchByName,
+  getCurrentMasterlist,
+  loadAggregateDoctorsClassCode
+})(AddMasterList);
