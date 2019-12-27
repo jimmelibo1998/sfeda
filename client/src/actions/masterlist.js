@@ -6,11 +6,27 @@ import {
   ML_CLEARED,
   DOCTOR_DETAILS_FETCHED,
   MASTERLIST_ADDED,
-  ADD_MASTERLIST_FAILED
+  ADD_MASTERLIST_FAILED,
+  ML_DOCTOR_ADDED
 } from "./types";
 import setAlert from "./alert";
 
 import myServer from "../apis/myServer";
+
+export const addDoctorToML = (masterlistId, doctorId) => async dispatch => {
+  try {
+    let res = await myServer.post(
+      `/api/masterlist/add/${masterlistId}/${doctorId}`
+    );
+    console.log(res.data);
+    await dispatch({ type: ML_DOCTOR_ADDED, payload: res.data });
+    await dispatch(getDoctorDetails(res.data.doctor));
+    dispatch(setAlert("Doctor Adeed", "green"));
+  } catch (err) {
+    console.log(err);
+    dispatch(setAlert("Doctor not added", "deep-orange accent-1"));
+  }
+};
 
 export const addMasterlist = (medrep, date) => async dispatch => {
   const config = {

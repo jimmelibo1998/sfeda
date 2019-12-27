@@ -6,7 +6,8 @@ import {
   ML_CLEARED,
   DOCTOR_DETAILS_FETCHED,
   MASTERLIST_ADDED,
-  ADD_MASTERLIST_FAILED
+  ADD_MASTERLIST_FAILED,
+  ML_DOCTOR_ADDED
 } from "../actions/types";
 
 const initialState = {
@@ -25,6 +26,8 @@ export default function(state = initialState, action) {
     case CURRENT_ML_FETCHED:
     case MASTERLIST_ADDED:
       return { ...state, masterlist: payload };
+    case ML_DOCTOR_ADDED:
+      return { ...state, doctors: [...state.doctors, payload] };
     case ML_DOCTORS_FETCHED:
       return { ...state, doctors: payload };
     case NO_ML_DOCTORS:

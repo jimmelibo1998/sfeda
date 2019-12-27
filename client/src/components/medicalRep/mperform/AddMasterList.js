@@ -6,7 +6,11 @@ import {
   searchByName,
   loadAggregateDoctorsClassCode
 } from "../../../actions/doctors";
-import { getCurrentMasterlist } from "../../../actions/masterlist";
+import {
+  getCurrentMasterlist,
+  addDoctorToML,
+  getMasterlistDoctors
+} from "../../../actions/masterlist";
 
 class AddMasterList extends React.Component {
   state = {
@@ -26,7 +30,14 @@ class AddMasterList extends React.Component {
           {doctor.fullName} /{" "}
           <span className="green-text text-darken-2">{doctor.email}</span> /{" "}
           {doctor.classCode}
-          <a href="#!" className="secondary-content">
+          <a
+            onClick={e => {
+              e.preventDefault();
+              this.props.addDoctorToML(this.props.masterlist._id, doctor._id);
+            }}
+            href="#!"
+            className="secondary-content"
+          >
             <i className="material-icons green-text">send</i>
           </a>
         </div>
@@ -80,6 +91,23 @@ class AddMasterList extends React.Component {
       this.state.classcode,
       this.props.user.area
     );
+  };
+
+  renderDoctorDetails = () => {
+    return this.props.doctorDetails.map(doctorDetail => (
+      <tr key={doctorDetail._id}>
+        <td>{doctorDetail.lastName}</td>
+        <td>{doctorDetail.firstName}</td>
+        <td>{doctorDetail.classCode}</td>
+        <td>{doctorDetail.specialityCode}</td>
+        <td>{doctorDetail.institution}</td>
+        <td>
+          <button className="red darken-4 waves-effect waves-light btn btn-small">
+            <i className="material-icons">cancel</i>
+          </button>
+        </td>
+      </tr>
+    ));
   };
   render() {
     return (
@@ -241,42 +269,15 @@ class AddMasterList extends React.Component {
               </thead>
 
               <tbody>
-                <tr>
-                  <td>Chiong</td>
-                  <td>Abigail Rivera</td>
-                  <td>B</td>
-                  <td>PEDIA2</td>
-                  <td>MMC</td>
-                  <td>
-                    <button className="red darken-4 waves-effect waves-light btn btn-small">
-                      <i className="material-icons">cancel</i>
-                    </button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Chiong</td>
-                  <td>Abigail Rivera</td>
-                  <td>B</td>
-                  <td>PEDIA2</td>
-                  <td>MMC</td>
-                  <td>
-                    <button className="red darken-4 waves-effect waves-light btn btn-small">
-                      <i className="material-icons">cancel</i>
-                    </button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Chiong</td>
-                  <td>Abigail Rivera</td>
-                  <td>B</td>
-                  <td>PEDIA2</td>
-                  <td>MMC</td>
-                  <td>
-                    <button className="red darken-4 waves-effect waves-light btn btn-small">
-                      <i className="material-icons">cancel</i>
-                    </button>
-                  </td>
-                </tr>
+                {this.props.doctorDetails.length > 0 ? (
+                  this.renderDoctorDetails()
+                ) : (
+                  <tr>
+                    <td colSpan="6">
+                      <p className="center grey-text">No Doctors</p>
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
@@ -287,12 +288,16 @@ class AddMasterList extends React.Component {
 }
 const mapStateToProps = state => ({
   user: state.auth.user,
-  doctors: state.doctors
+  doctors: state.doctors,
+  masterlist: state.masterlist.masterlist,
+  doctorDetails: state.masterlist.doctorDetails
 });
 
 export default connect(mapStateToProps, {
   loadAggregateDoctors,
   searchByName,
   getCurrentMasterlist,
-  loadAggregateDoctorsClassCode
+  loadAggregateDoctorsClassCode,
+  addDoctorToML,
+  getMasterlistDoctors
 })(AddMasterList);
