@@ -5,15 +5,64 @@ import {
   NO_ML_DOCTORS,
   ML_CLEARED,
   DOCTOR_DETAILS_FETCHED,
+  MASTERLIST_SENT,
   MASTERLIST_ADDED,
   ADD_MASTERLIST_FAILED,
-  ML_DOCTOR_ADDED
+  ML_DOCTOR_ADDED,
+  ML_DOCTOR_REMOVED
 } from "./types";
 import setAlert from "./alert";
+import { loadAggregateDoctors } from "./doctors";
 
 import myServer from "../apis/myServer";
 
-export const addDoctorToML = (masterlistId, doctorId) => async dispatch => {
+export const sendMasterlist = masterlistId => async (dispatch, getState) => {
+  const { doctors, doctorDetails } = getState().masterlist;
+
+  if (doctors.length < 60)
+    return dispatch(
+      setAlert("Doctors must be atleast 60 in total", "deep-orange accent-1")
+    );
+
+  let numClassA = doctorDetails.filter(doc => doc.classCode === "A").length;
+  if (numClassA < 20)
+    return dispatch(
+      setAlert(
+        "Class A Doctors must be atleast 20 in total",
+        "deep-orange accent-1"
+      )
+    );
+
+  try {
+    let res = await myServer.put(`/api/masterlist/send/${masterlistId}`);
+    dispatch({ type: MASTERLIST_SENT, payload: res.data });
+  } catch (err) {
+    console.log(err);
+    dispatch(setAlert("Masterlist not sent", "deep-orange accent-1"));
+  }
+};
+
+export const removeDoctorFromML = (masterlistId, doctorId) => async (
+  dispatch,
+  getState
+) => {
+  try {
+    let res = await myServer.delete(
+      `/api/masterlist/delete/${masterlistId}/${doctorId}`
+    );
+    await dispatch({ type: ML_DOCTOR_REMOVED, payload: res.data });
+    await dispatch(loadAggregateDoctors(getState().auth.user.area));
+    dispatch(setAlert("Doctor Removed", "green"));
+  } catch (err) {
+    console.log(err);
+    dispatch(setAlert("Doctor not removed", "deep-orange accent-1"));
+  }
+};
+
+export const addDoctorToML = (masterlistId, doctorId) => async (
+  dispatch,
+  getState
+) => {
   try {
     let res = await myServer.post(
       `/api/masterlist/add/${masterlistId}/${doctorId}`
@@ -21,6 +70,7 @@ export const addDoctorToML = (masterlistId, doctorId) => async dispatch => {
     console.log(res.data);
     await dispatch({ type: ML_DOCTOR_ADDED, payload: res.data });
     await dispatch(getDoctorDetails(res.data.doctor));
+    await dispatch(loadAggregateDoctors(getState().auth.user.area));
     dispatch(setAlert("Doctor Adeed", "green"));
   } catch (err) {
     console.log(err);

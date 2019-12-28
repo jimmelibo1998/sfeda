@@ -119,6 +119,9 @@ router.post("/add/:masterlist/:doctor", auth, async (req, res) => {
     });
 
     listdoctor.save();
+
+    doc.inMasterlist = true;
+    doc.save();
     res.json(listdoctor);
   } catch (err) {
     console.error(err.message);
@@ -149,10 +152,17 @@ router.delete("/delete/:masterlist/:doctor", auth, async (req, res) => {
     if (!masterlistdoctor)
       return res.status(400).json({ errors: [{ msg: "No doctor to delete" }] });
 
-    masterlistdoctor = await MasterListDoctor.findOneAndRemove({
+    let doc = await DoctorAccount.findById(req.params.doctor);
+    if (!doc)
+      return res.status(400).json({ errors: [{ msg: "Doctor not found" }] });
+
+    masterlistdoctor = await MasterListDoctor.findOneAndDelete({
       masterlist: req.params.masterlist,
       doctor: req.params.doctor
     });
+
+    doc.inMasterlist = false;
+    doc.save();
     console.log("Doctor removed from masterlist");
     res.send(masterlistdoctor);
   } catch (err) {

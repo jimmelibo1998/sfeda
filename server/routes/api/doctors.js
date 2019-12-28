@@ -29,7 +29,7 @@ router.get("/area/:area", auth, async (req, res) => {
   try {
     let docs = await DoctorAccount.aggregate([
       {
-        $match: { area: req.params.area }
+        $match: { area: req.params.area, inMasterlist: false }
       },
       {
         $project: {
@@ -59,7 +59,11 @@ router.get("/classcode/:classcode/:area", auth, async (req, res) => {
   try {
     let docs = await DoctorAccount.aggregate([
       {
-        $match: { classCode: req.params.classcode, area: req.params.area }
+        $match: {
+          classCode: req.params.classcode,
+          area: req.params.area,
+          inMasterlist: false
+        }
       },
       {
         $project: {

@@ -7,7 +7,9 @@ import {
   DOCTOR_DETAILS_FETCHED,
   MASTERLIST_ADDED,
   ADD_MASTERLIST_FAILED,
-  ML_DOCTOR_ADDED
+  ML_DOCTOR_ADDED,
+  ML_DOCTOR_REMOVED,
+  MASTERLIST_SENT
 } from "../actions/types";
 
 const initialState = {
@@ -23,15 +25,27 @@ export default function(state = initialState, action) {
   switch (type) {
     case DOCTOR_DETAILS_FETCHED:
       return { ...state, doctorDetails: [...state.doctorDetails, payload] };
+    case MASTERLIST_SENT:
     case CURRENT_ML_FETCHED:
     case MASTERLIST_ADDED:
       return { ...state, masterlist: payload };
     case ML_DOCTOR_ADDED:
       return { ...state, doctors: [...state.doctors, payload] };
+    case ML_DOCTOR_REMOVED:
+      return {
+        ...state,
+        doctors: state.doctors.filter(
+          doctor => doctor.doctor !== payload.doctor
+        ),
+        doctorDetails: state.doctorDetails.filter(
+          detail => detail._id !== payload.doctor
+        )
+      };
     case ML_DOCTORS_FETCHED:
       return { ...state, doctors: payload };
     case NO_ML_DOCTORS:
       return { ...state, doctors: null };
+
     case ADD_MASTERLIST_FAILED:
     case NO_CURRENT_ML:
     case ML_CLEARED:

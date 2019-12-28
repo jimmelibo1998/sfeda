@@ -14,9 +14,11 @@ class MDoctors extends React.Component {
   }
 
   renderDoctors = () => {
+    let num = 0;
     if (this.props.doctors !== null) {
       return this.props.doctors.map(doctor => (
         <tr key={doctor._id}>
+          <td>{(num += 1)}</td>
           <td>{doctor.lastName}</td>
           <td>{doctor.firstName}</td>
           <td>{doctor.classCode}</td>
@@ -104,6 +106,7 @@ class MDoctors extends React.Component {
             <table className="responsive-table">
               <thead>
                 <tr>
+                  <th>#</th>
                   <th>Last Name</th>
                   <th>First Name</th>
                   <th>Class Code</th>

@@ -4,25 +4,37 @@ import { connect } from "react-redux";
 import {
   loadAggregateDoctors,
   searchByName,
-  loadAggregateDoctorsClassCode
+  loadAggregateDoctorsClassCode,
+  clearDoctors
 } from "../../../actions/doctors";
 import {
   getCurrentMasterlist,
   addDoctorToML,
-  getMasterlistDoctors
+  getMasterlistDoctors,
+  removeDoctorFromML,
+  sendMasterlist,
+  clearMasterlist
 } from "../../../actions/masterlist";
 
 class AddMasterList extends React.Component {
   state = {
     name: "",
     email: "",
-    classcode: ""
+    classcode: "",
+    disabled: false
   };
   async componentDidMount() {
     await this.props.loadAggregateDoctors(this.props.user.area);
     await this.props.getCurrentMasterlist(this.props.user._id);
+    if (this.props.masterlist.sent === true) {
+      this.setState({ disabled: true });
+    }
   }
 
+  componentWillUnmount() {
+    this.props.clearMasterlist();
+    this.props.clearDoctors();
+  }
   renderAggregatedDoctors = () => {
     return this.props.doctors.map(doctor => (
       <li className="collection-item" key={doctor._id}>
@@ -33,7 +45,11 @@ class AddMasterList extends React.Component {
           <a
             onClick={e => {
               e.preventDefault();
-              this.props.addDoctorToML(this.props.masterlist._id, doctor._id);
+              if (this.state.disabled === false) {
+                this.props.addDoctorToML(this.props.masterlist._id, doctor._id);
+              } else {
+                console.log("Cant Add Doctor");
+              }
             }}
             href="#!"
             className="secondary-content"
@@ -92,17 +108,33 @@ class AddMasterList extends React.Component {
       this.props.user.area
     );
   };
-
+  sendMasterlist = async () => {
+    await this.props.sendMasterlist(this.props.masterlist._id);
+    if (this.props.masterlist.sent === true) {
+      this.setState({ disabled: true });
+    }
+  };
   renderDoctorDetails = () => {
+    let num = 0;
     return this.props.doctorDetails.map(doctorDetail => (
       <tr key={doctorDetail._id}>
+        <td>{(num += 1)}</td>
         <td>{doctorDetail.lastName}</td>
         <td>{doctorDetail.firstName}</td>
         <td>{doctorDetail.classCode}</td>
         <td>{doctorDetail.specialityCode}</td>
         <td>{doctorDetail.institution}</td>
         <td>
-          <button className="red darken-4 waves-effect waves-light btn btn-small">
+          <button
+            onClick={() =>
+              this.props.removeDoctorFromML(
+                this.props.masterlist._id,
+                doctorDetail._id
+              )
+            }
+            className="red darken-4 waves-effect waves-light btn btn-small"
+            disabled={this.state.disabled}
+          >
             <i className="material-icons">cancel</i>
           </button>
         </td>
@@ -229,6 +261,7 @@ class AddMasterList extends React.Component {
                 <button
                   style={{ width: "100%" }}
                   className="green darken-3 waves-effect waves-light btn btn-large"
+                  disabled={this.state.disabled}
                 >
                   <i className="material-icons left">add</i>Add Doctor
                 </button>
@@ -241,14 +274,17 @@ class AddMasterList extends React.Component {
                   }
                   style={{ width: "100%" }}
                   className="yellow darken-4 waves-effect waves-light btn btn-large"
+                  disabled={this.state.disabled}
                 >
                   <i className="material-icons left">repeat</i>Clear
                 </button>
               </div>
               <div className="col s12 m3">
                 <button
+                  onClick={() => this.sendMasterlist()}
                   style={{ width: "100%" }}
                   className="green darken-3 waves-effect waves-light btn btn-large"
+                  disabled={this.state.disabled}
                 >
                   <i className="material-icons left">send</i>submit master list
                 </button>
@@ -259,6 +295,7 @@ class AddMasterList extends React.Component {
             <table>
               <thead>
                 <tr>
+                  <th>#</th>
                   <th>Last Name</th>
                   <th>First Name</th>
                   <th>Class Code</th>
@@ -299,5 +336,9 @@ export default connect(mapStateToProps, {
   getCurrentMasterlist,
   loadAggregateDoctorsClassCode,
   addDoctorToML,
-  getMasterlistDoctors
+  getMasterlistDoctors,
+  removeDoctorFromML,
+  sendMasterlist,
+  clearMasterlist,
+  clearDoctors
 })(AddMasterList);

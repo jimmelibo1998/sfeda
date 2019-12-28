@@ -33,6 +33,10 @@ module.exports = DoctorAccount = mongoose.model(
     area: {
       type: String,
       required: true
+    },
+    inMasterlist: {
+      type: Boolean,
+      default: false
     }
   })
 );
