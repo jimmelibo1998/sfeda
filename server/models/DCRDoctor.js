@@ -20,9 +20,6 @@ module.exports = DCRDoctor = mongoose.model(
       type: Boolean,
       required: true
     },
-    id: {
-      type: mongoose.Schema.Types.ObjectId
-    },
     visited: {
       type: Boolean,
       default: false

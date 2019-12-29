@@ -17,8 +17,8 @@ const RegularCustomer = require("../../models/RegularCustomer");
 //@route POST /api/dcr/:masterlist
 //@desc  Create DCR
 //@access Private
-router.post("/:masterlist", auth, async (req, res) => {
-  const dateToday = moment().format("YYYY-MM-DD");
+router.post("/:masterlist/:date", auth, async (req, res) => {
+  const date = moment(req.params.date).format("YYYY-MM-DD");
 
   const valid = mongoose.Types.ObjectId.isValid(req.params.masterlist);
   if (valid === false)
@@ -34,15 +34,35 @@ router.post("/:masterlist", auth, async (req, res) => {
     if (masterlist.sent === false)
       return res.status(400).json({ errors: [{ msg: "Masterlist not sent" }] });
 
-    let dcr = await DCR.findOne({ date: dateToday });
+    let dcr = await DCR.findOne({
+      date: date,
+      masterlist: req.params.masterlist
+    });
     if (dcr)
-      return res
-        .status(400)
-        .json({ errors: [{ msg: "Already have a dcr for today" }] });
+      return res.status(400).json({ errors: [{ msg: "Already have a dcr" }] });
 
-    dcr = new DCR({});
+    dcr = new DCR({ masterlist: req.params.masterlist, date: date });
     await dcr.save();
     res.json(dcr);
+  } catch (err) {
+    console.error(err.message);
+    res.send("Server Error");
+  }
+});
+
+//@route GET /api/dcr/:masterlist
+//@desc  Fetch All DCRS in the masterlist
+//@access Private
+router.get("/:masterlist", auth, async (req, res) => {
+  let isValid = mongoose.Types.ObjectId.isValid(req.params.masterlist);
+  if (isValid === false)
+    return res.status(400).json({ errors: [{ msg: "Object Id not valid" }] });
+
+  try {
+    let dcrs = await DCR.find({ masterlist: req.params.masterlist });
+    if (!dcrs) res.send("NO DCRS IN MASTERLIST");
+
+    res.json(dcrs);
   } catch (err) {
     console.error(err.message);
     res.send("Server Error");

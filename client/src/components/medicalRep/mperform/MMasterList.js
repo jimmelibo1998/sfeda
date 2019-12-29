@@ -41,8 +41,10 @@ class MMasterList extends React.Component {
   };
 
   renderDoctors = () => {
+    let num = 0;
     return this.props.doctors.map(doctor => (
       <tr key={doctor._id}>
+        <th>{(num += 1)}</th>
         {this.getDoctorDetails(doctor.doctor)}
         <td>{doctor.weekOne.score}</td>
         <td>{doctor.weekTwo.score}</td>
@@ -228,6 +230,7 @@ class MMasterList extends React.Component {
             <table>
               <thead>
                 <tr>
+                  <th>#</th>
                   <th>Last Name</th>
                   <th>First Name</th>
                   <th>Class Code</th>

@@ -9,20 +9,27 @@ import {
   ADD_MASTERLIST_FAILED,
   ML_DOCTOR_ADDED,
   ML_DOCTOR_REMOVED,
-  MASTERLIST_SENT
+  MASTERLIST_SENT,
+  DCR_ADD_FAILED,
+  DCR_ADDED,
+  DCR_FETCHED
 } from "../actions/types";
 
 const initialState = {
   masterlist: null,
   doctors: [],
   doctorDetails: [],
-  dcrs: null
+  dcrs: []
 };
 
 export default function(state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
+    case DCR_FETCHED:
+      return { ...state, dcrs: payload };
+    case DCR_ADDED:
+      return { ...state, dcrs: [...state.dcrs, payload] };
     case DOCTOR_DETAILS_FETCHED:
       return { ...state, doctorDetails: [...state.doctorDetails, payload] };
     case MASTERLIST_SENT:
@@ -53,9 +60,10 @@ export default function(state = initialState, action) {
         ...state,
         masterlist: null,
         doctors: [],
-        dcrs: null,
+        dcrs: [],
         doctorDetails: []
       };
+    case DCR_ADD_FAILED:
     default:
       return state;
   }

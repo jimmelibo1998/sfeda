@@ -160,12 +160,12 @@ const App = ({ auth: { isAuthenticated }, alerts }) => {
                 />
                 <PrivateRoute
                   exact
-                  path="/medrep/perform/dcrs"
+                  path="/medrep/perform/dcr"
                   component={MDcrsList}
                 />
                 <PrivateRoute
                   exact
-                  path="/medrep/perform/dcrs/add"
+                  path="/medrep/perform/dcr/add"
                   component={MDcrs}
                 />
               </Switch>

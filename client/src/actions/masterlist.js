@@ -9,12 +9,40 @@ import {
   MASTERLIST_ADDED,
   ADD_MASTERLIST_FAILED,
   ML_DOCTOR_ADDED,
-  ML_DOCTOR_REMOVED
+  ML_DOCTOR_REMOVED,
+  DCR_ADD_FAILED,
+  DCR_ADDED,
+  DCR_FETCHED
 } from "./types";
 import setAlert from "./alert";
 import { loadAggregateDoctors } from "./doctors";
 
 import myServer from "../apis/myServer";
+
+export const fetchAllDcrsInMasterlist = () => async (dispatch, getState) => {
+  try {
+    let res = await myServer.get(
+      `/api/dcr/${getState().masterlist.masterlist._id}`
+    );
+    dispatch({ type: DCR_FETCHED, payload: res.data });
+    dispatch(setAlert("DCRS fetched", "deep-orange accent-1"));
+  } catch (err) {
+    console.log(err);
+    dispatch(setAlert("DCRS not fetched", "deep-orange accent-1"));
+  }
+};
+
+export const addDcr = (masterlistId, date) => async dispatch => {
+  try {
+    let res = await myServer.post(`/api/dcr/${masterlistId}/${date}`);
+    dispatch({ type: DCR_ADDED, payload: res.data });
+    dispatch(setAlert("DCR Added", "deep-orange accent-1"));
+  } catch (err) {
+    console.log(err);
+    dispatch({ type: DCR_ADD_FAILED });
+    dispatch(setAlert("DCR not added", "deep-orange accent-1"));
+  }
+};
 
 export const sendMasterlist = masterlistId => async (dispatch, getState) => {
   const { doctors, doctorDetails } = getState().masterlist;
@@ -109,9 +137,11 @@ export const getCurrentMasterlist = id => async (dispatch, getState) => {
     await dispatch({ type: CURRENT_ML_FETCHED, payload: res.data });
     await dispatch(getMasterlistDoctors());
 
-    getState().masterlist.doctors.map(async doctor => {
+    await getState().masterlist.doctors.map(async doctor => {
       await dispatch(getDoctorDetails(doctor.doctor));
     });
+
+    await dispatch(fetchAllDcrsInMasterlist());
   } catch (err) {
     dispatch({ type: NO_CURRENT_ML });
   }

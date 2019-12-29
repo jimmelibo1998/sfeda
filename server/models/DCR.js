@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const moment = require("moment");
 
 module.exports = DCR = mongoose.model(
   "dcr",
@@ -10,7 +9,19 @@ module.exports = DCR = mongoose.model(
     },
     date: {
       type: String,
-      default: moment().format("YYYY-MM-DD")
+      unique: true
+    },
+    registeredDoctors: {
+      type: Number,
+      default: 0
+    },
+    regularCustomers: {
+      type: Number,
+      default: 0
+    },
+    totalVisits: {
+      type: Number,
+      default: 0
     },
     totalPoints: {
       type: Number,

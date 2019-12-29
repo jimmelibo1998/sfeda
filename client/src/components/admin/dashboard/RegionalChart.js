@@ -4,7 +4,19 @@ import { Line } from "react-chartjs-2";
 class RegionalChart extends Component {
   state = {
     chartData: {
-      labels: ["January", "February", "March", "April", "May", "June", "July"],
+      labels: [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "November",
+        "December"
+      ],
       datasets: [
         {
           label: "North Luzon (99%)",
