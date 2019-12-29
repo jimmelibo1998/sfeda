@@ -262,11 +262,12 @@ router.put(
       return res.status(400).json({ errors: validationErrors.array() });
 
     try {
-      let res = await MasterList.updateMany(
+      let masterlist = await MasterList.updateMany(
         { month: req.body.month },
         { goalScore: req.params.score }
       );
       console.log(res.n + " " + res.nModified);
+      await masterlist.save();
     } catch (err) {
       console.error(err.message);
       res.send("Server Error");

@@ -21,11 +21,8 @@ class MMasterList extends React.Component {
   };
 
   async componentDidMount() {
+    await this.props.clearMasterlist();
     await this.props.getCurrentMasterlist(this.props.user._id);
-  }
-
-  componentWillUnmount() {
-    this.props.clearMasterlist();
   }
 
   getDoctorDetails = doctorId => {

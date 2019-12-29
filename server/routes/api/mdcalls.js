@@ -95,7 +95,7 @@ router.post(
         return res.json(nocalldays);
       }
 
-      let dates = nocalldays.dates.filter(
+      let dates = await nocalldays.dates.filter(
         date => date.date === moment(req.body.date).format("YYYY-MM-DD")
       );
       if (dates.length > 0)
@@ -106,7 +106,7 @@ router.post(
         desc: req.body.desc
       });
 
-      nocalldays.save();
+      await nocalldays.save();
       res.json(nocalldays);
     } catch (err) {
       console.error(err.message);

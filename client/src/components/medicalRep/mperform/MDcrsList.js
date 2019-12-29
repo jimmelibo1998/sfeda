@@ -1,7 +1,11 @@
 import React from "react";
 import { Select, DatePicker } from "react-materialize";
 import { connect } from "react-redux";
-import { getCurrentMasterlist, addDcr } from "../../../actions/masterlist";
+import {
+  getCurrentMasterlist,
+  addDcr,
+  clearMasterlist
+} from "../../../actions/masterlist";
 import { fetchMasterlistCall } from "../../../actions/noCalls";
 import moment from "moment";
 import history from "../../../history";
@@ -14,6 +18,7 @@ class MDcrsList extends React.Component {
   };
 
   async componentDidMount() {
+    await this.props.clearMasterlist();
     await this.props.getCurrentMasterlist(this.props.auth.user._id);
     this.props.fetchMasterlistCall(this.props.masterlist.month);
   }
@@ -304,5 +309,6 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, {
   getCurrentMasterlist,
   fetchMasterlistCall,
-  addDcr
+  addDcr,
+  clearMasterlist
 })(MDcrsList);

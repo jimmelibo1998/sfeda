@@ -5,7 +5,8 @@ import {
   excludeDate,
   fetchMasterlistCall,
   removeExcludedDate,
-  updateAllMasterlistGoalScore
+  updateAllMasterlistGoalScore,
+  clearNoCalls
 } from "../../../actions/noCalls";
 import moment from "moment";
 
@@ -17,13 +18,16 @@ class Masterlist extends React.Component {
     year: moment().format("YYYY"),
     month: moment().format("MMMM"),
     datetoexclude: "",
-    desc: ""
+    desc: "",
+    goalScore: 0
   };
 
   async componentDidMount() {
+    await this.props.clearNoCalls();
     await this.props.fetchMasterlistCall(
       this.state.year + " " + this.state.month
     );
+    await this.getGoalScore();
   }
   onFilter = e => {
     e.preventDefault();
@@ -34,10 +38,11 @@ class Masterlist extends React.Component {
   onSubmit = async e => {
     e.preventDefault();
     await this.props.excludeDate(this.state.datetoexclude, this.state.desc);
-    this.setState({
+    await this.setState({
       year: moment(this.props.nocall.month).format("YYYY"),
       month: moment(this.props.nocall.month).format("MMMM")
     });
+    await this.getGoalScore();
   };
 
   onChange = e => {
@@ -65,7 +70,7 @@ class Masterlist extends React.Component {
     ));
   };
 
-  getGoalScore = () => {
+  getGoalScore = async () => {
     let month = this.state.month + " " + this.state.year;
     let datesInMonth = getAllDatesInMonth(
       new Date(month).getMonth(),
@@ -74,9 +79,9 @@ class Masterlist extends React.Component {
 
     let excludedDates = this.props.nocall.dates.map(date => date.date);
     let gc = arrayDiff(datesInMonth, excludedDates).length * 15;
-    this.props.updateAllMasterlistGoalScore(gc, month);
+    await this.props.updateAllMasterlistGoalScore(gc, month);
 
-    return gc;
+    return this.setState({ goalScore: gc });
   };
   render() {
     console.log(this.state);
@@ -317,7 +322,7 @@ class Masterlist extends React.Component {
                     {" "}
                     {typeof this.props.nocall === "object" &&
                     this.props.nocall !== null
-                      ? this.getGoalScore()
+                      ? this.state.goalScore
                       : 0}{" "}
                   </span>
                 </h4>
@@ -338,5 +343,6 @@ export default connect(mapStateToProps, {
   excludeDate,
   fetchMasterlistCall,
   removeExcludedDate,
-  updateAllMasterlistGoalScore
+  updateAllMasterlistGoalScore,
+  clearNoCalls
 })(Masterlist);
