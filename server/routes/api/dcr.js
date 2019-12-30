@@ -14,7 +14,7 @@ const MdCallsScore = require("../../models/MdCallsScore");
 const DoctorAccount = require("../../models/DoctorAccount");
 const RegularCustomer = require("../../models/RegularCustomer");
 
-//@route POST /api/dcr/:masterlist
+//@route POST /api/dcr/:masterlist/:date
 //@desc  Create DCR
 //@access Private
 router.post("/:masterlist/:date", auth, async (req, res) => {
@@ -22,7 +22,9 @@ router.post("/:masterlist/:date", auth, async (req, res) => {
 
   const valid = mongoose.Types.ObjectId.isValid(req.params.masterlist);
   if (valid === false)
-    return res.status(400).json({ errors: [{ msg: "Invalid ObjectId" }] });
+    return res
+      .status(400)
+      .json({ errors: [{ msg: "Invalid ObjectId1wqeqweqweq" }] });
 
   try {
     let masterlist = await MasterList.findById(req.params.masterlist);
@@ -69,32 +71,54 @@ router.get("/:masterlist", auth, async (req, res) => {
   }
 });
 
-//@route POST /api/dcr/add/:id
+//@route DELETE /api/dcr/remove/doctor/:dcrId/:dcrDoctorId
+//@desc  Remove Doctor from DCR
+//@access Private
+router.delete(`/remove/doctor/:dcrDoctorId`, auth, async (req, res) => {
+  const valid = mongoose.Types.ObjectId.isValid(req.params.dcrDoctorId);
+  if (valid === false)
+    return res.status(400).json({ errors: [{ msg: "ObjectId Invalid" }] });
+
+  try {
+    let dcrDoctor = await DCRDoctor.findByIdAndRemove(req.params.dcrDoctorId);
+    res.json(dcrDoctor);
+    // let dcrDoctor = await DCRDoctor.findByIdAndRemove(
+    //   req.params.dcrDoctorId,
+    //   (err, doc) => {
+    //     if (err) throw err;
+    //     res.json(doc);
+    //   }
+    // );
+  } catch (err) {
+    console.error(err.message);
+    res.send("Server Error");
+  }
+});
+
+//@route POST /api/dcr/insert/doctor/:dcrId
 //@desc  Add Doctor to DCR
 //@access Private
 router.post(
-  "/add/:dcr/:id",
+  "/insert/doctor/:dcr",
   [
     auth,
     [
+      check("lastName", "lastName is required").exists(),
+      check("firstName", "firstName is required").exists(),
       check(
         "inMasterlist",
         "Please specify if registered or not(true or false)"
-      ).isBoolean()
+      ).isBoolean(),
+      check("contact", "Input a valid email").exists()
     ]
   ],
   async (req, res) => {
     const validationErrors = validationResult(req);
     if (!validationErrors.isEmpty())
       return res.status(400).json({ errors: validationErrors.array() });
-
     let valid = mongoose.Types.ObjectId.isValid(req.params.dcr);
     if (valid === false)
-      return res.status(400).json({ errors: [{ msg: "Invalid ObjectId" }] });
-
-    valid = mongoose.Types.ObjectId.isValid(req.params.id);
-    if (valid === false)
-      return res.status(400).json({ errors: [{ msg: "Invalid ObjectId" }] });
+      return res.status(400).json({ errors: [{ msg: "Invalid ObjectId2" }] });
 
     try {
       let dcr = await DCR.findById(req.params.dcr);
@@ -102,9 +126,7 @@ router.post(
         return res.status(400).json({ errors: [{ msg: "DCR not found" }] });
 
       let dcrDoctor = await DCRDoctor.findOne({
-        lastName,
-        firstName,
-        registered
+        contact: req.body.email
       });
 
       if (dcrDoctor)
@@ -112,24 +134,13 @@ router.post(
           .status(400)
           .json({ errors: [{ msg: "Doctor already in the list" }] });
 
-      let user = await DoctorAccount.findById(req.params.id);
-      if (!user) {
-        user = await RegularCustomer.findById(req.params.id);
-        if (!user)
-          return res.status(400).json({ errors: [{ msg: "User not found" }] });
-      }
-
-      let registered = false;
-      if (user.classCode) {
-        registered = true;
-      }
-
       dcrDoctor = new DCRDoctor({
         dcr: req.params.dcr,
-        lastName: user.lastName,
-        firstName: user.firstName,
-        id: user._id,
-        registered
+        lastName: req.body.lastName,
+        firstName: req.body.firstName,
+        inMasterlist: req.body.inMasterlist,
+        contact: req.body.contact,
+        classCode: req.body.classCode ? req.body.classCode : ""
       });
 
       await dcrDoctor.save();
@@ -141,8 +152,69 @@ router.post(
   }
 );
 
-//@route PUT /api/dcr/visit/:dcrdoctor
-//@desc  Set DCR's doctor to visited: true
+//@route GET /api/dcr/doctors/count/:dcrId
+//@desc  Count dcr doctors with inMasterlist and update dcr details
 //@access Private
+router.get("/doctors/count/:dcrId/:inMasterlist", auth, async (req, res) => {
+  let validId = mongoose.Types.ObjectId.isValid(req.params.dcrId);
+  if (validId === false)
+    return res.status(400).json({ errors: [{ msg: "ObjectId Invalid" }] });
+
+  try {
+    let dcr = await DCR.findById(req.params.dcrId);
+    if (!dcr)
+      return res.status(400).json({ errors: [{ msg: "DCR not found" }] });
+
+    let count = await DCRDoctor.find({
+      inMasterlist: req.params.inMasterlist
+    }).countDocuments();
+    let inMasterlist = req.params.inMasterlist === "true" ? true : false;
+    if (inMasterlist === true) {
+      dcr.registeredDoctors = count;
+    } else if (inMasterlist === false) {
+      dcr.regularCustomers = count;
+    }
+
+    await dcr.save();
+    res.json(dcr);
+  } catch (err) {
+    console.error(err.message);
+    res.send("Server Error");
+  }
+});
+
+//@route GET /api/dcr/detail/:dcrId
+//@desc  Fetch 1 DCR with Id
+//@access Private
+router.get("/detail/:dcrId", auth, async (req, res) => {
+  try {
+    let dcr = await DCR.findById(req.params.dcrId);
+    if (!dcr)
+      return res.status(400).json({ errors: [{ msg: "No Dcr found" }] });
+
+    res.json(dcr);
+  } catch (err) {
+    console.log(err.message);
+    res.send("Server Error");
+  }
+});
+
+//@route GET /api/dcr/doctors/:dcrId
+//@desc  Fetch DCR Doctors
+//@access Private
+router.get("/doctors/:dcrId", auth, async (req, res) => {
+  let isValid = mongoose.Types.ObjectId.isValid(req.params.dcrId);
+  if (isValid === false)
+    return res.status(400).json({ errors: [{ msg: "ObjectId not valid" }] });
+  try {
+    let doctors = await DCRDoctor.find({ dcr: req.params.dcrId });
+    if (!doctors) res.send("No Doctors in DCR");
+
+    res.json(doctors);
+  } catch (err) {
+    console.error(err.message);
+    res.send("Server Error");
+  }
+});
 
 module.exports = router;

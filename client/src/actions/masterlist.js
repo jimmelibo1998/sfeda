@@ -12,12 +12,118 @@ import {
   ML_DOCTOR_REMOVED,
   DCR_ADD_FAILED,
   DCR_ADDED,
-  DCR_FETCHED
+  DCR_FETCHED,
+  ACTIVE_DCR_SET,
+  DCR_DOCTORS_FETCHED,
+  ACTIVE_DCR_CLEAR,
+  DCR_DOCTOR_ADDED,
+  DOCTOR_COUNT_UPDATED,
+  DCR_DOCTOR_REMOVED
 } from "./types";
 import setAlert from "./alert";
 import { loadAggregateDoctors } from "./doctors";
 
 import myServer from "../apis/myServer";
+
+export const updateDoctorCount = inMasterlist => async (dispatch, getState) => {
+  const dcrId = getState().masterlist.activeDcr._id;
+  try {
+    let res = await myServer.get(
+      `/api/dcr/doctors/count/${dcrId}/${inMasterlist}`
+    );
+    dispatch({ type: DOCTOR_COUNT_UPDATED, payload: res.data });
+  } catch (err) {
+    console.error(err);
+    dispatch(setAlert("DOCTOR COUNT NOT UPDATED", "deep-orange accent-1"));
+  }
+};
+
+export const removeDoctorFromDcr = (
+  dcrDoctorId,
+  inMasterlist
+) => async dispatch => {
+  try {
+    console.log(inMasterlist);
+    let res = await myServer.delete(`/api/dcr/remove/doctor/${dcrDoctorId}`);
+    await dispatch({ type: DCR_DOCTOR_REMOVED, payload: res.data });
+    dispatch(updateDoctorCount(inMasterlist));
+  } catch (err) {
+    console.error(err);
+    dispatch(setAlert("DOCTOR NOT REMOVED", "deep-orange accent-1"));
+  }
+};
+
+export const addDoctorToDcr = ({
+  lastName,
+  firstName,
+  inMasterlist,
+  contact,
+  classCode
+}) => async (dispatch, getState) => {
+  let dcr = getState().masterlist.activeDcr._id;
+
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+
+  const body = JSON.stringify({
+    lastName,
+    firstName,
+    inMasterlist,
+    contact,
+    classCode
+  });
+
+  let inDcr = getState().masterlist.dcrDoctors.filter(
+    doctor => doctor.contact === contact
+  );
+
+  console.log(inDcr);
+  if (inDcr.length > 0)
+    return dispatch(setAlert("Doctor already in DCR", "deep-orange accent-1"));
+  try {
+    let res = await myServer.post(
+      `/api/dcr/insert/doctor/${dcr}`,
+      body,
+      config
+    );
+
+    await dispatch({ type: DCR_DOCTOR_ADDED, payload: res.data });
+    dispatch(updateDoctorCount(inMasterlist));
+  } catch (err) {
+    console.error(err);
+    dispatch(setAlert("Doctor not added", "deep-orange accent-1"));
+  }
+};
+
+export const activeDcrClear = () => async dispatch => {
+  dispatch({ type: ACTIVE_DCR_CLEAR });
+};
+
+export const fetchDCR = dcrId => async dispatch => {
+  try {
+    let res = await myServer.get(`/api/dcr/detail/${dcrId}`);
+
+    await dispatch({ type: ACTIVE_DCR_SET, payload: res.data });
+    await dispatch(fetchDcrDoctors(dcrId));
+  } catch (err) {
+    console.error(err);
+    dispatch(setAlert("DCR not fetched", "deep-orange accent-1"));
+  }
+};
+
+export const fetchDcrDoctors = dcrId => async dispatch => {
+  try {
+    let res = await myServer.get(`/api/dcr/doctors/${dcrId}`);
+
+    dispatch({ type: DCR_DOCTORS_FETCHED, payload: res.data });
+  } catch (err) {
+    console.error(err);
+    dispatch(setAlert("DOCTORS not fetched", "deep-orange accent-1"));
+  }
+};
 
 export const fetchAllDcrsInMasterlist = () => async (dispatch, getState) => {
   try {
@@ -133,12 +239,12 @@ export const clearMasterlist = () => dispatch => {
 export const getCurrentMasterlist = id => async (dispatch, getState) => {
   try {
     let res = await myServer.get(`/api/masterlist/${id}`);
-
+    console.log("Here");
     await dispatch({ type: CURRENT_ML_FETCHED, payload: res.data });
     await dispatch(getMasterlistDoctors());
 
-    await getState().masterlist.doctors.map(async doctor => {
-      await dispatch(getDoctorDetails(doctor.doctor));
+    await getState().masterlist.doctors.map(doctor => {
+      dispatch(getDoctorDetails(doctor.doctor));
     });
 
     await dispatch(fetchAllDcrsInMasterlist());

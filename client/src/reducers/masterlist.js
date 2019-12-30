@@ -12,20 +12,42 @@ import {
   MASTERLIST_SENT,
   DCR_ADD_FAILED,
   DCR_ADDED,
-  DCR_FETCHED
+  DCR_FETCHED,
+  ACTIVE_DCR_SET,
+  DCR_DOCTORS_FETCHED,
+  ACTIVE_DCR_CLEAR,
+  DCR_DOCTOR_ADDED,
+  DOCTOR_COUNT_UPDATED,
+  DCR_DOCTOR_REMOVED
 } from "../actions/types";
 
 const initialState = {
   masterlist: null,
   doctors: [],
   doctorDetails: [],
-  dcrs: []
+  dcrs: [],
+  activeDcr: null,
+  dcrDoctors: []
 };
 
 export default function(state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
+    case DCR_DOCTOR_REMOVED:
+      return {
+        ...state,
+        dcrDoctors: state.dcrDoctors.filter(doc => doc._id !== payload._id)
+      };
+    case DCR_DOCTOR_ADDED:
+      return { ...state, dcrDoctors: [...state.dcrDoctors, payload] };
+    case ACTIVE_DCR_CLEAR:
+      return { ...state, activeDcr: null, dcrDoctors: [] };
+    case ACTIVE_DCR_SET:
+    case DOCTOR_COUNT_UPDATED:
+      return { ...state, activeDcr: payload };
+    case DCR_DOCTORS_FETCHED:
+      return { ...state, dcrDoctors: payload };
     case DCR_FETCHED:
       return { ...state, dcrs: payload };
     case DCR_ADDED:
@@ -61,7 +83,9 @@ export default function(state = initialState, action) {
         masterlist: null,
         doctors: [],
         dcrs: [],
-        doctorDetails: []
+        doctorDetails: [],
+        activeDcr: null,
+        dcrDoctors: []
       };
     case DCR_ADD_FAILED:
     default:

@@ -4,7 +4,8 @@ import { connect } from "react-redux";
 import {
   getCurrentMasterlist,
   addDcr,
-  clearMasterlist
+  clearMasterlist,
+  fetchDCR
 } from "../../../actions/masterlist";
 import { fetchMasterlistCall } from "../../../actions/noCalls";
 import moment from "moment";
@@ -14,13 +15,14 @@ class MDcrsList extends React.Component {
   state = {
     year: moment().format("YYYY"),
     month: moment().format("MMMM"),
-    date: moment().format("YYYY-MM-DD")
+    date: ""
   };
 
   async componentDidMount() {
     await this.props.clearMasterlist();
     await this.props.getCurrentMasterlist(this.props.auth.user._id);
-    this.props.fetchMasterlistCall(this.props.masterlist.month);
+    if (this.props.masterlist !== null)
+      this.props.fetchMasterlistCall(this.props.masterlist.month);
   }
 
   onChange = e => {
@@ -44,6 +46,10 @@ class MDcrsList extends React.Component {
       : [];
   };
 
+  editDcr = async dcrId => {
+    await this.props.fetchDCR(dcrId);
+    history.push("/medrep/perform/dcr/add");
+  };
   renderDcrs = () => {
     return this.props.dcrs.map(dcr => (
       <tr key={dcr._id}>
@@ -56,7 +62,7 @@ class MDcrsList extends React.Component {
           <button
             className="waves-effect waves-light btn yellow darken-3"
             disabled={!dcr.enabledEdit}
-            onClick={() => history.push("/medrep/perform/dcr/add")}
+            onClick={() => this.editDcr(dcr._id)}
           >
             <i className="material-icons left">edit</i>Edit
           </button>
@@ -310,5 +316,6 @@ export default connect(mapStateToProps, {
   getCurrentMasterlist,
   fetchMasterlistCall,
   addDcr,
-  clearMasterlist
+  clearMasterlist,
+  fetchDCR
 })(MDcrsList);

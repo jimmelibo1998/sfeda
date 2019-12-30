@@ -39,7 +39,7 @@ router.get("/nocalls/:month", auth, async (req, res) => {
 router.put("/nocalls/:nocallid/:date", auth, async (req, res) => {
   let validNoCall = mongoose.Types.ObjectId.isValid(req.params.nocallid);
   if (validNoCall === false)
-    return res.status(400).json({ errors: [{ msg: "ObjectId not valid" }] });
+    return res.status(400).json({ errors: [{ msg: "ObjectId not valid6" }] });
 
   try {
     let nocalls = await NoCallDays.findOne({ _id: req.params.nocallid });

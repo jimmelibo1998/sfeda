@@ -16,6 +16,12 @@ module.exports = DCRDoctor = mongoose.model(
       type: String,
       required: true
     },
+    contact: {
+      type: String
+    },
+    classCode: {
+      type: String
+    },
     inMasterlist: {
       type: Boolean,
       required: true

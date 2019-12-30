@@ -30,7 +30,7 @@ router.post(
     //check if object id is valid
     const valid = mongoose.Types.ObjectId.isValid(req.params.medrep);
     if (valid === false)
-      return res.status(400).json({ errors: [{ msg: "Invalid ObjectId" }] });
+      return res.status(400).json({ errors: [{ msg: "Invalid ObjectId3" }] });
     let monthYear = moment(req.body.date).format("MMMM YYYY");
     let inputDate = moment(req.body.date).format("YYYY-MM-DD");
     try {
@@ -91,11 +91,11 @@ router.post("/add/:masterlist/:doctor", auth, async (req, res) => {
   //check if object id is valid
   const validMasterlist = mongoose.Types.ObjectId.isValid(masterlist);
   if (validMasterlist === false)
-    return res.status(400).json({ errors: [{ msg: "Invalid ObjectId" }] });
+    return res.status(400).json({ errors: [{ msg: "Invalid ObjectId4" }] });
 
   const validDoctor = mongoose.Types.ObjectId.isValid(doctor);
   if (validDoctor === false)
-    return res.status(400).json({ errors: [{ msg: "Invalid ObjectId" }] });
+    return res.status(400).json({ errors: [{ msg: "Invalid ObjectId5" }] });
 
   try {
     let doc = await DoctorAccount.findById(doctor);
@@ -121,7 +121,7 @@ router.post("/add/:masterlist/:doctor", auth, async (req, res) => {
     listdoctor.save();
 
     doc.inMasterlist = true;
-    doc.save();
+    await doc.save();
     res.json(listdoctor);
   } catch (err) {
     console.error(err.message);
