@@ -19,12 +19,59 @@ import {
   DCR_DOCTOR_ADDED,
   DOCTOR_COUNT_UPDATED,
   DCR_DOCTOR_REMOVED,
-  TOTAL_VISITS_POINTS_UPDATED
+  TOTAL_VISITS_POINTS_UPDATED,
+  CURRENT_SCORE_UPDATED
 } from "./types";
 import setAlert from "./alert";
 import { loadAggregateDoctors } from "./doctors";
 
 import myServer from "../apis/myServer";
+
+export const updateVisited = (dcrDoctorId, visited, doctorId) => async (
+  dispatch,
+  getState
+) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+
+  const body = JSON.stringify({ visited });
+
+  console.log(visited);
+  try {
+    let res = await myServer.put(
+      `/api/dcr/doctors/visited/${dcrDoctorId}`,
+      body,
+      config
+    );
+    await dispatch(fetchDcrDoctors(getState().masterlist.activeDcr._id));
+    await dispatch(updateTotalVisitsPoints());
+    if (doctorId) {
+      await dispatch(updateMasterlistDoctor(doctorId, visited));
+    }
+
+    await dispatch(getMasterlistDoctors());
+    await dispatch(updateCurrentScore());
+  } catch (err) {
+    console.error(err);
+    dispatch(setAlert("VISITED NOT UPDATED", "deep-orange accent-1"));
+  }
+};
+
+export const updateCurrentScore = () => async (dispatch, getState) => {
+  let masterlistId = getState().masterlist.masterlist._id;
+  try {
+    let res = await myServer.put(
+      `/api/masterlist/currentscore/${masterlistId}`
+    );
+    dispatch({ type: CURRENT_SCORE_UPDATED, payload: res.data });
+  } catch (err) {
+    console.error(err);
+    dispatch(setAlert("Current Score not Updated", "deep-orange accent-1"));
+  }
+};
 
 export const updateMasterlistDoctor = (doctorId, visited) => async (
   dispatch,
@@ -53,38 +100,6 @@ export const updateMasterlistDoctor = (doctorId, visited) => async (
     dispatch(
       setAlert("Masterlist Doctor Score not updated", "deep-orange accent-1")
     );
-  }
-};
-
-export const updateVisited = (dcrDoctorId, visited, doctorId) => async (
-  dispatch,
-  getState
-) => {
-  const config = {
-    headers: {
-      "Content-Type": "application/json"
-    }
-  };
-
-  const body = JSON.stringify({ visited });
-
-  console.log(visited);
-  try {
-    let res = await myServer.put(
-      `/api/dcr/doctors/visited/${dcrDoctorId}`,
-      body,
-      config
-    );
-    await dispatch(fetchDcrDoctors(getState().masterlist.activeDcr._id));
-    await dispatch(updateTotalVisitsPoints());
-    if (doctorId) {
-      await dispatch(updateMasterlistDoctor(doctorId, visited));
-    }
-
-    await dispatch(getMasterlistDoctors());
-  } catch (err) {
-    console.error(err);
-    dispatch(setAlert("VISITED NOT UPDATED", "deep-orange accent-1"));
   }
 };
 
@@ -330,6 +345,7 @@ export const getCurrentMasterlist = id => async (dispatch, getState) => {
     });
 
     await dispatch(fetchAllDcrsInMasterlist());
+    dispatch(updateCurrentScore());
   } catch (err) {
     dispatch({ type: NO_CURRENT_ML });
   }

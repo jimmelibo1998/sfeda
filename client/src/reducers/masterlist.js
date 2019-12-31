@@ -19,7 +19,8 @@ import {
   DCR_DOCTOR_ADDED,
   DOCTOR_COUNT_UPDATED,
   DCR_DOCTOR_REMOVED,
-  TOTAL_VISITS_POINTS_UPDATED
+  TOTAL_VISITS_POINTS_UPDATED,
+  CURRENT_SCORE_UPDATED
 } from "../actions/types";
 
 const initialState = {
@@ -57,6 +58,7 @@ export default function(state = initialState, action) {
     case DOCTOR_DETAILS_FETCHED:
       return { ...state, doctorDetails: [...state.doctorDetails, payload] };
     case MASTERLIST_SENT:
+    case CURRENT_SCORE_UPDATED:
     case CURRENT_ML_FETCHED:
     case MASTERLIST_ADDED:
       return { ...state, masterlist: payload };

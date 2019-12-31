@@ -10,6 +10,7 @@ const DoctorAccount = require("../../models/DoctorAccount");
 const MedRepAccount = require("../../models/MedRepAccount");
 const MasterListDoctor = require("../../models/MasterListDoctor");
 const NoCallDays = require("../../models/NoCallDays");
+const DCR = require("../../models/DCR");
 
 const auth = require("../../middleware/auth");
 
@@ -416,8 +417,37 @@ router.put(
 
 //5
 //@route PUT /api/masterlist/currentscore/:masterlistId
-//@desc GEt currentScore of masterlist
+//@desc GEt and update currentScore of masterlist
 //@access Private
+router.put(`/currentscore/:masterlistId`, auth, async (req, res) => {
+  let validId = mongoose.Types.ObjectId.isValid(req.params.masterlistId);
+  if (validId === false)
+    return res.status(400).json({ errors: [{ msg: "ObjectId Invalid" }] });
+
+  try {
+    let masterlist = await MasterList.findById(req.params.masterlistId);
+    if (!masterlist)
+      return res.status(400).json({ errors: [{ msg: "No masterlist found" }] });
+
+    let dcrs = await DCR.find({ masterlist: req.params.masterlistId }).select(
+      "totalPoints"
+    );
+    if (!dcrs) return res.send("No DCRs found in masterlist");
+
+    let total = 0;
+    dcrs.map(dcr => (total += dcr.totalPoints));
+
+    masterlist.currentScore = total;
+    masterlist.callRate = Number(
+      ((masterlist.currentScore / masterlist.goalScore) * 100).toFixed(2)
+    );
+    await masterlist.save();
+    res.send(masterlist);
+  } catch (err) {
+    console.log(err.message);
+    res.send("Server Error");
+  }
+});
 
 //6
 //@route PUT /api/masterlist/callrate/:masterlistId
