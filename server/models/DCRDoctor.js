@@ -8,6 +8,9 @@ module.exports = DCRDoctor = mongoose.model(
       ref: "dcr",
       required: true
     },
+    doctorId: {
+      type: mongoose.Schema.Types.ObjectId
+    },
     lastName: {
       type: String,
       required: true

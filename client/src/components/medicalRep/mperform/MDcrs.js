@@ -3,7 +3,8 @@ import { connect } from "react-redux";
 import {
   activeDcrClear,
   addDoctorToDcr,
-  removeDoctorFromDcr
+  removeDoctorFromDcr,
+  updateVisited
 } from "../../../actions/masterlist";
 
 class MDcrs extends React.Component {
@@ -16,14 +17,22 @@ class MDcrs extends React.Component {
     this.props.activeDcrClear();
   }
 
-  addRegistered = async (e, lastName, firstName, email, classCode) => {
+  addRegistered = async (
+    e,
+    lastName,
+    firstName,
+    email,
+    classCode,
+    doctorId
+  ) => {
     e.preventDefault();
     let dcrDoctor = {
       lastName,
       firstName,
       inMasterlist: true,
       contact: email,
-      classCode
+      classCode,
+      doctorId
     };
     await this.props.addDoctorToDcr(dcrDoctor);
   };
@@ -56,7 +65,8 @@ class MDcrs extends React.Component {
                 detail.lastName,
                 detail.firstName,
                 detail.email,
-                detail.classCode
+                detail.classCode,
+                detail._id
               )
             }
             href="#!"
@@ -79,7 +89,13 @@ class MDcrs extends React.Component {
         <td>{doctor.inMasterlist === true ? "Yes" : "No"}</td>
         <td>
           <label>
-            <input type="checkbox" />
+            <input
+              onChange={() => {
+                this.props.updateVisited(doctor._id, doctor.visited);
+              }}
+              type="checkbox"
+              checked={doctor.visited}
+            />
             <span>Yes</span>
           </label>
         </td>
@@ -274,5 +290,6 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, {
   activeDcrClear,
   addDoctorToDcr,
-  removeDoctorFromDcr
+  removeDoctorFromDcr,
+  updateVisited
 })(MDcrs);

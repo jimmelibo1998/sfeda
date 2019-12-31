@@ -71,7 +71,7 @@ router.get("/:masterlist", auth, async (req, res) => {
   }
 });
 
-//@route DELETE /api/dcr/remove/doctor/:dcrId/:dcrDoctorId
+//@route DELETE /api/dcr/remove/doctor/:dcrDoctorId
 //@desc  Remove Doctor from DCR
 //@access Private
 router.delete(`/remove/doctor/:dcrDoctorId`, auth, async (req, res) => {
@@ -140,7 +140,8 @@ router.post(
         firstName: req.body.firstName,
         inMasterlist: req.body.inMasterlist,
         contact: req.body.contact,
-        classCode: req.body.classCode ? req.body.classCode : ""
+        classCode: req.body.classCode ? req.body.classCode : "",
+        doctorId: req.body.doctorId ? req.body.doctorId : ""
       });
 
       await dcrDoctor.save();
@@ -152,10 +153,10 @@ router.post(
   }
 );
 
-//@route GET /api/dcr/doctors/count/:dcrId
+//@route PUT /api/dcr/doctors/count/:dcrId/:inMasterlist
 //@desc  Count dcr doctors with inMasterlist and update dcr details
 //@access Private
-router.get("/doctors/count/:dcrId/:inMasterlist", auth, async (req, res) => {
+router.put("/doctors/count/:dcrId/:inMasterlist", auth, async (req, res) => {
   let validId = mongoose.Types.ObjectId.isValid(req.params.dcrId);
   if (validId === false)
     return res.status(400).json({ errors: [{ msg: "ObjectId Invalid" }] });
@@ -166,7 +167,8 @@ router.get("/doctors/count/:dcrId/:inMasterlist", auth, async (req, res) => {
       return res.status(400).json({ errors: [{ msg: "DCR not found" }] });
 
     let count = await DCRDoctor.find({
-      inMasterlist: req.params.inMasterlist
+      inMasterlist: req.params.inMasterlist,
+      dcr: req.params.dcrId
     }).countDocuments();
     let inMasterlist = req.params.inMasterlist === "true" ? true : false;
     if (inMasterlist === true) {
@@ -182,6 +184,49 @@ router.get("/doctors/count/:dcrId/:inMasterlist", auth, async (req, res) => {
     res.send("Server Error");
   }
 });
+//1
+//@route PUT /api/dcr/doctors/visited/:dcrDoctorId
+//@desc  Update Visited in DCR Doctor[visited]
+//@access Private
+router.put(
+  "/doctors/visited/:dcrDoctorId",
+  [auth, [check("visited", "visited is required").isBoolean()]],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty())
+      return res.status(400).json({ errors: errors.array() });
+    const validId = mongoose.Types.ObjectId.isValid(req.params.dcrDoctorId);
+    if (validId === false)
+      return res.status(400).json({ errors: [{ msg: "ObjectId Invalid" }] });
+
+    try {
+      let dcrDoctor = await DCRDoctor.findById(req.params.dcrDoctorId);
+      if (!dcrDoctor)
+        return res
+          .status(400)
+          .json({ errors: [{ msg: "DCR Doctor not found" }] });
+
+      let visitedValue = req.body.visited === true ? false : true;
+
+      dcrDoctor.visited = visitedValue;
+      await dcrDoctor.save();
+      res.json(dcrDoctor);
+    } catch (err) {
+      console.error(err.message);
+      res.send("Server Error");
+    }
+  }
+);
+
+//2
+//@route PUT /api/dcr/totalvisits/:dcrId
+//@desc  Update TotalVisits in DCR
+//@access Private
+
+//3
+//@route PUT /api/dcr/totalpoints/:dcrId
+//@desc  Update Total Points in DCR
+//@access Private
 
 //@route GET /api/dcr/detail/:dcrId
 //@desc  Fetch 1 DCR with Id

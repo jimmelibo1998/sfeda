@@ -274,5 +274,29 @@ router.put(
     }
   }
 );
+//4
+//@route PUT /api/masterlist/doctors/week/:masterlistId/:doctorId
+//@desc  update doctor in masterlist and total all week's score [dcrDate (weekNumber)]
+//@access Private
+
+//5
+//@route PUT /api/masterlist/currentscore/:masterlistId
+//@desc GEt currentScore of masterlist
+//@access Private
+
+//6
+//@route PUT /api/masterlist/callrate/:masterlistId
+//@desc  Update Call Rate
+//@access Private
+
+//7
+//@route PUT /api/masterlist/callfreq/:masterlistId
+//@desc  Update Call Freq
+//@access Private
+
+//9
+//@route PUT /api/masterlist/callReach/:masterlistId
+//@desc  Update Call Reach
+//@access Private
 
 module.exports = router;

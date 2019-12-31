@@ -25,10 +25,35 @@ import { loadAggregateDoctors } from "./doctors";
 
 import myServer from "../apis/myServer";
 
+export const updateVisited = (dcrDoctorId, visited) => async (
+  dispatch,
+  getState
+) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+
+  const body = JSON.stringify({ visited });
+
+  try {
+    let res = await myServer.put(
+      `/api/dcr/doctors/visited/${dcrDoctorId}`,
+      body,
+      config
+    );
+    await dispatch(fetchDcrDoctors(getState().masterlist.activeDcr._id));
+  } catch (err) {
+    console.error(err);
+    dispatch(setAlert("VISITED NOT UPDATED", "deep-orange accent-1"));
+  }
+};
+
 export const updateDoctorCount = inMasterlist => async (dispatch, getState) => {
   const dcrId = getState().masterlist.activeDcr._id;
   try {
-    let res = await myServer.get(
+    let res = await myServer.put(
       `/api/dcr/doctors/count/${dcrId}/${inMasterlist}`
     );
     dispatch({ type: DOCTOR_COUNT_UPDATED, payload: res.data });
@@ -58,7 +83,8 @@ export const addDoctorToDcr = ({
   firstName,
   inMasterlist,
   contact,
-  classCode
+  classCode,
+  doctorId
 }) => async (dispatch, getState) => {
   let dcr = getState().masterlist.activeDcr._id;
 
@@ -73,7 +99,8 @@ export const addDoctorToDcr = ({
     firstName,
     inMasterlist,
     contact,
-    classCode
+    classCode,
+    doctorId
   });
 
   let inDcr = getState().masterlist.dcrDoctors.filter(
