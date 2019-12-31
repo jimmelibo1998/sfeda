@@ -14,28 +14,28 @@ module.exports = MasterListDoctor = mongoose.model(
       required: true
     },
     weekOne: {
-      dates: [{ type: Date }],
+      dates: [{ type: String }],
       score: {
         type: Number,
         default: 0
       }
     },
     weekTwo: {
-      dates: [{ type: Date }],
+      dates: [{ type: String }],
       score: {
         type: Number,
         default: 0
       }
     },
     weekThree: {
-      dates: [{ type: Date }],
+      dates: [{ type: String }],
       score: {
         type: Number,
         default: 0
       }
     },
     weekFour: {
-      dates: [{ type: Date }],
+      dates: [{ type: String }],
       score: {
         type: Number,
         default: 0

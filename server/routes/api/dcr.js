@@ -184,6 +184,7 @@ router.put("/doctors/count/:dcrId/:inMasterlist", auth, async (req, res) => {
     res.send("Server Error");
   }
 });
+
 //1
 //@route PUT /api/dcr/doctors/visited/:dcrDoctorId
 //@desc  Update Visited in DCR Doctor[visited]
@@ -219,14 +220,45 @@ router.put(
 );
 
 //2
-//@route PUT /api/dcr/totalvisits/:dcrId
-//@desc  Update TotalVisits in DCR
+//@route PUT /api/dcr/totalvisits/totalpoints/:dcrId
+//@desc COUNT Visited doctors in DCR and Update TotalVisits / TotalPoints
 //@access Private
+router.put("/totalvisits/totalpoints/:dcrId", auth, async (req, res) => {
+  let validId = mongoose.Types.ObjectId.isValid(req.params.dcrId);
+  if (validId === false)
+    return res.status(400).json({ errors: [{ msg: "ObjectId Invalid" }] });
 
-//3
-//@route PUT /api/dcr/totalpoints/:dcrId
-//@desc  Update Total Points in DCR
-//@access Private
+  try {
+    let dcr = await DCR.findById(req.params.dcrId);
+    if (!dcr)
+      return res.status(400).json({ errors: [{ msg: "DCR no found" }] });
+    let countVisited = await DCRDoctor.find({
+      dcr: req.params.dcrId,
+      visited: true
+    }).countDocuments();
+    let countInMasterlistVisited = await DCRDoctor.find({
+      dcr: req.params.dcrId,
+      visited: true,
+      inMasterlist: true
+    }).countDocuments();
+
+    let countNotInMasterlistVisited = await DCRDoctor.find({
+      dcr: req.params.dcrId,
+      visited: true,
+      inMasterlist: false
+    }).countDocuments();
+
+    dcr.totalVisits = countVisited;
+    dcr.totalPoints =
+      0.5 * countNotInMasterlistVisited + countInMasterlistVisited;
+
+    await dcr.save();
+    res.json(dcr);
+  } catch (err) {
+    console.error(err.message);
+    res.send("Server Error");
+  }
+});
 
 //@route GET /api/dcr/detail/:dcrId
 //@desc  Fetch 1 DCR with Id

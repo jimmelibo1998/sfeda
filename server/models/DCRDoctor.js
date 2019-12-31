@@ -9,7 +9,7 @@ module.exports = DCRDoctor = mongoose.model(
       required: true
     },
     doctorId: {
-      type: mongoose.Schema.Types.ObjectId
+      type: String
     },
     lastName: {
       type: String,

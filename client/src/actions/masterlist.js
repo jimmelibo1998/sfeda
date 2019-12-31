@@ -18,14 +18,45 @@ import {
   ACTIVE_DCR_CLEAR,
   DCR_DOCTOR_ADDED,
   DOCTOR_COUNT_UPDATED,
-  DCR_DOCTOR_REMOVED
+  DCR_DOCTOR_REMOVED,
+  TOTAL_VISITS_POINTS_UPDATED
 } from "./types";
 import setAlert from "./alert";
 import { loadAggregateDoctors } from "./doctors";
 
 import myServer from "../apis/myServer";
 
-export const updateVisited = (dcrDoctorId, visited) => async (
+export const updateMasterlistDoctor = (doctorId, visited) => async (
+  dispatch,
+  getState
+) => {
+  let date = getState().masterlist.activeDcr.date;
+  let masterlistId = getState().masterlist.masterlist._id;
+
+  let config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+
+  let body = JSON.stringify({ date, visited });
+
+  try {
+    let res = await myServer.put(
+      `/api/masterlist/doctors/week/${masterlistId}/${doctorId}`,
+      body,
+      config
+    );
+    console.log(res.data);
+  } catch (err) {
+    console.error(err);
+    dispatch(
+      setAlert("Masterlist Doctor Score not updated", "deep-orange accent-1")
+    );
+  }
+};
+
+export const updateVisited = (dcrDoctorId, visited, doctorId) => async (
   dispatch,
   getState
 ) => {
@@ -37,6 +68,7 @@ export const updateVisited = (dcrDoctorId, visited) => async (
 
   const body = JSON.stringify({ visited });
 
+  console.log(visited);
   try {
     let res = await myServer.put(
       `/api/dcr/doctors/visited/${dcrDoctorId}`,
@@ -44,9 +76,26 @@ export const updateVisited = (dcrDoctorId, visited) => async (
       config
     );
     await dispatch(fetchDcrDoctors(getState().masterlist.activeDcr._id));
+    await dispatch(updateTotalVisitsPoints());
+    if (doctorId) {
+      await dispatch(updateMasterlistDoctor(doctorId, visited));
+    }
+
+    await dispatch(getMasterlistDoctors());
   } catch (err) {
     console.error(err);
     dispatch(setAlert("VISITED NOT UPDATED", "deep-orange accent-1"));
+  }
+};
+
+export const updateTotalVisitsPoints = () => async (dispatch, getState) => {
+  let dcrId = getState().masterlist.activeDcr._id;
+  try {
+    let res = await myServer.put(`/api/dcr/totalvisits/totalpoints/${dcrId}`);
+    dispatch({ type: TOTAL_VISITS_POINTS_UPDATED, payload: res.data });
+  } catch (err) {
+    console.error(err);
+    dispatch(setAlert("TOTALS NOT UPDATED", "deep-orange accent-1"));
   }
 };
 
@@ -65,13 +114,19 @@ export const updateDoctorCount = inMasterlist => async (dispatch, getState) => {
 
 export const removeDoctorFromDcr = (
   dcrDoctorId,
-  inMasterlist
+  inMasterlist,
+  doctorId
 ) => async dispatch => {
   try {
     console.log(inMasterlist);
     let res = await myServer.delete(`/api/dcr/remove/doctor/${dcrDoctorId}`);
     await dispatch({ type: DCR_DOCTOR_REMOVED, payload: res.data });
-    dispatch(updateDoctorCount(inMasterlist));
+    await dispatch(updateDoctorCount(inMasterlist));
+    await dispatch(updateTotalVisitsPoints());
+    await dispatch(updateMasterlistDoctor(doctorId, true));
+    if (inMasterlist === true) {
+      await dispatch(getMasterlistDoctors());
+    }
   } catch (err) {
     console.error(err);
     dispatch(setAlert("DOCTOR NOT REMOVED", "deep-orange accent-1"));

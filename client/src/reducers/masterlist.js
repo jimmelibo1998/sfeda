@@ -18,7 +18,8 @@ import {
   ACTIVE_DCR_CLEAR,
   DCR_DOCTOR_ADDED,
   DOCTOR_COUNT_UPDATED,
-  DCR_DOCTOR_REMOVED
+  DCR_DOCTOR_REMOVED,
+  TOTAL_VISITS_POINTS_UPDATED
 } from "../actions/types";
 
 const initialState = {
@@ -45,6 +46,7 @@ export default function(state = initialState, action) {
       return { ...state, activeDcr: null, dcrDoctors: [] };
     case ACTIVE_DCR_SET:
     case DOCTOR_COUNT_UPDATED:
+    case TOTAL_VISITS_POINTS_UPDATED:
       return { ...state, activeDcr: payload };
     case DCR_DOCTORS_FETCHED:
       return { ...state, dcrDoctors: payload };

@@ -3,6 +3,7 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const { check, validationResult } = require("express-validator");
 const moment = require("moment");
+const weekOfMonth = require("../../functions/weekOfMonth");
 
 const MasterList = require("../../models/MasterList");
 const DoctorAccount = require("../../models/DoctorAccount");
@@ -278,6 +279,140 @@ router.put(
 //@route PUT /api/masterlist/doctors/week/:masterlistId/:doctorId
 //@desc  update doctor in masterlist and total all week's score [dcrDate (weekNumber)]
 //@access Private
+router.put(
+  "/doctors/week/:masterlistId/:doctorId",
+  [
+    auth,
+    [
+      check("date", "Date is required").exists(),
+      check("visited", "visited is required and must be boolean").isBoolean()
+    ]
+  ],
+  async (req, res) => {
+    console.log(req.body);
+    const errors = validationResult(req);
+    if (!errors.isEmpty())
+      return res.status(400).json({ errors: errors.array() });
+
+    const validMasterlist = mongoose.Types.ObjectId.isValid(
+      req.params.masterlistId
+    );
+    if (validMasterlist === false)
+      return res.status(400).json({ errors: [{ msg: "ObjectId Invalid" }] });
+
+    const validDoctor = mongoose.Types.ObjectId.isValid(req.params.doctorId);
+    if (validDoctor === false)
+      return res.status(400).json({ errors: [{ msg: "ObjectId Invalid" }] });
+
+    try {
+      let doctor = await MasterListDoctor.findOne({
+        masterlist: req.params.masterlistId,
+        doctor: req.params.doctorId
+      });
+      if (!doctor)
+        return res
+          .status(400)
+          .json({ errors: [{ msg: "Masterlist Doctor Not Found" }] });
+
+      let weekNumber = weekOfMonth(moment(req.body.date));
+      console.log(weekNumber);
+      if (req.body.visited === false) {
+        if (weekNumber === 1) {
+          if (!doctor.weekOne.dates.includes(req.body.date)) {
+            let arr = arrayDiff(doctor.weekOne.dates, [req.body.date]);
+            doctor.weekOne.dates = arr;
+            await doctor.save();
+            doctor.weekOne.score = doctor.weekOne.dates.length;
+            await doctor.save();
+          }
+        }
+
+        if (weekNumber === 2) {
+          if (!doctor.weekTwo.dates.includes(req.body.date)) {
+            let arr = arrayDiff(doctor.weekTwo.dates, [req.body.date]);
+            doctor.weekTwo.dates = arr;
+            await doctor.save();
+            doctor.weekTwo.score = doctor.weekTwo.dates.length;
+            await doctor.save();
+          }
+        }
+
+        if (weekNumber === 3) {
+          if (!doctor.weekThree.dates.includes(req.body.date)) {
+            let arr = arrayDiff(doctor.weekThree.dates, [req.body.date]);
+            doctor.weekThree.dates = arr;
+            await doctor.save();
+            doctor.weekThree.score = doctor.weekThree.dates.length;
+            await doctor.save();
+          }
+        }
+
+        if (weekNumber === 4) {
+          if (!doctor.weekFour.dates.includes(req.body.date)) {
+            let arr = await arrayDiff(doctor.weekFour.dates, [
+              moment(req.body.date).format("YYYY-MM-DD")
+            ]);
+            console.log(arr);
+            doctor.weekFour.dates = arr;
+            doctor.weekFour.score = doctor.weekFour.dates.length;
+            await doctor.save();
+          }
+        }
+      }
+      if (req.body.visited === true) {
+        console.log(weekNumber);
+        if (weekNumber === 1) {
+          let arr = doctor.weekOne.dates.filter(
+            date => date !== moment(req.body.date).format("YYYY-MM-DD")
+          );
+          doctor.weekOne.dates = arr;
+          doctor.weekOne.score = doctor.weekOne.dates.length;
+          await doctor.save();
+        }
+
+        if (weekNumber === 2) {
+          let arr = doctor.weekTwo.dates.filter(
+            date => date !== moment(req.body.date).format("YYYY-MM-DD")
+          );
+          doctor.weekTwo.dates = arr;
+          doctor.weekTwo.score = doctor.weekTwo.dates.length;
+          await doctor.save();
+        }
+
+        if (weekNumber === 3) {
+          let arr = doctor.weekThree.dates.filter(
+            date => date !== moment(req.body.date).format("YYYY-MM-DD")
+          );
+          doctor.weekThree.dates = arr;
+          doctor.weekThree.score = doctor.weekThree.dates.length;
+          await doctor.save();
+        }
+
+        if (weekNumber === 4) {
+          let arr = doctor.weekFour.dates.filter(
+            date => date !== moment(req.body.date).format("YYYY-MM-DD")
+          );
+          console.log(arr);
+          doctor.weekFour.dates = arr;
+          await doctor.save();
+          doctor.weekFour.score = doctor.weekFour.dates.length;
+          await doctor.save();
+        }
+      }
+
+      doctor.total =
+        doctor.weekOne.score +
+        doctor.weekTwo.score +
+        doctor.weekThree.score +
+        doctor.weekFour.score;
+      await doctor.save();
+      res.json(doctor);
+    } catch (err) {
+      console.log(err.message);
+      res.send("Server Error");
+    }
+  }
+);
 
 //5
 //@route PUT /api/masterlist/currentscore/:masterlistId

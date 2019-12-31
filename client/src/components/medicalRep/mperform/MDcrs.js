@@ -1,10 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
+import uuid from "uuid";
 import {
   activeDcrClear,
   addDoctorToDcr,
   removeDoctorFromDcr,
-  updateVisited
+  updateVisited,
+  updateTotalVisitsPoints
 } from "../../../actions/masterlist";
 
 class MDcrs extends React.Component {
@@ -13,6 +15,11 @@ class MDcrs extends React.Component {
     firstname: "",
     email: ""
   };
+
+  componentDidMount() {
+    this.props.updateTotalVisitsPoints();
+  }
+
   componentWillUnmount() {
     this.props.activeDcrClear();
   }
@@ -80,42 +87,55 @@ class MDcrs extends React.Component {
   };
 
   renderDcrDoctors = () => {
-    return this.props.dcrDoctors.map(doctor => (
-      <tr key={doctor._id}>
-        <td>{doctor.lastName}</td>
-        <td>{doctor.firstName}</td>
-        <td>{doctor.classCode}</td>
-        <td>{doctor.contact}</td>
-        <td>{doctor.inMasterlist === true ? "Yes" : "No"}</td>
-        <td>
-          <label>
-            <input
-              onChange={() => {
-                this.props.updateVisited(doctor._id, doctor.visited);
-              }}
-              type="checkbox"
-              checked={doctor.visited}
-            />
-            <span>Yes</span>
-          </label>
-        </td>
-        <td>
-          <button className="green darken-3 waves-effect waves-light btn">
-            <i className="material-icons">add</i>
-          </button>
-        </td>
-        <td>
-          <button
-            onClick={() =>
-              this.props.removeDoctorFromDcr(doctor._id, doctor.inMasterlist)
-            }
-            className="red darken-4 waves-effect waves-light btn btn-small"
-          >
-            <i className="material-icons">cancel</i>
-          </button>
-        </td>
-      </tr>
-    ));
+    return this.props.dcrDoctors.map(doctor => {
+      const id = uuid.v4();
+      return (
+        <tr key={id}>
+          <td>{doctor.lastName}</td>
+          <td>{doctor.firstName}</td>
+          <td>{doctor.classCode}</td>
+          <td>{doctor.contact}</td>
+          <td>{doctor.inMasterlist === true ? "Yes" : "No"}</td>
+          <td>
+            <label>
+              <input
+                onChange={async () => {
+                  doctor._id !== ""
+                    ? await this.props.updateVisited(
+                        doctor._id,
+                        doctor.visited,
+                        doctor.doctorId
+                      )
+                    : console.log("Not Registered");
+                }}
+                type="checkbox"
+                checked={doctor.visited}
+              />
+              <span>Yes</span>
+            </label>
+          </td>
+          <td>
+            <button className="green darken-3 waves-effect waves-light btn">
+              <i className="material-icons">add</i>
+            </button>
+          </td>
+          <td>
+            <button
+              onClick={() =>
+                this.props.removeDoctorFromDcr(
+                  doctor._id,
+                  doctor.inMasterlist,
+                  doctor.doctorId
+                )
+              }
+              className="red darken-4 waves-effect waves-light btn btn-small"
+            >
+              <i className="material-icons">cancel</i>
+            </button>
+          </td>
+        </tr>
+      );
+    });
   };
   render() {
     return (
@@ -291,5 +311,6 @@ export default connect(mapStateToProps, {
   activeDcrClear,
   addDoctorToDcr,
   removeDoctorFromDcr,
-  updateVisited
+  updateVisited,
+  updateTotalVisitsPoints
 })(MDcrs);
