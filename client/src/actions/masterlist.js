@@ -290,13 +290,22 @@ export const removeDoctorFromML = (masterlistId, doctorId) => async (
   }
 };
 
-export const addDoctorToML = (masterlistId, doctorId) => async (
+export const addDoctorToML = (masterlistId, doctorId, classCode) => async (
   dispatch,
   getState
 ) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+  console.log(masterlistId);
+  const body = JSON.stringify({ classCode });
   try {
     let res = await myServer.post(
-      `/api/masterlist/add/${masterlistId}/${doctorId}`
+      `/api/masterlist/add/${masterlistId}/${doctorId}`,
+      body,
+      config
     );
     console.log(res.data);
     await dispatch({ type: ML_DOCTOR_ADDED, payload: res.data });
@@ -336,6 +345,22 @@ export const clearMasterlist = () => dispatch => {
 export const getCurrentMasterlist = id => async (dispatch, getState) => {
   try {
     let res = await myServer.get(`/api/masterlist/${id}`);
+    await dispatch({ type: CURRENT_ML_FETCHED, payload: res.data });
+    await dispatch(getMasterlistDoctors());
+    await getState().masterlist.doctors.map(doctor => {
+      dispatch(getDoctorDetails(doctor.doctor));
+    });
+    await dispatch(fetchAllDcrsInMasterlist());
+    dispatch(updateCurrentScore());
+  } catch (err) {
+    dispatch({ type: NO_CURRENT_ML });
+  }
+};
+
+export const getMonthMasterlist = month => async (dispatch, getState) => {
+  let medrepId = getState().auth.user._id;
+  try {
+    let res = await myServer.get(`/api/masterlist/month/${medrepId}/${month}`);
     await dispatch({ type: CURRENT_ML_FETCHED, payload: res.data });
     await dispatch(getMasterlistDoctors());
     await getState().masterlist.doctors.map(doctor => {

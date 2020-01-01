@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import uuid from "uuid";
+import { arrayDiff } from "../../../functions/arrayDiff";
 import {
   activeDcrClear,
   addDoctorToDcr,
@@ -304,7 +305,8 @@ class MDcrs extends React.Component {
 const mapStateToProps = state => ({
   activeDcr: state.masterlist.activeDcr,
   dcrDoctors: state.masterlist.dcrDoctors,
-  doctorDetails: state.masterlist.doctorDetails
+  doctorDetails: state.masterlist.doctorDetails,
+  doctors: state.masterlist.doctors
 });
 
 export default connect(mapStateToProps, {

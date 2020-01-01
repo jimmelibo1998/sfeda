@@ -16,6 +16,8 @@ import {
   clearMasterlist
 } from "../../../actions/masterlist";
 
+import history from "../../../history";
+
 class AddMasterList extends React.Component {
   state = {
     name: "",
@@ -25,7 +27,6 @@ class AddMasterList extends React.Component {
   };
   async componentDidMount() {
     await this.props.loadAggregateDoctors(this.props.user.area);
-    await this.props.getCurrentMasterlist(this.props.user._id);
     if (this.props.masterlist.sent === true) {
       this.setState({ disabled: true });
     }
@@ -46,7 +47,11 @@ class AddMasterList extends React.Component {
             onClick={e => {
               e.preventDefault();
               if (this.state.disabled === false) {
-                this.props.addDoctorToML(this.props.masterlist._id, doctor._id);
+                this.props.addDoctorToML(
+                  this.props.masterlist._id,
+                  doctor._id,
+                  doctor.classCode
+                );
               } else {
                 console.log("Cant Add Doctor");
               }
@@ -149,6 +154,9 @@ class AddMasterList extends React.Component {
         </h3>
         <div className="row">
           <div className="col s12 m3">
+            <h4 className="flow-text light-green-text text-darken-3 center">
+              Filtering
+            </h4>
             <form onSubmit={e => e.preventDefault()}>
               <div className="input-field col s12">
                 <input
@@ -197,31 +205,11 @@ class AddMasterList extends React.Component {
                 }
               }}
             >
-              <option value="">Choose your option</option>
+              <option value="">Class Code ( All )</option>
               <option value="A">A</option>
               <option value="B">B</option>
               <option value="C">C</option>
             </Select>
-            <form>
-              <div className="input-field col s12">
-                <input
-                  id="sp_code"
-                  type="text"
-                  className="validate"
-                  placeholder="Specialization Code"
-                />
-              </div>
-            </form>
-            <form>
-              <div className="input-field col s12">
-                <input
-                  id="institution_name"
-                  type="text"
-                  className="validate"
-                  placeholder="Institution Name"
-                />
-              </div>
-            </form>
           </div>
           <div className="col s12 m9">
             <ul
@@ -247,39 +235,17 @@ class AddMasterList extends React.Component {
 
           <div className="input-field col s12">
             <div className="row">
-              <div className="col s12 m3">
+              <div className="col s12 m6">
                 {" "}
                 <button
+                  onClick={() => history.push("/medrep/perform/masterlist")}
                   style={{ width: "100%" }}
                   className="teal darken-3 waves-effect waves-light btn btn-large"
                 >
                   <i className="material-icons left">arrow_back</i>Go Back
                 </button>
               </div>
-              <div className="col s12 m3">
-                {" "}
-                <button
-                  style={{ width: "100%" }}
-                  className="green darken-3 waves-effect waves-light btn btn-large"
-                  disabled={this.state.disabled}
-                >
-                  <i className="material-icons left">add</i>Add Doctor
-                </button>
-              </div>
-              <div className="col s12 m3">
-                {" "}
-                <button
-                  onClick={() =>
-                    this.props.loadAggregateDoctors(this.props.user.area)
-                  }
-                  style={{ width: "100%" }}
-                  className="yellow darken-4 waves-effect waves-light btn btn-large"
-                  disabled={this.state.disabled}
-                >
-                  <i className="material-icons left">repeat</i>Clear
-                </button>
-              </div>
-              <div className="col s12 m3">
+              <div className="col s12 m6">
                 <button
                   onClick={() => this.sendMasterlist()}
                   style={{ width: "100%" }}
@@ -310,7 +276,7 @@ class AddMasterList extends React.Component {
                   this.renderDoctorDetails()
                 ) : (
                   <tr>
-                    <td colSpan="6">
+                    <td colSpan="7">
                       <p className="center grey-text">No Doctors</p>
                     </td>
                   </tr>

@@ -88,48 +88,55 @@ router.post(
 //@route POST /api/masterlist/add/:masterlist/:doctor
 //@desc  Add Doctor to masterlist
 //@access Private
-router.post("/add/:masterlist/:doctor", auth, async (req, res) => {
-  const { masterlist, doctor } = req.params;
-  //check if object id is valid
-  const validMasterlist = mongoose.Types.ObjectId.isValid(masterlist);
-  if (validMasterlist === false)
-    return res.status(400).json({ errors: [{ msg: "Invalid ObjectId4" }] });
+router.post(
+  "/add/:masterlist/:doctor",
+  [auth, [check("classCode", "ClassCode is required").exists()]],
+  async (req, res) => {
+    const { masterlist, doctor } = req.params;
+    //check if object id is valid
+    const validMasterlist = mongoose.Types.ObjectId.isValid(
+      req.params.masterlist
+    );
+    if (validMasterlist === false)
+      return res.status(400).json({ errors: [{ msg: "Invalid ObjectId4" }] });
 
-  const validDoctor = mongoose.Types.ObjectId.isValid(doctor);
-  if (validDoctor === false)
-    return res.status(400).json({ errors: [{ msg: "Invalid ObjectId5" }] });
+    const validDoctor = mongoose.Types.ObjectId.isValid(req.params.doctor);
+    if (validDoctor === false)
+      return res.status(400).json({ errors: [{ msg: "Invalid ObjectId5" }] });
 
-  try {
-    let doc = await DoctorAccount.findById(doctor);
-    if (!doc)
-      return res.status(400).json({ errors: [{ msg: "Doctor not found" }] });
+    try {
+      let doc = await DoctorAccount.findById(doctor);
+      if (!doc)
+        return res.status(400).json({ errors: [{ msg: "Doctor not found" }] });
 
-    let mlist = await MasterList.findById(masterlist);
-    if (!mlist)
-      return res
-        .status(400)
-        .json({ errors: [{ msg: "Master List not found" }] });
+      let mlist = await MasterList.findById(masterlist);
+      if (!mlist)
+        return res
+          .status(400)
+          .json({ errors: [{ msg: "Master List not found" }] });
 
-    let listdoctor = await MasterListDoctor.findOne({ masterlist, doctor });
-    if (listdoctor)
-      return res
-        .status(400)
-        .json({ errors: [{ msg: "Doctor already in the masterlist" }] });
-    listdoctor = new MasterListDoctor({
-      masterlist,
-      doctor
-    });
+      let listdoctor = await MasterListDoctor.findOne({ masterlist, doctor });
+      if (listdoctor)
+        return res
+          .status(400)
+          .json({ errors: [{ msg: "Doctor already in the masterlist" }] });
+      listdoctor = new MasterListDoctor({
+        masterlist,
+        doctor,
+        classCode: req.body.classCode
+      });
 
-    listdoctor.save();
+      listdoctor.save();
 
-    doc.inMasterlist = true;
-    await doc.save();
-    res.json(listdoctor);
-  } catch (err) {
-    console.error(err.message);
-    res.send("Server Error");
+      doc.inMasterlist = true;
+      await doc.save();
+      res.json(listdoctor);
+    } catch (err) {
+      console.error(err.message);
+      res.send("Server Error");
+    }
   }
-});
+);
 
 //@route POST /api/masterlist/delete/:masterlist/:doctor
 //@desc  Rmove Doctor in masterlist
@@ -215,6 +222,32 @@ router.get("/:medrep", auth, async (req, res) => {
     return res.status(400).json({ errors: [{ msg: "ObjectId not valid" }] });
 
   let monthYear = moment().format("MMMM YYYY");
+  try {
+    let masterlist = await MasterList.findOne({
+      month: monthYear,
+      medrep: req.params.medrep
+    });
+    if (!masterlist)
+      return res
+        .status(404)
+        .json({ errors: [{ msg: "Masterlist not found" }] });
+
+    res.json(masterlist);
+  } catch (err) {
+    console.error(err.message);
+    res.send("Server Error");
+  }
+});
+
+//@route GET /api/masterlist/month/:medrep/:month
+//@desc  Fetch Masterlist with monthYear and medrepId
+//@access Private
+router.get("/month/:medrep/:month", auth, async (req, res) => {
+  let isValid = mongoose.Types.ObjectId.isValid(req.params.medrep);
+  if (isValid === false)
+    return res.status(400).json({ errors: [{ msg: "ObjectId not valid" }] });
+
+  let monthYear = moment(req.params.month).format("MMMM YYYY");
   try {
     let masterlist = await MasterList.findOne({
       month: monthYear,
@@ -442,6 +475,36 @@ router.put(`/currentscore/:masterlistId`, auth, async (req, res) => {
     masterlist.callRate = Number(
       ((masterlist.currentScore / masterlist.goalScore) * 100).toFixed(2)
     );
+
+    let mLVisitedDoctorsCount = await MasterListDoctor.find({
+      masterlist: req.params.masterlistId,
+      total: { $gt: 0 }
+    }).countDocuments();
+    let mLTotalDoctors = await MasterListDoctor.find({
+      masterlist: req.params.masterlistId
+    }).countDocuments();
+
+    console.log(mLTotalDoctors + " " + mLVisitedDoctorsCount);
+    masterlist.callFreq = (
+      (mLVisitedDoctorsCount / mLTotalDoctors) *
+      100
+    ).toFixed(2);
+
+    let gTZeroClassA = await MasterListDoctor.find({
+      masterlist: req.params.masterlistId,
+      classCode: "A",
+      total: { $gt: 0 }
+    });
+    let classACount = await MasterListDoctor.find({
+      masterlist: req.params.masterlistId,
+      classCode: "A"
+    }).countDocuments();
+    let sum = 0;
+    gTZeroClassA.map(gtzca => (sum += gtzca.total));
+    let callReach = ((sum / (classACount * 3)) * 100).toFixed(2);
+
+    masterlist.callReach = callReach;
+
     await masterlist.save();
     res.send(masterlist);
   } catch (err) {

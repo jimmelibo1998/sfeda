@@ -13,6 +13,10 @@ module.exports = MasterListDoctor = mongoose.model(
       ref: "doctor",
       required: true
     },
+    classCode: {
+      type: String,
+      required: true
+    },
     weekOne: {
       dates: [{ type: String }],
       score: {

@@ -9,7 +9,8 @@ import {
   getMasterlistDoctors,
   getDoctorDetails,
   clearMasterlist,
-  addMasterlist
+  addMasterlist,
+  getMonthMasterlist
 } from "../../../actions/masterlist";
 
 class MMasterList extends React.Component {
@@ -92,6 +93,12 @@ class MMasterList extends React.Component {
     this.props.addMasterlist(this.props.user._id, moment().format("MMMM YYYY"));
   };
 
+  onChange = async e => {
+    await this.setState({ [e.target.id]: e.target.value });
+    console.log(this.state);
+    this.props.getMonthMasterlist(this.state.month + " " + this.state.year);
+  };
+
   render() {
     return (
       <div>
@@ -113,7 +120,8 @@ class MMasterList extends React.Component {
           <Select
             s={12}
             m={4}
-            onChange={e => this.setState({ month: e.target.value })}
+            id="month"
+            onChange={e => this.onChange(e)}
             value={this.state.month}
             options={{
               classes: "",
@@ -151,7 +159,8 @@ class MMasterList extends React.Component {
           <Select
             s={12}
             m={4}
-            onChange={e => this.setState({ year: e.target.value })}
+            id="year"
+            onChange={e => this.onChange(e)}
             value={this.state.year}
             options={{
               classes: "",
@@ -172,6 +181,7 @@ class MMasterList extends React.Component {
               }
             }}
           >
+            <option value="2020">2020</option>
             <option value="2019">2019</option>
             <option value="2018">2018</option>
             <option value="2017">2017</option>
@@ -194,7 +204,8 @@ class MMasterList extends React.Component {
           <Select
             s={12}
             m={4}
-            onChange={e => this.setState({ classCode: e.target.value })}
+            id="classCode"
+            onChange={e => this.onChange(e)}
             value={this.state.classCode}
             options={{
               classes: "",
@@ -298,11 +309,11 @@ class MMasterList extends React.Component {
                 </tr>
               </thead>
               <tbody>
-                {this.props.masterlist instanceof Array ? (
+                {this.props.masterlist instanceof Object ? (
                   this.renderDoctors()
                 ) : (
                   <tr>
-                    <td colSpan="8">
+                    <td colSpan="9">
                       <p className="center grey-text">No Masterlist</p>
                     </td>
                   </tr>
@@ -330,5 +341,6 @@ export default connect(mapStateToProps, {
   getMasterlistDoctors,
   getDoctorDetails,
   addMasterlist,
-  fetchMasterlistCall
+  fetchMasterlistCall,
+  getMonthMasterlist
 })(MMasterList);
