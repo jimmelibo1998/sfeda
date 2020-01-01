@@ -20,7 +20,8 @@ import {
   DOCTOR_COUNT_UPDATED,
   DCR_DOCTOR_REMOVED,
   TOTAL_VISITS_POINTS_UPDATED,
-  CURRENT_SCORE_UPDATED
+  CURRENT_SCORE_UPDATED,
+  ALREADY_EXCLUDED
 } from "../actions/types";
 
 const initialState = {
@@ -92,6 +93,7 @@ export default function(state = initialState, action) {
         dcrDoctors: []
       };
     case DCR_ADD_FAILED:
+    case ALREADY_EXCLUDED:
     default:
       return state;
   }

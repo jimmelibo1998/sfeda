@@ -2,7 +2,8 @@ import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import moment from "moment";
-
+import { Select } from "react-materialize";
+import { fetchMasterlistCall } from "../../../actions/noCalls";
 import {
   getCurrentMasterlist,
   getMasterlistDoctors,
@@ -22,7 +23,13 @@ class MMasterList extends React.Component {
 
   async componentDidMount() {
     await this.props.clearMasterlist();
+    await this.props.fetchMasterlistCall(
+      this.state.month + " " + this.state.year
+    );
     await this.props.getCurrentMasterlist(this.props.user._id);
+    if (!this.props.nocall.dates) {
+      await this.setState({ addButtonDisabled: true });
+    }
   }
 
   getDoctorDetails = doctorId => {
@@ -103,64 +110,116 @@ class MMasterList extends React.Component {
 
             <div className="col s12 m6">{this.renderButton()}</div>
           </div>
-          <div className="input-field col s4">
-            <select
-              className="browser-default"
-              onChange={e => this.setState({ month: e.target.value })}
-              value={this.state.month}
-            >
-              <option value="January">January</option>
-              <option value="February">February</option>
-              <option value="March">March</option>
-              <option value="April">April</option>
-              <option value="May">May</option>
-              <option value="June">June</option>
-              <option value="July">July</option>
-              <option value="August">August</option>
-              <option value="September">September</option>
-              <option value="October">October</option>
-              <option value="November">November</option>
-              <option value="December">December</option>
-            </select>
-          </div>
-          <div className="input-field col s4">
-            <select
-              className="browser-default"
-              onChange={e => this.setState({ year: e.target.value })}
-              value={this.state.year}
-            >
-              <option value="2019">2019</option>
-              <option value="2018">2018</option>
-              <option value="2017">2017</option>
-              <option value="2016">2016</option>
-              <option value="2015">2015</option>
-              <option value="2014">2014</option>
-              <option value="2013">2013</option>
-              <option value="2012">2012</option>
-              <option value="2011">2011</option>
-              <option value="2010">2010</option>
-              <option value="2009">2009</option>
-              <option value="2008">2008</option>
-              <option value="2007">2007</option>
-              <option value="2006">2006</option>
-              <option value="2005">2005</option>
-              <option value="2004">2004</option>
-              <option value="2003">2003</option>
-              <option value="2002">2002</option>
-            </select>
-          </div>
-          <div className="input-field col s4">
-            <select
-              className="browser-default"
-              onChange={e => this.setState({ classCode: e.target.value })}
-              value={this.state.classCode}
-            >
-              <option value="All">All</option>
-              <option value="A">A</option>
-              <option value="B">B</option>
-              <option value="C">C</option>
-            </select>
-          </div>
+          <Select
+            s={12}
+            m={4}
+            onChange={e => this.setState({ month: e.target.value })}
+            value={this.state.month}
+            options={{
+              classes: "",
+              dropdownOptions: {
+                alignment: "left",
+                autoTrigger: true,
+                closeOnClick: true,
+                constrainWidth: true,
+                container: null,
+                coverTrigger: true,
+                hover: false,
+                inDuration: 150,
+                onCloseEnd: null,
+                onCloseStart: null,
+                onOpenEnd: null,
+                onOpenStart: null,
+                outDuration: 250
+              }
+            }}
+          >
+            <option value="January">January</option>
+            <option value="February">February</option>
+            <option value="March">March</option>
+            <option value="April">April</option>
+            <option value="May">May</option>
+            <option value="June">June</option>
+            <option value="July">July</option>
+            <option value="August">August</option>
+            <option value="September">September</option>
+            <option value="October">October</option>
+            <option value="November">November</option>
+            <option value="December">December</option>
+          </Select>
+
+          <Select
+            s={12}
+            m={4}
+            onChange={e => this.setState({ year: e.target.value })}
+            value={this.state.year}
+            options={{
+              classes: "",
+              dropdownOptions: {
+                alignment: "left",
+                autoTrigger: true,
+                closeOnClick: true,
+                constrainWidth: true,
+                container: null,
+                coverTrigger: true,
+                hover: false,
+                inDuration: 150,
+                onCloseEnd: null,
+                onCloseStart: null,
+                onOpenEnd: null,
+                onOpenStart: null,
+                outDuration: 250
+              }
+            }}
+          >
+            <option value="2019">2019</option>
+            <option value="2018">2018</option>
+            <option value="2017">2017</option>
+            <option value="2016">2016</option>
+            <option value="2015">2015</option>
+            <option value="2014">2014</option>
+            <option value="2013">2013</option>
+            <option value="2012">2012</option>
+            <option value="2011">2011</option>
+            <option value="2010">2010</option>
+            <option value="2009">2009</option>
+            <option value="2008">2008</option>
+            <option value="2007">2007</option>
+            <option value="2006">2006</option>
+            <option value="2005">2005</option>
+            <option value="2004">2004</option>
+            <option value="2003">2003</option>
+            <option value="2002">2002</option>
+          </Select>
+          <Select
+            s={12}
+            m={4}
+            onChange={e => this.setState({ classCode: e.target.value })}
+            value={this.state.classCode}
+            options={{
+              classes: "",
+              dropdownOptions: {
+                alignment: "left",
+                autoTrigger: true,
+                closeOnClick: true,
+                constrainWidth: true,
+                container: null,
+                coverTrigger: true,
+                hover: false,
+                inDuration: 150,
+                onCloseEnd: null,
+                onCloseStart: null,
+                onOpenEnd: null,
+                onOpenStart: null,
+                outDuration: 250
+              }
+            }}
+          >
+            <option value="All">All</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+          </Select>
           <div className="col s12">
             <div className="row">
               <div className="col s12 m4">
@@ -239,7 +298,7 @@ class MMasterList extends React.Component {
                 </tr>
               </thead>
               <tbody>
-                {this.props.masterlist !== null ? (
+                {this.props.masterlist instanceof Array ? (
                   this.renderDoctors()
                 ) : (
                   <tr>
@@ -261,7 +320,8 @@ const mapStateToProps = state => ({
   masterlist: state.masterlist.masterlist,
   doctors: state.masterlist.doctors,
   doctorDetails: state.masterlist.doctorDetails,
-  user: state.auth.user
+  user: state.auth.user,
+  nocall: state.nocall
 });
 
 export default connect(mapStateToProps, {
@@ -269,5 +329,6 @@ export default connect(mapStateToProps, {
   getCurrentMasterlist,
   getMasterlistDoctors,
   getDoctorDetails,
-  addMasterlist
+  addMasterlist,
+  fetchMasterlistCall
 })(MMasterList);

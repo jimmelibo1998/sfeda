@@ -5,7 +5,8 @@ import {
   NO_CALLS_FETCH_FAILED,
   EXCLUDED_DATE_REMOVED,
   REMOVE_DATE_FAILED,
-  NO_CALL_CLEARED
+  NO_CALL_CLEARED,
+  ALREADY_EXCLUDED
 } from "../actions/types";
 import myServer from "../apis/myServer";
 import setAlert from "./alert";
@@ -28,6 +29,7 @@ export const updateAllMasterlistGoalScore = (
 
   try {
     await myServer.put(`/api/masterlist/goalscore/${goalscore}`, body, config);
+    console.log("updaed");
     dispatch(setAlert("Goal Score Updated!", "green"));
   } catch (err) {
     console.log(err);
@@ -49,7 +51,6 @@ export const removeExcludedDate = (nocallid, dateid) => async dispatch => {
 export const fetchMasterlistCall = month => async dispatch => {
   try {
     let res = await myServer.get(`/api/mdcalls/nocalls/${month}`);
-
     await dispatch({ type: NO_CALLS_FETCHED, payload: res.data });
     dispatch(setAlert("No Calls Fetched!", "green"));
   } catch (error) {

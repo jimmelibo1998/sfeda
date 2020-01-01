@@ -27,7 +27,10 @@ class Masterlist extends React.Component {
     await this.props.fetchMasterlistCall(
       this.state.year + " " + this.state.month
     );
-    await this.getGoalScore();
+    this.getGoalScore();
+  }
+  componentWillUnmount() {
+    this.props.clearNoCalls();
   }
   onFilter = e => {
     e.preventDefault();
@@ -40,13 +43,19 @@ class Masterlist extends React.Component {
     await this.props.excludeDate(this.state.datetoexclude, this.state.desc);
     await this.setState({
       year: moment(this.props.nocall.month).format("YYYY"),
-      month: moment(this.props.nocall.month).format("MMMM")
+      month: moment(this.props.nocall.month).format("MMMM"),
+      datetoexclude: "",
+      desc: ""
     });
     await this.getGoalScore();
   };
 
-  onChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
+  onChange = async e => {
+    await this.setState({ [e.target.name]: e.target.value });
+    await this.props.fetchMasterlistCall(
+      this.state.year + " " + this.state.month
+    );
+    await this.getGoalScore();
   };
   onChangeDate(e) {
     this.setState({ datetoexclude: e.target.value });
@@ -58,9 +67,13 @@ class Masterlist extends React.Component {
         <td>{date.desc}</td>
         <td>
           <button
-            onClick={() =>
-              this.props.removeExcludedDate(this.props.nocall._id, date.date)
-            }
+            onClick={async () => {
+              await this.props.removeExcludedDate(
+                this.props.nocall._id,
+                date.date
+              );
+              await this.getGoalScore();
+            }}
             className="btn red"
           >
             <i className="material-icons center">remove</i>
@@ -70,30 +83,40 @@ class Masterlist extends React.Component {
     ));
   };
 
+  disableDates = () => {
+    return this.props.nocall !== null && typeof this.props.nocall === "object"
+      ? this.props.nocall.dates.map(date => new Date(date.date).toDateString())
+      : [];
+  };
+
   getGoalScore = async () => {
-    let month = this.state.month + " " + this.state.year;
-    let datesInMonth = getAllDatesInMonth(
-      new Date(month).getMonth(),
-      new Date(month).getFullYear()
-    );
+    if (this.props.nocall.dates instanceof Array) {
+      let month = this.state.month + " " + this.state.year;
+      let datesInMonth = getAllDatesInMonth(
+        new Date(month).getMonth(),
+        new Date(month).getFullYear()
+      );
 
-    let excludedDates = this.props.nocall.dates.map(date => date.date);
-    let gc = arrayDiff(datesInMonth, excludedDates).length * 15;
-    await this.props.updateAllMasterlistGoalScore(gc, month);
+      let excludedDates = this.props.nocall.dates.map(date => date.date);
+      let gc = arrayDiff(datesInMonth, excludedDates).length * 15;
 
-    return this.setState({ goalScore: gc });
+      console.log(excludedDates);
+      await this.props.updateAllMasterlistGoalScore(gc, month);
+
+      return this.setState({ goalScore: gc });
+    }
   };
   render() {
     console.log(this.state);
     return (
       <div>
-        <form onSubmit={e => this.onFilter(e)}>
+        <form>
           <Select
             onChange={e => this.onChange(e)}
             name="year"
             value={this.state.year}
             s={12}
-            m={5}
+            m={6}
             options={{
               classes: "",
               dropdownOptions: {
@@ -116,6 +139,7 @@ class Masterlist extends React.Component {
             <option disabled value="">
               Year
             </option>
+            <option value="2020">2020</option>
             <option value="2019">2019</option>
             <option value="2018">2018</option>
             <option value="2017">2017</option>
@@ -140,7 +164,7 @@ class Masterlist extends React.Component {
             name="month"
             value={this.state.month}
             s={12}
-            m={5}
+            m={6}
             options={{
               classes: "",
               dropdownOptions: {
@@ -176,16 +200,6 @@ class Masterlist extends React.Component {
             <option value="November">November</option>
             <option value="December">December</option>
           </Select>
-          <div className="col s2">
-            <button
-              type="submit"
-              className="waves-effect waves-light btn btn-large perf-btn green"
-              style={{ width: "100%", marginBottom: "5px" }}
-            >
-              <i className="material-icons left">search</i>
-              search
-            </button>
-          </div>
         </form>
         <form onSubmit={e => this.onSubmit(e)}>
           <DatePicker
@@ -201,12 +215,22 @@ class Masterlist extends React.Component {
             s={12}
             m={4}
             label="Exclude Date"
+            value={this.state.datetoexclude}
             options={{
-              autoClose: false,
+              autoClose: true,
               container: null,
               defaultDate: null,
-              disableDayFn: null,
+              disableDayFn: date => {
+                let disableListDate = this.disableDates();
+
+                if (disableListDate.includes(date.toDateString())) {
+                  return true;
+                } else {
+                  return false;
+                }
+              },
               disableWeekends: false,
+              disable: [new Date()],
               events: [],
               firstDay: 0,
               format: "yyyy-mm-dd",
@@ -265,7 +289,7 @@ class Masterlist extends React.Component {
               onSelect: null,
               parse: null,
               setDefaultDate: false,
-              showClearBtn: false,
+              showClearBtn: true,
               showDaysInNextAndPreviousMonths: false,
               showMonthAfterYear: false,
               yearRange: 10

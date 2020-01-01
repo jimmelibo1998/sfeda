@@ -222,7 +222,7 @@ router.get("/:medrep", auth, async (req, res) => {
     });
     if (!masterlist)
       return res
-        .status(400)
+        .status(404)
         .json({ errors: [{ msg: "Masterlist not found" }] });
 
     res.json(masterlist);
@@ -264,12 +264,13 @@ router.put(
       return res.status(400).json({ errors: validationErrors.array() });
 
     try {
-      let masterlist = await MasterList.updateMany(
+      let ress = await MasterList.updateMany(
         { month: req.body.month },
         { goalScore: req.params.score }
       );
-      console.log(res.n + " " + res.nModified);
-      await masterlist.save();
+      console.log(ress.n + " " + ress.nModified);
+      console.log(ress);
+      res.json(ress);
     } catch (err) {
       console.error(err.message);
       res.send("Server Error");
@@ -448,11 +449,6 @@ router.put(`/currentscore/:masterlistId`, auth, async (req, res) => {
     res.send("Server Error");
   }
 });
-
-//6
-//@route PUT /api/masterlist/callrate/:masterlistId
-//@desc  Update Call Rate
-//@access Private
 
 //7
 //@route PUT /api/masterlist/callfreq/:masterlistId

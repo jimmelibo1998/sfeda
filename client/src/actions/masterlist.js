@@ -336,14 +336,11 @@ export const clearMasterlist = () => dispatch => {
 export const getCurrentMasterlist = id => async (dispatch, getState) => {
   try {
     let res = await myServer.get(`/api/masterlist/${id}`);
-    console.log("Here");
     await dispatch({ type: CURRENT_ML_FETCHED, payload: res.data });
     await dispatch(getMasterlistDoctors());
-
     await getState().masterlist.doctors.map(doctor => {
       dispatch(getDoctorDetails(doctor.doctor));
     });
-
     await dispatch(fetchAllDcrsInMasterlist());
     dispatch(updateCurrentScore());
   } catch (err) {
