@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import uuid from "uuid";
-import { arrayDiff } from "../../../functions/arrayDiff";
+import { Modal, Button } from "react-materialize";
 import {
   activeDcrClear,
   addDoctorToDcr,
@@ -116,11 +116,6 @@ class MDcrs extends React.Component {
             </label>
           </td>
           <td>
-            <button className="green darken-3 waves-effect waves-light btn">
-              <i className="material-icons">add</i>
-            </button>
-          </td>
-          <td>
             <button
               onClick={() =>
                 this.props.removeDoctorFromDcr(
@@ -138,6 +133,7 @@ class MDcrs extends React.Component {
       );
     });
   };
+
   render() {
     return (
       <div>
@@ -145,56 +141,7 @@ class MDcrs extends React.Component {
           Add Daily Coverage Report ({this.props.activeDcr.date})
         </h3>
         <div className="row">
-          <div className="col s12 m3">
-            <div className="input-field col s12">
-              <h5 className="green-text center">Not in Masterlist</h5>
-            </div>
-            <form onSubmit={e => this.addNotRegistered(e)}>
-              <div className="input-field col s12">
-                <input
-                  onChange={e => this.onChange(e)}
-                  value={this.state.firstname}
-                  id="firstname"
-                  type="text"
-                  className="validate"
-                  placeholder="First Name"
-                />
-              </div>
-
-              <div className="input-field col s12">
-                <input
-                  onChange={e => this.onChange(e)}
-                  value={this.state.lastname}
-                  id="lastname"
-                  type="text"
-                  className="validate"
-                  placeholder="Last Name"
-                />
-              </div>
-
-              <div className="input-field col s12">
-                <input
-                  onChange={e => this.onChange(e)}
-                  value={this.state.email}
-                  id="email"
-                  type="text"
-                  className="validate"
-                  placeholder="Email"
-                />
-              </div>
-
-              <div className="input-field col s12">
-                <button
-                  type="submit"
-                  style={{ width: "100%" }}
-                  className="green darken-3 btn btn-large"
-                >
-                  <i className="material-icons left">add</i>Add Doctor
-                </button>
-              </div>
-            </form>
-          </div>
-          <div className="col s12 m9">
+          <div className="col s12">
             <ul
               className="collection with-header"
               style={{
@@ -204,24 +151,7 @@ class MDcrs extends React.Component {
               }}
             >
               <li className="collection-header">
-                <div className="row">
-                  <div className="col s12 m6">
-                    <input
-                      id="namesearch"
-                      type="text"
-                      className="validate"
-                      placeholder="Name"
-                    />
-                  </div>
-                  <div className="col s12 m6">
-                    <input
-                      id="emailsearch"
-                      type="text"
-                      className="validate"
-                      placeholder="Email"
-                    />
-                  </div>
-                </div>
+                <h5 className="green-text center">Masterlist Doctors</h5>
               </li>
               {this.props.doctorDetails.length > 0 ? (
                 this.renderMasterlistDoctors()
@@ -232,10 +162,55 @@ class MDcrs extends React.Component {
               )}
             </ul>
           </div>
+          <div className="col s12">
+            <form onSubmit={e => this.addNotRegistered(e)}>
+              <div className="input-field col s12 m3">
+                <input
+                  onChange={e => this.onChange(e)}
+                  value={this.state.firstname}
+                  id="firstname"
+                  type="text"
+                  className="validate"
+                  placeholder="First Name"
+                />
+              </div>
 
+              <div className="input-field col s1 m3">
+                <input
+                  onChange={e => this.onChange(e)}
+                  value={this.state.lastname}
+                  id="lastname"
+                  type="text"
+                  className="validate"
+                  placeholder="Last Name"
+                />
+              </div>
+
+              <div className="input-field col s12 m3">
+                <input
+                  onChange={e => this.onChange(e)}
+                  value={this.state.email}
+                  id="email"
+                  type="text"
+                  className="validate"
+                  placeholder="Email"
+                />
+              </div>
+
+              <div className="input-field col s12 m3">
+                <button
+                  type="submit"
+                  style={{ width: "100%" }}
+                  className="green darken-3 btn btn-large"
+                >
+                  <i className="material-icons left">add</i>Add Doctor
+                </button>
+              </div>
+            </form>
+          </div>
           <div className="input-field col s12">
             <div className="row">
-              <div className="col s12 m3">
+              <div className="col s12 m6">
                 <button
                   style={{ width: "100%" }}
                   className="teal darken-4 btn btn-large"
@@ -243,29 +218,58 @@ class MDcrs extends React.Component {
                   <i className="material-icons left">arrow_left</i>Back
                 </button>
               </div>
-              <div className="col s12 m3">
-                <button
-                  style={{ width: "100%" }}
-                  className="yellow darken-4 btn btn-large"
+
+              <div className="col s12 m6">
+                <Modal
+                  actions={[
+                    <Button flat modal="close" node="button" waves="green">
+                      Close
+                    </Button>,
+                    <Button
+                      className="red-text"
+                      flat
+                      modal="close"
+                      node="button"
+                      waves="green"
+                    >
+                      Confirm
+                    </Button>
+                  ]}
+                  bottomSheet={false}
+                  fixedFooter
+                  header="No Coverage"
+                  id="modal-0"
+                  options={{
+                    dismissible: true,
+                    endingTop: "10%",
+                    inDuration: 250,
+                    onCloseEnd: null,
+                    onCloseStart: null,
+                    onOpenEnd: null,
+                    onOpenStart: null,
+                    opacity: 0.5,
+                    outDuration: 250,
+                    preventScrolling: true,
+                    startingTop: "4%"
+                  }}
+                  trigger={
+                    <Button
+                      style={{ width: "100%" }}
+                      node="button"
+                      className="red darken-3 btn btn-large"
+                    >
+                      NO COVERAGE
+                    </Button>
+                  }
                 >
-                  <i className="material-icons left">repeat</i>Clear
-                </button>
-              </div>
-              <div className="col s12 m3">
-                <button
-                  style={{ width: "100%" }}
-                  className="green darken-3 btn btn-large"
-                >
-                  <i className="material-icons left">send</i>Submit DCR
-                </button>
-              </div>
-              <div className="col s12 m3">
-                <button
-                  style={{ width: "100%" }}
-                  className="red darken-3 btn btn-large"
-                >
-                  <i className="material-icons left">cancel</i>No Coverage
-                </button>
+                  <div className="input-field">
+                    <textarea
+                      style={{ height: "100%" }}
+                      id="textarea1"
+                      className="materialize-textarea browser-default"
+                    ></textarea>
+                  </div>
+                </Modal>
               </div>
             </div>
           </div>
@@ -279,7 +283,6 @@ class MDcrs extends React.Component {
                   <th>Email</th>
                   <th>In Masterlist</th>
                   <th>Visited</th>
-                  <th>Add Comment</th>
                   <th>Remove</th>
                 </tr>
               </thead>

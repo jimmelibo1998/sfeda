@@ -20,7 +20,8 @@ import {
   DOCTOR_COUNT_UPDATED,
   DCR_DOCTOR_REMOVED,
   TOTAL_VISITS_POINTS_UPDATED,
-  CURRENT_SCORE_UPDATED
+  CURRENT_SCORE_UPDATED,
+  DOCTOR_DETAILS_FILTERED
 } from "./types";
 import setAlert from "./alert";
 import { loadAggregateDoctors } from "./doctors";
@@ -139,9 +140,11 @@ export const removeDoctorFromDcr = (
     await dispatch(updateDoctorCount(inMasterlist));
     await dispatch(updateTotalVisitsPoints());
     await dispatch(updateMasterlistDoctor(doctorId, true));
+
     if (inMasterlist === true) {
       await dispatch(getMasterlistDoctors());
     }
+    await dispatch(updateCurrentScore());
   } catch (err) {
     console.error(err);
     dispatch(setAlert("DOCTOR NOT REMOVED", "deep-orange accent-1"));
@@ -355,6 +358,17 @@ export const getCurrentMasterlist = id => async (dispatch, getState) => {
   } catch (err) {
     dispatch({ type: NO_CURRENT_ML });
   }
+};
+
+export const filterDoctorDetails = filtered => async dispatch => {
+  dispatch({ type: DOCTOR_DETAILS_FILTERED, payload: filtered });
+};
+
+export const getDoctorAndDetails = () => async (dispatch, getState) => {
+  await dispatch(getMasterlistDoctors());
+  await getState().masterlist.doctors.map(doctor => {
+    dispatch(getDoctorDetails(doctor.doctor));
+  });
 };
 
 export const getMonthMasterlist = month => async (dispatch, getState) => {

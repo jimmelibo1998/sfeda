@@ -21,7 +21,8 @@ import {
   DCR_DOCTOR_REMOVED,
   TOTAL_VISITS_POINTS_UPDATED,
   CURRENT_SCORE_UPDATED,
-  ALREADY_EXCLUDED
+  ALREADY_EXCLUDED,
+  DOCTOR_DETAILS_FILTERED
 } from "../actions/types";
 
 const initialState = {
@@ -58,6 +59,8 @@ export default function(state = initialState, action) {
       return { ...state, dcrs: [...state.dcrs, payload] };
     case DOCTOR_DETAILS_FETCHED:
       return { ...state, doctorDetails: [...state.doctorDetails, payload] };
+    case DOCTOR_DETAILS_FILTERED:
+      return { ...state, doctorDetails: payload };
     case MASTERLIST_SENT:
     case CURRENT_SCORE_UPDATED:
     case CURRENT_ML_FETCHED:
