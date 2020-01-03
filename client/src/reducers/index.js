@@ -5,6 +5,7 @@ import masterlist from "./masterlist";
 import doctors from "./doctors";
 import medrep from "./medreps";
 import nocall from "./noCalls";
+import noCovers from "./noCover";
 
 export default combineReducers({
   auth,
@@ -12,5 +13,6 @@ export default combineReducers({
   masterlist,
   doctors,
   medrep,
-  nocall
+  nocall,
+  noCovers
 });

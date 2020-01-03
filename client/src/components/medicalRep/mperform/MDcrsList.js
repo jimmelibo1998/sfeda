@@ -61,7 +61,13 @@ class MDcrsList extends React.Component {
         <td>
           <button
             className="waves-effect waves-light btn yellow darken-3"
-            disabled={!dcr.enabledEdit}
+            disabled={
+              !dcr.enabledEdit ||
+              dcr.noCover === true ||
+              new Date(`${dcr.date}`) <
+                new Date(moment().format("YYYY-MM-DD")) ===
+                true
+            }
             onClick={() => this.editDcr(dcr._id)}
           >
             <i className="material-icons left">edit</i>Edit

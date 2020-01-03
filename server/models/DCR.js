@@ -7,6 +7,10 @@ module.exports = DCR = mongoose.model(
       type: mongoose.Schema.Types.ObjectId,
       ref: "masterlist"
     },
+    medrep: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "medrep"
+    },
     date: {
       type: String,
       unique: true
@@ -34,6 +38,20 @@ module.exports = DCR = mongoose.model(
     enabledEdit: {
       type: Boolean,
       default: true
+    },
+    noCover: {
+      type: Boolean,
+      default: false
+    },
+    reason: {
+      type: String
+    },
+    accepted: {
+      type: Boolean
+    },
+    ack: {
+      type: Boolean,
+      default: false
     }
   })
 );

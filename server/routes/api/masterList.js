@@ -387,7 +387,6 @@ router.put(
             let arr = await arrayDiff(doctor.weekFour.dates, [
               moment(req.body.date).format("YYYY-MM-DD")
             ]);
-            console.log(arr);
             doctor.weekFour.dates = arr;
             doctor.weekFour.score = doctor.weekFour.dates.length;
             await doctor.save();
@@ -471,7 +470,7 @@ router.put(`/currentscore/:masterlistId`, auth, async (req, res) => {
     let total = 0;
     dcrs.map(dcr => (total += dcr.totalPoints));
 
-    masterlist.currentScore = total;
+    masterlist.currentScore = total + masterlist.additionalScore;
     masterlist.callRate = Number(
       ((masterlist.currentScore / masterlist.goalScore) * 100).toFixed(2)
     );
@@ -484,17 +483,17 @@ router.put(`/currentscore/:masterlistId`, auth, async (req, res) => {
       masterlist: req.params.masterlistId
     }).countDocuments();
 
-    console.log(mLTotalDoctors + " " + mLVisitedDoctorsCount);
     masterlist.callFreq = (
       (mLVisitedDoctorsCount / mLTotalDoctors) *
       100
     ).toFixed(2);
-
+    console.log(masterlist.callFreq);
     let gTZeroClassA = await MasterListDoctor.find({
       masterlist: req.params.masterlistId,
       classCode: "A",
       total: { $gt: 0 }
     });
+    console.log(gTZeroClassA);
     let classACount = await MasterListDoctor.find({
       masterlist: req.params.masterlistId,
       classCode: "A"

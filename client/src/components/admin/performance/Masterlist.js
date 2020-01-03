@@ -99,17 +99,15 @@ class Masterlist extends React.Component {
 
       let excludedDates = this.props.nocall.dates.map(date => date.date);
       let gc = arrayDiff(datesInMonth, excludedDates).length * 15;
-
-      console.log(excludedDates);
       await this.props.updateAllMasterlistGoalScore(gc, month);
 
       return this.setState({ goalScore: gc });
     }
   };
   render() {
-    console.log(this.state);
     return (
       <div>
+        <h5 className="green-text center">No Calls</h5>
         <form>
           <Select
             onChange={e => this.onChange(e)}
@@ -314,11 +312,11 @@ class Masterlist extends React.Component {
               style={{ width: "100%", marginBottom: "5px" }}
             >
               <i className="material-icons left">add</i>
-              Add
+              Exclude
             </button>
           </div>
         </form>
-        <table className="col s12">
+        <table className="col s12 centered">
           <thead>
             <tr>
               <th>Date</th>

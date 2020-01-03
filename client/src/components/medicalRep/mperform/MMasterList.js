@@ -12,6 +12,7 @@ import {
   addMasterlist,
   getMonthMasterlist
 } from "../../../actions/masterlist";
+import history from "../../../history";
 
 class MMasterList extends React.Component {
   state = {
@@ -63,15 +64,14 @@ class MMasterList extends React.Component {
   renderButton = () => {
     if (this.props.masterlist === null) {
       return (
-        <Link
+        <button
           onClick={() => this.onClick()}
           style={{ width: "100%" }}
           className="green darken-3 waves-effect waves-light btn btn-large"
           disabled={this.state.addButtonDisabled}
-          to="/medrep/perform/masterlist/add"
         >
           <i className="material-icons left">add</i>Add
-        </Link>
+        </button>
       );
     }
 
@@ -89,8 +89,13 @@ class MMasterList extends React.Component {
     }
   };
 
-  onClick = () => {
-    this.props.addMasterlist(this.props.user._id, moment().format("MMMM YYYY"));
+  onClick = async () => {
+    await this.props.addMasterlist(
+      this.props.user._id,
+      moment().format("MMMM YYYY")
+    );
+    await this.props.getMonthMasterlist(moment().format("MMMM YYYY"));
+    history.push("/medrep/perform/masterlist/add");
   };
 
   onChange = async e => {

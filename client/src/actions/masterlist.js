@@ -25,8 +25,31 @@ import {
 } from "./types";
 import setAlert from "./alert";
 import { loadAggregateDoctors } from "./doctors";
+import history from "../history";
 
 import myServer from "../apis/myServer";
+
+export const setDcrToNoCover = reason => async (dispatch, getState) => {
+  let config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+
+  let body = JSON.stringify({ reason });
+  try {
+    let res = await myServer.put(
+      `/api/dcr/nocover/add/${getState().masterlist.activeDcr._id}`,
+      body,
+      config
+    );
+    history.push("/medrep/perform/dcr");
+    dispatch({ type: ACTIVE_DCR_SET, payload: res.data });
+  } catch (err) {
+    console.error(err);
+    dispatch(setAlert("SET TO NO COVER FAILED", "deep-orange accent-1"));
+  }
+};
 
 export const updateVisited = (dcrDoctorId, visited, doctorId) => async (
   dispatch,
@@ -354,7 +377,6 @@ export const getCurrentMasterlist = id => async (dispatch, getState) => {
       dispatch(getDoctorDetails(doctor.doctor));
     });
     await dispatch(fetchAllDcrsInMasterlist());
-    dispatch(updateCurrentScore());
   } catch (err) {
     dispatch({ type: NO_CURRENT_ML });
   }
@@ -381,7 +403,6 @@ export const getMonthMasterlist = month => async (dispatch, getState) => {
       dispatch(getDoctorDetails(doctor.doctor));
     });
     await dispatch(fetchAllDcrsInMasterlist());
-    dispatch(updateCurrentScore());
   } catch (err) {
     dispatch({ type: NO_CURRENT_ML });
   }

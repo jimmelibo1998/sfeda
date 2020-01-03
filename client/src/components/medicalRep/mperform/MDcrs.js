@@ -7,18 +7,24 @@ import {
   addDoctorToDcr,
   removeDoctorFromDcr,
   updateVisited,
-  updateTotalVisitsPoints
+  updateTotalVisitsPoints,
+  setDcrToNoCover
 } from "../../../actions/masterlist";
-
+import history from "../../../history";
+import moment from "moment";
 class MDcrs extends React.Component {
   state = {
     lastname: "",
     firstname: "",
-    email: ""
+    email: "",
+    noCoverReason: ""
   };
 
   componentDidMount() {
     this.props.updateTotalVisitsPoints();
+    if (this.props.activeDcr.noCover === true) {
+      history.push("/medrep/perform/dcr");
+    }
   }
 
   componentWillUnmount() {
@@ -53,6 +59,7 @@ class MDcrs extends React.Component {
       contact: this.state.email
     };
     await this.props.addDoctorToDcr(dcrDoctor);
+    this.setState({ lastname: "", firstname: "", email: "" });
   };
 
   onChange = e => {
@@ -88,10 +95,13 @@ class MDcrs extends React.Component {
   };
 
   renderDcrDoctors = () => {
+    let num = 0;
     return this.props.dcrDoctors.map(doctor => {
+      num += 1;
       const id = uuid.v4();
       return (
         <tr key={id}>
+          <td>{num}</td>
           <td>{doctor.lastName}</td>
           <td>{doctor.firstName}</td>
           <td>{doctor.classCode}</td>
@@ -111,19 +121,25 @@ class MDcrs extends React.Component {
                 }}
                 type="checkbox"
                 checked={doctor.visited}
+                disabled={
+                  new Date(this.props.activeDcr.date) >
+                  new Date(moment().format("YYYY-MM-DD"))
+                    ? "disabled"
+                    : ""
+                }
               />
               <span>Yes</span>
             </label>
           </td>
           <td>
             <button
-              onClick={() =>
-                this.props.removeDoctorFromDcr(
+              onClick={async () => {
+                await this.props.removeDoctorFromDcr(
                   doctor._id,
                   doctor.inMasterlist,
                   doctor.doctorId
-                )
-              }
+                );
+              }}
               className="red darken-4 waves-effect waves-light btn btn-small"
             >
               <i className="material-icons">cancel</i>
@@ -226,6 +242,9 @@ class MDcrs extends React.Component {
                       Close
                     </Button>,
                     <Button
+                      onClick={() =>
+                        this.props.setDcrToNoCover(this.state.noCoverReason)
+                      }
                       className="red-text"
                       flat
                       modal="close"
@@ -264,8 +283,10 @@ class MDcrs extends React.Component {
                 >
                   <div className="input-field">
                     <textarea
+                      onChange={e => this.onChange(e)}
+                      value={this.state.noCoverReason}
                       style={{ height: "100%" }}
-                      id="textarea1"
+                      id="noCoverReason"
                       className="materialize-textarea browser-default"
                     ></textarea>
                   </div>
@@ -277,6 +298,7 @@ class MDcrs extends React.Component {
             <table>
               <thead>
                 <tr>
+                  <th>#</th>
                   <th>Last Name</th>
                   <th>First Name</th>
                   <th>Class Code</th>
@@ -317,5 +339,6 @@ export default connect(mapStateToProps, {
   addDoctorToDcr,
   removeDoctorFromDcr,
   updateVisited,
-  updateTotalVisitsPoints
+  updateTotalVisitsPoints,
+  setDcrToNoCover
 })(MDcrs);

@@ -13,8 +13,10 @@ import {
   getMasterlistDoctors,
   removeDoctorFromML,
   sendMasterlist,
-  clearMasterlist
+  clearMasterlist,
+  getMonthMasterlist
 } from "../../../actions/masterlist";
+import moment from "moment";
 
 import history from "../../../history";
 
@@ -306,5 +308,6 @@ export default connect(mapStateToProps, {
   removeDoctorFromML,
   sendMasterlist,
   clearMasterlist,
-  clearDoctors
+  clearDoctors,
+  getMonthMasterlist
 })(AddMasterList);

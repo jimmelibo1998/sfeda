@@ -13,6 +13,7 @@ const MdCalls = require("../../models/MdCalls");
 const MdCallsScore = require("../../models/MdCallsScore");
 const DoctorAccount = require("../../models/DoctorAccount");
 const RegularCustomer = require("../../models/RegularCustomer");
+const MedRepAccount = require("../../models/MedRepAccount");
 
 //@route POST /api/dcr/:masterlist/:date
 //@desc  Create DCR
@@ -43,7 +44,11 @@ router.post("/:masterlist/:date", auth, async (req, res) => {
     if (dcr)
       return res.status(400).json({ errors: [{ msg: "Already have a dcr" }] });
 
-    dcr = new DCR({ masterlist: req.params.masterlist, date: date });
+    dcr = new DCR({
+      masterlist: req.params.masterlist,
+      date: date,
+      medrep: masterlist.medrep
+    });
     await dcr.save();
     res.json(dcr);
   } catch (err) {
@@ -288,6 +293,70 @@ router.get("/doctors/:dcrId", auth, async (req, res) => {
     if (!doctors) res.send("No Doctors in DCR");
 
     res.json(doctors);
+  } catch (err) {
+    console.error(err.message);
+    res.send("Server Error");
+  }
+});
+
+//@route PUT /api/dcr/nocover/add/:dcrId
+//@desc  Set noCover = true of DCR
+//@access Private
+router.put("/nocover/add/:dcrId", auth, async (req, res) => {
+  let validId = mongoose.Types.ObjectId.isValid(req.params.dcrId);
+  if (validId === false)
+    return res.status(400).json({ errors: [{ msg: "ObjectId Invalid" }] });
+
+  try {
+    let dcr = await DCR.findById(req.params.dcrId);
+    if (!dcr)
+      return res.status(404).json({ errors: [{ msg: "DCR no found" }] });
+
+    dcr.noCover = true;
+    dcr.reason = req.body.reason ? req.body.reason : "";
+    dcr.ack = false;
+    await dcr.save();
+    res.json(dcr);
+  } catch (err) {
+    console.error(err.message);
+    res.send("Server Error");
+  }
+});
+
+//@route GET /api/dcr/nocover/fetch
+//@desc  Fetch All No Covers
+//@access Private
+router.get("/nocover/fetch", auth, async (req, res) => {
+  try {
+    let dcrs = await DCR.find({ noCover: true, ack: false });
+    console.log(dcrs);
+    res.json(dcrs);
+  } catch (err) {
+    console.error(err.message);
+    res.send("Server Error");
+  }
+});
+
+//@route GET /api/dcr/nocover/medrep/:masterlistId
+//@desc  Get medrep data for no covers using masterlistId
+//@access Private
+router.get("/nocover/medrep/:masterlistId", auth, async (req, res) => {
+  const validId = mongoose.Types.ObjectId.isValid(req.params.masterlistId);
+  if (validId === false)
+    return res.status(400).json({ errors: [{ msg: "ObjectId Invalid" }] });
+
+  try {
+    let masterlist = await MasterList.findById(req.params.masterlistId);
+    if (!masterlist)
+      return res
+        .status(404)
+        .json({ errors: [{ msg: "masterlist not found" }] });
+
+    let medrep = await MedRepAccount.findById(masterlist.medrep);
+    if (!medrep)
+      return res.status(404).json({ errors: [{ msg: "Medrep not found" }] });
+
+    res.json(medrep);
   } catch (err) {
     console.error(err.message);
     res.send("Server Error");

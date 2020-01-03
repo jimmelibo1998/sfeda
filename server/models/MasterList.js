@@ -37,6 +37,10 @@ module.exports = Masterlist = mongoose.model(
     sent: {
       type: Boolean,
       default: false
+    },
+    additionalScore: {
+      type: Number,
+      default: 0
     }
   })
 );

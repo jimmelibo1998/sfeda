@@ -15,6 +15,7 @@ class Performance extends React.Component {
             onClick={() => this.setState({ page: "masterlist" })}
             className="waves-effect waves-light btn btn-large perf-btn teal"
             style={{ width: "100%", marginBottom: "5px" }}
+            disabled={this.state.page === "masterlist" ? true : false}
           >
             Masterlist
           </button>
@@ -24,6 +25,7 @@ class Performance extends React.Component {
             onClick={() => this.setState({ page: "dcr" })}
             className="waves-effect waves-light btn btn-large perf-btn light-green darken-1"
             style={{ width: "100%", marginBottom: "5px" }}
+            disabled={this.state.page === "dcr" ? true : false}
           >
             DCR
           </button>
