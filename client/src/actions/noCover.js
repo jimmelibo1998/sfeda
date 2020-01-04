@@ -1,6 +1,39 @@
-import { NOCOVERS_LOADED, MEDREP_DETAILS_FETCHED } from "./types";
+import {
+  NOCOVERS_LOADED,
+  MEDREP_DETAILS_FETCHED,
+  NOCOVER_UPDATED
+} from "./types";
+
+import { updateCurrentScoreWithId } from "./masterlist";
 import myServer from "../apis/myServer";
 import setAlert from "./alert";
+
+export const respondToNoCover = (
+  dcrId,
+  masterlistId,
+  accepted
+) => async dispatch => {
+  let config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+
+  let body = JSON.stringify({ accepted });
+
+  try {
+    await myServer.put(
+      `/api/dcr/nocover/respond/${dcrId}/${masterlistId}`,
+      body,
+      config
+    );
+    await dispatch({ type: NOCOVER_UPDATED });
+    dispatch(updateCurrentScoreWithId(masterlistId));
+  } catch (err) {
+    console.log(err);
+    dispatch(setAlert("DCR not updated", "deep-orange accent-1"));
+  }
+};
 
 export const loadNoCovers = () => async (dispatch, getState) => {
   try {

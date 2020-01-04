@@ -512,14 +512,4 @@ router.put(`/currentscore/:masterlistId`, auth, async (req, res) => {
   }
 });
 
-//7
-//@route PUT /api/masterlist/callfreq/:masterlistId
-//@desc  Update Call Freq
-//@access Private
-
-//9
-//@route PUT /api/masterlist/callReach/:masterlistId
-//@desc  Update Call Reach
-//@access Private
-
 module.exports = router;

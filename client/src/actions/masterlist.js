@@ -97,6 +97,18 @@ export const updateCurrentScore = () => async (dispatch, getState) => {
   }
 };
 
+export const updateCurrentScoreWithId = masterlistId => async dispatch => {
+  try {
+    let res = await myServer.put(
+      `/api/masterlist/currentscore/${masterlistId}`
+    );
+    dispatch({ type: CURRENT_SCORE_UPDATED, payload: res.data });
+  } catch (err) {
+    console.error(err);
+    dispatch(setAlert("Current Score not Updated", "deep-orange accent-1"));
+  }
+};
+
 export const updateMasterlistDoctor = (doctorId, visited) => async (
   dispatch,
   getState

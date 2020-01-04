@@ -1,4 +1,8 @@
-import { NOCOVERS_LOADED, MEDREP_DETAILS_FETCHED } from "../actions/types";
+import {
+  NOCOVERS_LOADED,
+  MEDREP_DETAILS_FETCHED,
+  NOCOVER_UPDATED
+} from "../actions/types";
 
 let initialState = {
   dcrs: [],
@@ -22,6 +26,7 @@ export default function(state = initialState, action) {
           );
         })
       };
+    case NOCOVER_UPDATED:
     default:
       return state;
   }

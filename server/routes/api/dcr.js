@@ -363,4 +363,47 @@ router.get("/nocover/medrep/:masterlistId", auth, async (req, res) => {
   }
 });
 
+//@route PUT /api/dcr/nocover/respond/:dcrId/:masterlistId
+//@desc  Set accept = true/false ,ack = true and additionalScore(masterlist) += 15 [accepted = true/false]
+//@access Private
+router.put(
+  "/nocover/respond/:dcrId/:masterlistId",
+  [auth, check("accepted", "accepted is required").isBoolean()],
+  async (req, res) => {
+    let errors = validationResult(req);
+    if (!errors.isEmpty())
+      return res.status(400).json({ errors: errors.array() });
+    let validDcr = mongoose.Types.ObjectId.isValid(req.params.dcrId);
+    let validMasterlist = mongoose.Types.ObjectId.isValid(
+      req.params.masterlistId
+    );
+    if (validDcr === false || validMasterlist === false)
+      return res.status(400).json({ errors: [{ msg: "Invalid Object Id33" }] });
+    try {
+      let dcr = await DCR.findById(req.params.dcrId);
+      if (!dcr)
+        return res.status(404).json({ errors: [{ msg: "DCR not found" }] });
+
+      dcr.accepted = req.body.accepted;
+      dcr.ack = true;
+
+      let masterlist = await MasterList.findById(req.params.masterlistId);
+      if (!masterlist)
+        return res
+          .status(404)
+          .json({ errors: [{ msg: "Masterlist not found" }] });
+
+      let additional = req.body.accepted === true ? 15 : 0;
+      masterlist.additionalScore += additional;
+
+      await masterlist.save();
+      await dcr.save();
+      res.send("No cover accepted");
+    } catch (err) {
+      console.error(err.message);
+      res.send("Server Error");
+    }
+  }
+);
+
 module.exports = router;

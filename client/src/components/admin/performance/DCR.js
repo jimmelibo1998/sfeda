@@ -1,12 +1,17 @@
 import React from "react";
 import { Modal, Button } from "react-materialize";
-import { loadNoCovers } from "../../../actions/noCover";
+import { loadNoCovers, respondToNoCover } from "../../../actions/noCover";
 import { connect } from "react-redux";
 
 class DCR extends React.Component {
   componentDidMount() {
     this.props.loadNoCovers();
   }
+
+  respondToNoCoverReq = async (dcr, masterlist, accepted) => {
+    await this.props.respondToNoCover(dcr, masterlist, accepted);
+    await this.props.loadNoCovers();
+  };
 
   renderNoCovers = () => {
     return this.props.dcrs.map(dcr => {
@@ -23,6 +28,9 @@ class DCR extends React.Component {
             <Modal
               actions={[
                 <Button
+                  onClick={() =>
+                    this.respondToNoCoverReq(dcr._id, dcr.masterlist, true)
+                  }
                   className="green-text"
                   flat
                   modal="close"
@@ -68,6 +76,9 @@ class DCR extends React.Component {
             <Modal
               actions={[
                 <Button
+                  onClick={() =>
+                    this.respondToNoCoverReq(dcr._id, dcr.masterlist, false)
+                  }
                   className="red-text"
                   flat
                   modal="close"
@@ -142,4 +153,6 @@ const mapStateToProps = state => ({
   dcrs: state.noCovers.dcrs,
   medreps: state.noCovers.medreps
 });
-export default connect(mapStateToProps, { loadNoCovers })(DCR);
+export default connect(mapStateToProps, { loadNoCovers, respondToNoCover })(
+  DCR
+);
