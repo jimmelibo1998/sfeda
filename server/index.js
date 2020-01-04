@@ -27,6 +27,7 @@ app.use("/api/mdcalls", require("./routes/api/mdcalls"));
 app.use("/api/announcements", require("./routes/api/announcements"));
 app.use("/api/auth", require("./routes/api/authentication"));
 app.use("/api/profiles", require("./routes/api/profiles"));
+app.use("/api/reports", require("./routes/api/reports"));
 
 const PORT = process.env.PORT || 5000;
 

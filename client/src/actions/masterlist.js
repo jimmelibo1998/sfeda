@@ -356,7 +356,8 @@ export const addDoctorToML = (masterlistId, doctorId, classCode) => async (
   }
 };
 
-export const addMasterlist = (medrep, date) => async dispatch => {
+export const addMasterlist = (medrep, date) => async (dispatch, getState) => {
+  let area = getState().auth.user.area;
   const config = {
     headers: {
       "Content-Type": "application/json"
@@ -366,7 +367,11 @@ export const addMasterlist = (medrep, date) => async dispatch => {
   const body = JSON.stringify({ date });
 
   try {
-    let res = await myServer.post(`/api/masterlist/${medrep}`, body, config);
+    let res = await myServer.post(
+      `/api/masterlist/${medrep}/${area}`,
+      body,
+      config
+    );
     dispatch({ type: MASTERLIST_ADDED, payload: res.data });
     dispatch(setAlert("Masterlist Added!", "green"));
   } catch (err) {

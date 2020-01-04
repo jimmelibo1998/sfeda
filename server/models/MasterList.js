@@ -10,9 +10,17 @@ module.exports = Masterlist = mongoose.model(
       type: mongoose.Schema.Types.ObjectId,
       ref: "medrep"
     },
+    area: {
+      type: String,
+      required: true
+    },
     month: {
       type: String,
       required: true
+    },
+    year: {
+      type: Number,
+      default: new Date().getFullYear()
     },
     callFreq: {
       type: Number,

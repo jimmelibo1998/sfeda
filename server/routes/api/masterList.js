@@ -21,7 +21,7 @@ const arrayDiff = require("../../functions/arrayDiff");
 //@desc  Add MasterList
 //@access Private
 router.post(
-  "/:medrep",
+  "/:medrep/:area",
   [auth, [check("date", "Date is required").exists()]],
   async (req, res) => {
     let d = new Date();
@@ -72,7 +72,8 @@ router.post(
       masterlist = new MasterList({
         medrep: req.params.medrep,
         month: monthYear,
-        goalScore
+        goalScore,
+        area: req.params.area
       });
 
       await masterlist.save();
