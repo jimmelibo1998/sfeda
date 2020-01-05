@@ -1,12 +1,10 @@
 const express = require("express");
 const connectDB = require("./config/db");
-const moment = require("moment");
 const cors = require("cors");
 
 const app = express();
 const bodyParser = require("body-parser");
 
-console.log(moment("2012-12-11").format("YYYY-MM-DD"));
 //Connect to database
 connectDB();
 

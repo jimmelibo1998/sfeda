@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { fetchActiveMedrep } from "../../../actions/reports";
+import history from "../../../history";
 
 class MedRepsTable extends Component {
   renderMedreps = () => {
@@ -11,14 +13,20 @@ class MedRepsTable extends Component {
         <td>{medrep.email}</td>
         <td>{medrep.area}</td>
         <td>
-          <Link to="/admin/medrep/profile" className="btn blue darken-4">
+          <button
+            onClick={async () => {
+              await this.props.fetchActiveMedrep(medrep._id);
+              history.push("/admin/medrep/profile");
+            }}
+            className="btn blue darken-4"
+          >
             VIEW
-          </Link>
+          </button>
         </td>
         <td>
-          <Link to="/admin/medrep/profile" className="btn yellow darken-1">
+          <button to="/admin/medrep/profile" className="btn yellow darken-1">
             Edit
-          </Link>
+          </button>
         </td>
       </tr>
     ));
@@ -51,14 +59,15 @@ class MedRepsTable extends Component {
           </tbody>
           <tfoot>
             <tr>
-              <td colSpan="5">
-                <Link
+              <td colSpan="6">
+                <button
+                  style={{ marginRight: "20px" }}
                   to="/admin/medrep/new"
-                  className="waves-effect waves-light btn btn-large perf-btn green darken-1"
+                  className="waves-effect waves-light btn btn-large perf-btn green darken-1 right"
                 >
                   <i className="material-icons left">person_add</i>
                   Add New
-                </Link>
+                </button>
               </td>
             </tr>
           </tfoot>
@@ -72,4 +81,4 @@ const mapStateToProps = state => ({
   medreps: state.medrep
 });
 
-export default connect(mapStateToProps)(MedRepsTable);
+export default connect(mapStateToProps, { fetchActiveMedrep })(MedRepsTable);

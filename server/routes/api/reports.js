@@ -56,7 +56,13 @@ router.get("/average/:area/:month", auth, async (req, res) => {
       month: req.params.month,
       area: req.params.area
     });
-    console.log(masterlists);
+    if (!masterlists) {
+      return res.json({
+        avgCallRate: 0,
+        avgCallFreq: 0,
+        avgCallReach: 0
+      });
+    }
     let data = {
       callRate: [],
       callFreq: [],
@@ -67,18 +73,6 @@ router.get("/average/:area/:month", auth, async (req, res) => {
       data.callFreq.push(masterlist.callFreq);
       data.callReach.push(masterlist.callReach);
     });
-
-    let noCalls = await NoCallDays.findOne({ month: req.params.month });
-    if (!noCalls)
-      return res.status(404).json({ errors: [{ msg: "no calls found" }] });
-    let nocallArr = await noCalls.dates.map(date => date.date);
-    let numOfDays = arrayDiff(
-      nocallArr,
-      getAllDatesInMonth(
-        new Date(req.params.month).getMonth(),
-        new Date(req.params.month).getFullYear()
-      )
-    ).length;
 
     let medreps = await MedRepAccount.find({
       area: req.params.area
@@ -110,20 +104,55 @@ router.get("/average/:area/:month", auth, async (req, res) => {
   }
 });
 
-router.get("/medreps/:area/:month/:year", auth, async (req, res) => {
-  let medreps = await MedRepAccount.find({ area: req.params.area });
-  let masterlisting = [];
-  medreps.map(async medrep => {
-    let data = [];
-    let masterlist = await MasterList.find({
-      medrep: req.params.medrep._id,
-      month: req.params.month + " " + req.params.year
+//@route GET /api/reports/medrep/:id
+//@desc  Fetch Active Medrep
+//@access Private
+router.get("/medrep/:id", auth, async (req, res) => {
+  let valid = mongoose.Types.ObjectId.isValid(req.params.id);
+  if (valid === false)
+    return res.status(400).json({ errors: [{ msg: "ObjectId Invalid" }] });
+
+  try {
+    let medrep = await MedRepAccount.findById(req.params.id);
+    if (!medrep)
+      return res.status(404).json({ errors: [{ msg: "Medrep not found" }] });
+
+    res.json(medrep);
+  } catch (err) {
+    console.error(err);
+    res.send("Server Error");
+  }
+});
+
+//@route GET /api/reports/medrep/perf/:medrepId/:month
+//@desc  Fetch Active Medrep's Performance (callREach, callFreq, callRate)
+//@access Private
+router.get("/medrep/perf/:medrepId/:month", auth, async (req, res) => {
+  let valid = mongoose.Types.ObjectId.isValid(req.params.medrepId);
+  if (valid === false)
+    return res.status(400).json({ errors: [{ msg: "ObjectId Invalid" }] });
+
+  try {
+    let medrep = await MedRepAccount.findById(req.params.medrepId);
+    if (!medrep)
+      return res.status(404).json({ errors: [{ msg: "Medrep not found" }] });
+
+    let masterlist = await MasterList.findOne({
+      medrep: req.params.medrepId,
+      month: req.params.month
     });
-    await masterlist.map(masterlist => {
-      data.push(masterlist);
-    });
-    masterlisting.push(data);
-  });
+
+    let response = {
+      callRate: masterlist ? masterlist.callRate : 0,
+      callFreq: masterlist ? masterlist.callFreq : 0,
+      callReach: masterlist ? masterlist.callReach : 0
+    };
+
+    res.json(response);
+  } catch (err) {
+    console.error(err);
+    res.send("Server Error");
+  }
 });
 
 module.exports = router;
