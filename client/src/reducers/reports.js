@@ -6,7 +6,10 @@ import {
   ACTIVE_MEDREP_CLEARED,
   ACTIVE_MEDREP_PERF_FETCHED,
   PERF_CLEARED,
-  REGIONAL_CLEARED
+  REGIONAL_CLEARED,
+  REPORTS_MASTERLIST_FETCHED,
+  REPORTS_DCR_FETCHED,
+  CLEAR_MD_CALLS
 } from "../actions/types";
 
 let initialState = {
@@ -28,7 +31,7 @@ let initialState = {
       callReach: []
     },
     mdCalls: {
-      masterlist: {},
+      masterlist: null,
       dcrs: []
     }
   }
@@ -91,6 +94,31 @@ export default function(state = initialState, action) {
         ...state,
         activeMedrep: { ...state.activeMedrep, userDetails: payload }
       };
+    case REPORTS_MASTERLIST_FETCHED:
+      return {
+        ...state,
+        activeMedrep: {
+          ...state.activeMedrep,
+          mdCalls: { ...state.activeMedrep.mdCalls, masterlist: payload }
+        }
+      };
+
+    case REPORTS_DCR_FETCHED:
+      return {
+        ...state,
+        activeMedrep: {
+          ...state.activeMedrep,
+          mdCalls: { ...state.activeMedrep.mdCalls, dcrs: payload }
+        }
+      };
+    case CLEAR_MD_CALLS:
+      return {
+        ...state,
+        activeMedrep: {
+          ...state.activeMedrep,
+          mdCalls: { ...state.activeMedrep.mdCalls, dcrs: [], masterlist: null }
+        }
+      };
     case REPORTS_CLEARED:
       return {
         ...state,
@@ -129,7 +157,7 @@ export default function(state = initialState, action) {
             callReach: []
           },
           mdCalls: {
-            masterlist: {},
+            masterlist: null,
             dcrs: []
           }
         }

@@ -9,12 +9,25 @@ import MdCalls from "../medreps/MdCalls";
 
 class ViewProfile extends React.Component {
   state = {
+    page: "performance",
     year: moment().format("YYYY")
   };
 
   componentWillUnmount() {
     this.props.clearActiveMedrep();
   }
+
+  onClick = e => {
+    this.setState({ page: e.target.id });
+  };
+
+  renderComponent = () => {
+    return this.state.page === "performance" ? (
+      <MedRepPerfChart />
+    ) : (
+      <MdCalls />
+    );
+  };
   render() {
     return (
       <div>
@@ -31,22 +44,28 @@ class ViewProfile extends React.Component {
             <div className="row" style={{ marginTop: "10px" }}>
               <div className="col s12 m6">
                 <button
+                  onClick={e => this.onClick(e)}
+                  id="performance"
                   className="waves-effect waves-light btn btn-large green darken 3"
                   style={{ width: "100%" }}
+                  disabled={this.state.page === "performance" ? "disabled" : ""}
                 >
                   Performance
                 </button>
               </div>
               <div className="col s12 m6">
                 <button
+                  onClick={e => this.onClick(e)}
+                  id="mdcalls"
                   className="waves-effect waves-light btn btn-large yellow darken-3"
                   style={{ width: "100%" }}
+                  disabled={this.state.page === "performance" ? "" : "disabled"}
                 >
                   MD Calls
                 </button>
               </div>
             </div>
-            <MedRepPerfChart />
+            {this.renderComponent()}
           </div>
         </div>
       </div>

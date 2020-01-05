@@ -6,11 +6,50 @@ import {
   ACTIVE_MEDREP_CLEARED,
   ACTIVE_MEDREP_PERF_FETCHED,
   PERF_CLEARED,
-  REGIONAL_CLEARED
+  REGIONAL_CLEARED,
+  REPORTS_MASTERLIST_FETCHED,
+  REPORTS_DCR_FETCHED,
+  CLEAR_MD_CALLS
 } from "./types";
 import myServer from "../apis/myServer";
 import setAlert from "./alert";
 import { months } from "../functions/getMonths";
+
+export const fetchDCRS = masterlistId => async dispatch => {
+  try {
+    let res = await myServer.get(
+      `/api/reports/medrep/mdcalls/dcrs/${masterlistId}`
+    );
+    dispatch({ type: REPORTS_DCR_FETCHED, payload: res.data });
+  } catch (err) {
+    console.error(err);
+    dispatch(setAlert("DCRS not fetched", "deep-orange accent-1"));
+  }
+};
+
+export const fetchMasterlist = month => async (dispatch, getState) => {
+  let medrep = getState().reports.activeMedrep.userDetails._id;
+  try {
+    await dispatch({ type: CLEAR_MD_CALLS });
+    let res = await myServer.get(
+      `/api/reports/medrep/mdcalls/masterlist/${medrep}/${month}`
+    );
+    await dispatch({
+      type: REPORTS_MASTERLIST_FETCHED,
+      payload: res.data === false ? null : res.data
+    });
+    if (res.data !== false) {
+      dispatch(
+        fetchDCRS(getState().reports.activeMedrep.mdCalls.masterlist._id)
+      );
+    }
+  } catch (err) {
+    console.error(err);
+    dispatch(
+      setAlert("Masterlist not fetched for reports", "deep-orange accent-1")
+    );
+  }
+};
 export const fetchMedrepPerf = (year, medrepId) => async dispatch => {
   console.log(year + " " + medrepId);
   try {

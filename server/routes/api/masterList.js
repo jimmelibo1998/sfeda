@@ -273,7 +273,7 @@ router.get("/doctors/:masterlist", auth, async (req, res) => {
   try {
     let masterlistdoctors = await MasterListDoctor.find({
       masterlist: req.params.masterlist
-    });
+    }).sort({ classCode: 1 });
     if (!masterlistdoctors)
       return res
         .status(400)

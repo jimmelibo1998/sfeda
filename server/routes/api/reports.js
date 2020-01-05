@@ -155,4 +155,47 @@ router.get("/medrep/perf/:medrepId/:month", auth, async (req, res) => {
   }
 });
 
+//@route GET /api/reports/medrep/mdcalls/masterlist/:medrep/:month
+//@desc  Fetch masterlist
+//@access Private
+router.get(
+  "/medrep/mdcalls/masterlist/:medrep/:month",
+  auth,
+  async (req, res) => {
+    let validId = mongoose.Types.ObjectId.isValid(req.params.medrep);
+    if (validId === false)
+      return res.status(400).json({ errors: [{ msg: "ObjectId Invalid" }] });
+    try {
+      let masterlist = await MasterList.findOne({
+        medrep: req.params.medrep,
+        month: req.params.month
+      });
+      if (!masterlist) return res.send(false);
+
+      res.json(masterlist);
+    } catch (err) {
+      console.error(err.message);
+      res.send("Server Error");
+    }
+  }
+);
+
+//@route GET /api/reports/medrep/mdcalls/dcrs/:masterlist
+//@desc  Fetch masterlist
+//@access Private
+router.get("/medrep/mdcalls/dcrs/:masterlist", auth, async (req, res) => {
+  let validId = mongoose.Types.ObjectId.isValid(req.params.masterlist);
+  if (validId === false)
+    return res.status(400).json({ errors: [{ msg: "ObjectId Invalid" }] });
+
+  try {
+    let dcrs = await DCR.find({ masterlist: req.params.masterlist }).sort({
+      date: 1
+    });
+    res.json(dcrs);
+  } catch (err) {
+    console.error(err.message);
+    res.send("Server Error");
+  }
+});
 module.exports = router;
