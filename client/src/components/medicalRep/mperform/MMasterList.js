@@ -110,21 +110,11 @@ class MMasterList extends React.Component {
         <h3 className="light-green-text text-darken-3 center">Master List</h3>
         <div className="row">
           <div className="col s12">
-            <div className="col s12 m6">
-              <button
-                style={{ width: "100%" }}
-                className="waves-effect waves-light btn btn-large"
-                disabled={this.state.currentButtonDisabled}
-              >
-                <i className="material-icons left">list</i>Current
-              </button>
-            </div>
-
-            <div className="col s12 m6">{this.renderButton()}</div>
+            <div className="col s12">{this.renderButton()}</div>
           </div>
           <Select
             s={12}
-            m={4}
+            m={6}
             id="month"
             onChange={e => this.onChange(e)}
             value={this.state.month}
@@ -163,7 +153,7 @@ class MMasterList extends React.Component {
 
           <Select
             s={12}
-            m={4}
+            m={6}
             id="year"
             onChange={e => this.onChange(e)}
             value={this.state.year}
@@ -205,36 +195,6 @@ class MMasterList extends React.Component {
             <option value="2004">2004</option>
             <option value="2003">2003</option>
             <option value="2002">2002</option>
-          </Select>
-          <Select
-            s={12}
-            m={4}
-            id="classCode"
-            onChange={e => this.onChange(e)}
-            value={this.state.classCode}
-            options={{
-              classes: "",
-              dropdownOptions: {
-                alignment: "left",
-                autoTrigger: true,
-                closeOnClick: true,
-                constrainWidth: true,
-                container: null,
-                coverTrigger: true,
-                hover: false,
-                inDuration: 150,
-                onCloseEnd: null,
-                onCloseStart: null,
-                onOpenEnd: null,
-                onOpenStart: null,
-                outDuration: 250
-              }
-            }}
-          >
-            <option value="All">All</option>
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="C">C</option>
           </Select>
           <div className="col s12">
             <div className="row">

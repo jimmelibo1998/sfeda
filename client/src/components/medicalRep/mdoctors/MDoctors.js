@@ -1,11 +1,17 @@
 import React from "react";
+import history from "../../../history";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { fetchAllDoctors, clearDoctors } from "../../../actions/doctors";
+import {
+  loadCurrentDoctor,
+  clearCurrentDoctor
+} from "../../../actions/currentDoctor";
 import { Autocomplete, Select } from "react-materialize";
 
 class MDoctors extends React.Component {
   async componentDidMount() {
+    await this.props.clearCurrentDoctor();
     await this.props.fetchAllDoctors();
   }
 
@@ -26,12 +32,15 @@ class MDoctors extends React.Component {
           <td>{doctor.area}</td>
           <td>{doctor.email}</td>
           <td>
-            <Link
-              to="/medrep/doctors/new"
+            <button
+              onClick={async () => {
+                await this.props.loadCurrentDoctor(doctor._id);
+                history.push("/medrep/doctors/new");
+              }}
               className="waves-effect waves-light btn yellow darken-3"
             >
               <i className="material-icons left">edit</i>Edit
-            </Link>
+            </button>
           </td>
         </tr>
       ));
@@ -44,64 +53,18 @@ class MDoctors extends React.Component {
         <h3 className="flow-text light-green-text text-darken-3 center">
           Doctors
         </h3>
+
         <div className="row">
-          <Autocomplete
-            s={12}
-            m={4}
-            options={{
-              data: {
-                "Gus Fring": null,
-                "Saul Goodman": null,
-                "Tuco Salamanca": "https://placehold.it/250x250"
-              }
-            }}
-            placeholder="Search Names"
-          />
-          <Autocomplete
-            s={12}
-            m={4}
-            options={{
-              data: {
-                "Gus Fring": null,
-                "Saul Goodman": null,
-                "Tuco Salamanca": "https://placehold.it/250x250"
-              }
-            }}
-            placeholder="Search Email"
-          />
-          <Select
-            s={12}
-            m={4}
-            onChange={function noRefCheck() {}}
-            options={{
-              classes: "",
-              dropdownOptions: {
-                alignment: "left",
-                autoTrigger: true,
-                closeOnClick: true,
-                constrainWidth: true,
-                container: null,
-                coverTrigger: true,
-                hover: false,
-                inDuration: 150,
-                onCloseEnd: null,
-                onCloseStart: null,
-                onOpenEnd: null,
-                onOpenStart: null,
-                outDuration: 250
-              }
-            }}
-            value=""
-          >
-            <option disabled value="">
-              Class Code
-            </option>
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="C">C</option>
-          </Select>
-        </div>
-        <div className="row">
+          <div className="col s12">
+            <Link
+              style={{ width: "100%" }}
+              to="/medrep/doctors/new"
+              className="btn btn-large right green"
+            >
+              <i className="material-icons left">add</i>
+              ADD NEW
+            </Link>
+          </div>
           <div className="col s12">
             <table className="responsive-table">
               <thead>
@@ -127,15 +90,6 @@ class MDoctors extends React.Component {
                   </tr>
                 )}
               </tbody>
-              <tfoot>
-                <tr>
-                  <td colSpan="7">
-                    <Link to="/medrep/doctors/new" className="btn right green">
-                      Add New
-                    </Link>
-                  </td>
-                </tr>
-              </tfoot>
             </table>
           </div>
         </div>
@@ -148,6 +102,9 @@ const mapStateToProps = state => ({
   doctors: state.doctors
 });
 
-export default connect(mapStateToProps, { fetchAllDoctors, clearDoctors })(
-  MDoctors
-);
+export default connect(mapStateToProps, {
+  fetchAllDoctors,
+  clearDoctors,
+  loadCurrentDoctor,
+  clearCurrentDoctor
+})(MDoctors);

@@ -2,6 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Select } from "react-materialize";
 import { connect } from "react-redux";
+import {
+  clearCurrentDoctor,
+  updateCurrentDoctor
+} from "../../../actions/currentDoctor";
 import { addDoctor } from "../../../actions/doctors";
 
 class NewDoctor extends React.Component {
@@ -15,9 +19,56 @@ class NewDoctor extends React.Component {
     email: ""
   };
 
+  async componentDidMount() {
+    if (this.props.currentDoctor !== null) {
+      await this.setState({
+        lastname: this.props.currentDoctor.lastName,
+        firstname: this.props.currentDoctor.firstName,
+        classcode: this.props.currentDoctor.classCode,
+        area: this.props.currentDoctor.area,
+        specializationcode: this.props.currentDoctor.specialityCode,
+        institution: this.props.currentDoctor.institution,
+        email: this.props.currentDoctor.email
+      });
+    }
+  }
+
+  componentWillUnmount() {
+    this.props.clearCurrentDoctor();
+  }
+
   onChange = e => {
     this.setState({
       [e.target.name]: e.target.value
+    });
+  };
+
+  updateDoctor = async () => {
+    const {
+      lastname,
+      firstname,
+      classcode,
+      area,
+      specializationcode,
+      institution
+    } = this.state;
+    await this.props.updateCurrentDoctor(
+      this.props.currentDoctor._id,
+      lastname,
+      firstname,
+      specializationcode,
+      classcode,
+      area,
+      institution
+    );
+    this.setState({
+      lastname: this.props.currentDoctor.lastName,
+      firstname: this.props.currentDoctor.firstName,
+      classcode: this.props.currentDoctor.classCode,
+      area: this.props.currentDoctor.area,
+      specializationcode: this.props.currentDoctor.specialityCode,
+      institution: this.props.currentDoctor.institution,
+      email: this.props.currentDoctor.email
     });
   };
 
@@ -139,6 +190,7 @@ class NewDoctor extends React.Component {
                       outDuration: 250
                     }
                   }}
+                  disabled={this.props.currentDoctor === null ? "true" : ""}
                 >
                   <option value="NORTH LUZON">NORTH LUZON</option>
                   <option value="NORTH GMA">NORTH GMA</option>
@@ -179,6 +231,7 @@ class NewDoctor extends React.Component {
                     name="email"
                     className="validate"
                     placeholder="Email"
+                    disabled="true"
                   />
                 </div>
               </div>
@@ -187,11 +240,19 @@ class NewDoctor extends React.Component {
               <div className="row">
                 <div className="col s12 m6">
                   <button
-                    type="submit"
-                    className="waves-effect waves-light btn btn-large green darken-3"
+                    onClick={e => {
+                      if (this.props.currentDoctor !== null) {
+                        this.updateDoctor();
+                      } else {
+                        this.onSubmit();
+                      }
+                    }}
+                    className={`waves-effect waves-light btn btn-large ${
+                      this.props.currentDoctor !== null ? "yellow" : "green"
+                    } darken-3`}
                     style={{ width: "100%" }}
                   >
-                    Create Account
+                    {this.props.currentDoctor !== null ? "Edit" : "Create"}
                   </button>
                 </div>
                 <div className="col s12 m6">
@@ -213,7 +274,12 @@ class NewDoctor extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  user: state.auth.user
+  user: state.auth.user,
+  currentDoctor: state.currentDoctor
 });
 
-export default connect(mapStateToProps, { addDoctor })(NewDoctor);
+export default connect(mapStateToProps, {
+  addDoctor,
+  clearCurrentDoctor,
+  updateCurrentDoctor
+})(NewDoctor);

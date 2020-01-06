@@ -5,7 +5,8 @@ import {
   getCurrentMasterlist,
   addDcr,
   clearMasterlist,
-  fetchDCR
+  fetchDCR,
+  getMonthMasterlist
 } from "../../../actions/masterlist";
 import { fetchMasterlistCall } from "../../../actions/noCalls";
 import moment from "moment";
@@ -25,11 +26,12 @@ class MDcrsList extends React.Component {
       this.props.fetchMasterlistCall(this.props.masterlist.month);
   }
 
-  onChange = e => {
-    this.setState({
+  onChange = async e => {
+    await this.setState({
       [e.target.name]: e.target.value,
       date: moment().format("YYYY-MM-DD")
     });
+    this.props.getMonthMasterlist(this.state.month + " " + this.state.year);
   };
 
   onChangeDate = e => {
@@ -323,5 +325,6 @@ export default connect(mapStateToProps, {
   fetchMasterlistCall,
   addDcr,
   clearMasterlist,
-  fetchDCR
+  fetchDCR,
+  getMonthMasterlist
 })(MDcrsList);

@@ -73,9 +73,10 @@ export const addDoctor = (
   }
 };
 
-export const fetchAllDoctors = () => async dispatch => {
+export const fetchAllDoctors = () => async (dispatch, getState) => {
+  let area = getState().auth.user.area;
   try {
-    let res = await myServer.get("/api/doctors");
+    let res = await myServer.get(`/api/doctors/${area}`);
     dispatch({ type: DOCTORS_LOADED, payload: res.data });
   } catch (err) {
     console.log(err);

@@ -442,7 +442,7 @@ export const getMasterlistDoctors = () => async (dispatch, getState) => {
 
 export const getDoctorDetails = doctorId => async dispatch => {
   try {
-    let res = await myServer.get(`/api/doctors/${doctorId}`);
+    let res = await myServer.get(`/api/doctors/current/${doctorId}`);
     dispatch({ type: DOCTOR_DETAILS_FETCHED, payload: res.data });
   } catch (err) {
     console.log(err);

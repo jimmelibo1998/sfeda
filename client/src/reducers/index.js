@@ -7,6 +7,7 @@ import medrep from "./medreps";
 import nocall from "./noCalls";
 import noCovers from "./noCover";
 import reports from "./reports";
+import currentDoctor from "./currentDoctor";
 
 export default combineReducers({
   auth,
@@ -16,5 +17,6 @@ export default combineReducers({
   medrep,
   nocall,
   noCovers,
-  reports
+  reports,
+  currentDoctor
 });
