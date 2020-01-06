@@ -40,15 +40,15 @@ export const login = (email, password) => async dispatch => {
 
   try {
     const res = await myServer.post("/api/auth", body, config);
-    dispatch({
+    await dispatch({
       type: LOGIN_SUCCESS,
       payload: res.data
     });
-    dispatch(setAlert("Log In is Successful", "green"));
-    dispatch(loadUser());
+    await dispatch(setAlert("Log In is Successful", "green"));
+    await dispatch(loadUser());
   } catch (err) {
     console.error(err.message);
-    dispatch({ type: LOGIN_FAILED });
+    await dispatch({ type: LOGIN_FAILED });
     dispatch(setAlert("Invalid Credentials", "deep-orange accent-1"));
   }
 };

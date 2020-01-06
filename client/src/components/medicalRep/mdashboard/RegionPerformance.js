@@ -2,10 +2,12 @@ import React from "react";
 import { Line } from "react-chartjs-2";
 import { connect } from "react-redux";
 import { getRegional } from "../../../actions/reports";
+import { loadUser } from "../../../actions/auth";
 import moment from "moment";
 
 class RegionPerformance extends React.Component {
-  componentDidMount() {
+  async componentDidMount() {
+    await this.props.loadUser();
     this.props.getRegional(this.props.user.area, moment().format("YYYY"));
   }
   render() {
@@ -86,4 +88,6 @@ const mapStateToProps = state => ({
   regional: state.reports.regional
 });
 
-export default connect(mapStateToProps, { getRegional })(RegionPerformance);
+export default connect(mapStateToProps, { getRegional, loadUser })(
+  RegionPerformance
+);

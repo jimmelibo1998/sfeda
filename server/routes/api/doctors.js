@@ -11,7 +11,9 @@ const DoctorAccount = require("../../models/DoctorAccount");
 //@access Private
 router.get("/", auth, async (req, res) => {
   try {
-    let doctors = await DoctorAccount.find().select("-password");
+    let doctors = await DoctorAccount.find()
+      .select("-password")
+      .sort({ classCode: 1 });
     if (!doctors)
       return res.status(400).json({ errors: [{ msg: "No Doctor found" }] });
 
