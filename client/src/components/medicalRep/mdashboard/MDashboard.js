@@ -7,7 +7,6 @@ class MDashboard extends React.Component {
     return (
       <div className="row">
         <div className="col s12">
-          <RegionMedRepPerf />
           <RegionPerformance />
         </div>
       </div>
