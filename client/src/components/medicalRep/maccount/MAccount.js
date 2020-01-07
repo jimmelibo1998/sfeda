@@ -1,101 +1,34 @@
 import React, { Fragment } from "react";
-import ProPic from "./profile.jpg";
+import { connect } from "react-redux";
+import { changePassword } from "../../../actions/medrep";
 
 class MAccount extends React.Component {
+  state = {
+    old: "",
+    pass1: "",
+    pass2: ""
+  };
+
+  onChange = e => {
+    this.setState({ [e.target.id]: e.target.value });
+  };
+
   render() {
     return (
       <Fragment>
         <div>
-          <div className="card-panel  green" style={{ textAlign: "center" }}>
-            <img
-              src={ProPic}
-              alt="ProPic"
-              className="circle"
-              style={{ width: "200px" }}
-            />
-            <p>
-              <button className="waves-effect waves-light btn green darken-4">
-                Change Picture
-              </button>
-            </p>
-
-            <h5 className="white-text">Jimmel Ibo</h5>
-            <h6 className="white-text">jimmel.ibo1998@yahoo.com</h6>
-          </div>
-
           <div className="card-panel">
             <div className="row">
-              <h6 className="blue-text darken-3">Profile</h6>
-              <div className="col s12 m6">
-                <div className="input-field">
-                  <input id="last_name" type="text" className="validate" />
-                  <label htmlFor="last_name">Last Name</label>
-                </div>
-                <br />
-                <div className="input-field">
-                  <input id="first_name" type="text" className="validate" />
-                  <label htmlFor="first_name">First Name</label>
-                </div>
-                <br />
-                <div className="input-field">
-                  <input id="phone" type="text" className="validate" />
-                  <label htmlFor="phone">Phone Number</label>
-                </div>
-                <br />
-                <button className="waves-effect waves-light btn">
-                  <i className="material-icons left">edit</i>Edit
-                </button>{" "}
-                <button className="green waves-effect waves-light btn">
-                  <i className="material-icons left">check</i>Save
-                </button>
-                {"  "}
-                <button className="red waves-effect waves-light btn">
-                  <i className="material-icons left">cancel</i>Cancel
-                </button>
-              </div>
-              <div className="col s12 m6">
-                <div className="input-field">
-                  <input id="area" type="text" className="validate" />
-                  <label htmlFor="area">Area</label>
-                </div>
-                <br />
-                <div className="input-field">
-                  <input id="addresss" type="text" className="validate" />
-                  <label htmlFor="address">Address</label>
-                </div>
-              </div>
-            </div>
-            <div className="divider"></div>
-            <div className="row">
-              <h6 className="blue-text darken-3">Account</h6>
-              <div className="col s12 m6">
-                <div className="input-field">
-                  <input id="current_email" type="text" className="validate" />
-                  <label htmlFor="current_email">Current Email</label>
-                </div>
-                <br />
-                <div className="input-field">
-                  <input id="new_email" type="text" className="validate" />
-                  <label htmlFor="new_email">New Email</label>
-                </div>
-                <br />
-                <button className="waves-effect waves-light btn">
-                  <i className="material-icons left">edit</i>Edit
-                </button>{" "}
-                <button className="green waves-effect waves-light btn">
-                  <i className="material-icons left">check</i>Save
-                </button>
-                {"  "}
-                <button className="red waves-effect waves-light btn">
-                  <i className="material-icons left">cancel</i>Cancel
-                </button>
-              </div>
-              <div className="col s12 m6">
+              <div className="col s12 m6 offset-m3">
+                <h6 className="blue-text darken-3 center">Password</h6>
                 <div className="input-field">
                   <input
-                    id="current_pass"
+                    onChange={e => this.onChange(e)}
+                    value={this.state.old}
+                    id="old"
                     type="password"
                     className="validate"
+                    required
                   />
                   <label htmlFor="current_pass">Current Password</label>
                 </div>
@@ -104,9 +37,12 @@ class MAccount extends React.Component {
                   <div className="col s12 m6">
                     <div className="input-field">
                       <input
-                        id="new_pass"
+                        onChange={e => this.onChange(e)}
+                        value={this.state.pass1}
+                        id="pass1"
                         type="password"
                         className="validate"
+                        required
                       />
                       <label htmlFor="new_pass">New Password</label>
                     </div>
@@ -114,24 +50,43 @@ class MAccount extends React.Component {
                   <div className="col s12 m6">
                     <div className="input-field">
                       <input
-                        id="confirm_pass"
+                        onChange={e => this.onChange(e)}
+                        value={this.state.pass2}
+                        id="pass2"
                         type="password"
                         className="validate"
+                        required
                       />
                       <label htmlFor="confirm_pass">Confirm Password</label>
                     </div>
                   </div>
                 </div>
-                <button className="waves-effect waves-light btn">
-                  <i className="material-icons left">edit</i>Edit
-                </button>{" "}
-                <button className="green waves-effect waves-light btn">
-                  <i className="material-icons left">check</i>Save
-                </button>
-                {"  "}
-                <button className="red waves-effect waves-light btn">
-                  <i className="material-icons left">cancel</i>Cancel
-                </button>
+                <div className="row">
+                  <div className="col s12 m6">
+                    <button
+                      style={{ width: "100%" }}
+                      className="waves-effect waves-light btn btn-large teal darken-3"
+                    >
+                      <i className="material-icons left">arrow_left</i>Back
+                    </button>
+                  </div>
+                  <div className="col s12 m6">
+                    <button
+                      onClick={async () => {
+                        await this.props.changePassword(
+                          this.state.old,
+                          this.state.pass1,
+                          this.state.pass2
+                        );
+                        this.setState({ old: "", pass1: "", pass2: "" });
+                      }}
+                      style={{ width: "100%" }}
+                      className="waves-effect waves-light btn btn-large green"
+                    >
+                      <i className="material-icons left">check</i>Save
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -141,4 +96,4 @@ class MAccount extends React.Component {
   }
 }
 
-export default MAccount;
+export default connect(null, { changePassword })(MAccount);

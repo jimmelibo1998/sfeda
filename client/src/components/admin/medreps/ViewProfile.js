@@ -35,8 +35,18 @@ class ViewProfile extends React.Component {
         <div className="row">
           <div className="col s12 m12 green darken-3">
             <div style={{ textAlign: "center" }}>
-              <h3 className="white-text">Valleryn Patosa</h3>
-              <p className="white-text">valeryn.patosa@prebiotech.com</p>
+              <h3 className="white-text">
+                {this.props.activeMedrep.userDetails !== null
+                  ? this.props.activeMedrep.userDetails.firstName +
+                    " " +
+                    this.props.activeMedrep.userDetails.lastName
+                  : ""}
+              </h3>
+              <p className="white-text">
+                {this.props.activeMedrep.userDetails !== null
+                  ? this.props.activeMedrep.userDetails.email
+                  : ""}
+              </p>
             </div>
             <div className="divider"></div>
           </div>

@@ -25,13 +25,14 @@ const SideNavs = ({ logout, role, user }) => {
                 <img src="./img/cover.jpg" alt="sidenav-cover" />
               </div>
               <Link to="/admin/profile">
-                <img className="circle" src="./img/profile.jpg" alt="profile" />
+                <span style={{ fontSize: "20px" }} className="white-text name">
+                  {displayUserName()}
+                </span>
               </Link>
               <Link to="/admin/profile">
-                <span className="white-text name">{displayUserName()}</span>
-              </Link>
-              <Link to="/admin/profile">
-                <span className="white-text email">{displayEmail()}</span>
+                <span style={{ fontSize: "20px" }} className="white-text email">
+                  {displayEmail()}
+                </span>
               </Link>
             </div>
           </li>
@@ -112,15 +113,6 @@ const SideNavs = ({ logout, role, user }) => {
           <li>
             <Link to="/admin/medrep" className="light-green-text text-darken-3">
               <i className="small material-icons left">people</i>Med Rep
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/admin/announcements"
-              className="light-green-text text-darken-3"
-            >
-              <i className="small material-icons left">announcement</i>
-              Announcements
             </Link>
           </li>
           <li>

@@ -9,11 +9,34 @@ import {
   REGIONAL_CLEARED,
   REPORTS_MASTERLIST_FETCHED,
   REPORTS_DCR_FETCHED,
-  CLEAR_MD_CALLS
+  CLEAR_MD_CALLS,
+  ACTIVE_MEDREP_UPDATED
 } from "./types";
 import myServer from "../apis/myServer";
 import setAlert from "./alert";
 import { months } from "../functions/getMonths";
+
+export const updateActiveMedrep = (firstName, lastName, area, email) => async (
+  dispatch,
+  getState
+) => {
+  let medrepId = getState().reports.activeMedrep.userDetails._id;
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+
+  const body = JSON.stringify({ firstName, lastName, area, email });
+  try {
+    let res = await myServer.put(`/api/medreps/info/${medrepId}`, body, config);
+    await dispatch({ type: ACTIVE_MEDREP_UPDATED, payload: res.data });
+    dispatch(setAlert("Medrep updated", "green"));
+  } catch (err) {
+    console.log(err);
+    dispatch(setAlert("Medrep not updated", "deep-orange accent-1"));
+  }
+};
 
 export const fetchDCRS = masterlistId => async dispatch => {
   try {

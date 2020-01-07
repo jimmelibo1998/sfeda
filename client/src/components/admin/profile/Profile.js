@@ -1,32 +1,14 @@
 import React, { Component, Fragment } from "react";
-import ProPic from "./profile.jpg";
 
 class Profile extends Component {
   render() {
     return (
       <Fragment>
         <div>
-          <div className="card-panel  green" style={{ textAlign: "center" }}>
-            <img
-              src={ProPic}
-              alt="ProPic"
-              className="circle"
-              style={{ width: "200px" }}
-            />
-            <p>
-              <button className="waves-effect waves-light btn green darken-4">
-                Change Picture
-              </button>
-            </p>
-
-            <h5 className="white-text">Jimmel Ibo</h5>
-            <h6 className="white-text">jimmel.ibo1998@yahoo.com</h6>
-          </div>
-
           <div className="card-panel">
             <div className="row">
-              <h6 className="blue-text darken-3">Profile</h6>
               <div className="col s12 m6">
+                <h6 className="blue-text darken-3">Profile</h6>
                 <div className="input-field">
                   <input id="last_name" type="text" className="validate" />
                   <label htmlFor="last_name">Last Name</label>
@@ -38,8 +20,8 @@ class Profile extends Component {
                 </div>
                 <br />
                 <div className="input-field">
-                  <input id="phone" type="text" className="validate" />
-                  <label htmlFor="phone">Phone Number</label>
+                  <input id="role" type="text" className="validate" />
+                  <label htmlFor="role">Role</label>
                 </div>
                 <br />
                 <button className="waves-effect waves-light btn">
@@ -54,21 +36,7 @@ class Profile extends Component {
                 </button>
               </div>
               <div className="col s12 m6">
-                <div className="input-field">
-                  <input id="role" type="text" className="validate" />
-                  <label htmlFor="role">Role</label>
-                </div>
-                <br />
-                <div className="input-field">
-                  <input id="position" type="text" className="validate" />
-                  <label htmlFor="position">Position</label>
-                </div>
-              </div>
-            </div>
-            <div className="divider"></div>
-            <div className="row">
-              <h6 className="blue-text darken-3">Account</h6>
-              <div className="col s12 m6">
+                <h6 className="blue-text darken-3">Email</h6>
                 <div className="input-field">
                   <input id="current_email" type="text" className="validate" />
                   <label htmlFor="current_email">Current Email</label>
@@ -90,7 +58,11 @@ class Profile extends Component {
                   <i className="material-icons left">cancel</i>Cancel
                 </button>
               </div>
+            </div>
+            <div className="divider"></div>
+            <div className="row">
               <div className="col s12 m6">
+                <h6 className="blue-text darken-3">Password</h6>
                 <div className="input-field">
                   <input
                     id="current_pass"

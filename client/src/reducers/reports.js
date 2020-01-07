@@ -9,7 +9,8 @@ import {
   REGIONAL_CLEARED,
   REPORTS_MASTERLIST_FETCHED,
   REPORTS_DCR_FETCHED,
-  CLEAR_MD_CALLS
+  CLEAR_MD_CALLS,
+  ACTIVE_MEDREP_UPDATED
 } from "../actions/types";
 
 let initialState = {
@@ -24,7 +25,7 @@ let initialState = {
     callReach: []
   },
   activeMedrep: {
-    userDetails: {},
+    userDetails: null,
     performance: {
       callRate: [],
       callFreq: [],
@@ -89,6 +90,7 @@ export default function(state = initialState, action) {
           }
         }
       };
+    case ACTIVE_MEDREP_UPDATED:
     case ACTIVE_MEDREP_FETCHED:
       return {
         ...state,
@@ -150,7 +152,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         activeMedrep: {
-          userDetails: {},
+          userDetails: null,
           performance: {
             callRate: [],
             callFreq: [],

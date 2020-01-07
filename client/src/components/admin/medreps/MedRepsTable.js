@@ -24,7 +24,13 @@ class MedRepsTable extends Component {
           </button>
         </td>
         <td>
-          <button to="/admin/medrep/profile" className="btn yellow darken-1">
+          <button
+            onClick={async () => {
+              await this.props.fetchActiveMedrep(medrep._id);
+              history.push("/admin/medrep/new");
+            }}
+            className="btn yellow darken-1"
+          >
             Edit
           </button>
         </td>

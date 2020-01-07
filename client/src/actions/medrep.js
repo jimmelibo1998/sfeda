@@ -8,6 +8,30 @@ import {
 import myServer from "../apis/myServer";
 import setAlert from "./alert";
 
+export const changePassword = (old, pass1, pass2) => async (
+  dispatch,
+  getState
+) => {
+  let id = getState().auth.user._id;
+  let config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+
+  let body = JSON.stringify({ old, pass1, pass2 });
+  try {
+    let res = await myServer.put(`/api/medreps/password/${id}`, body, config);
+    dispatch(
+      setAlert(
+        res.data.msg,
+        `${res.data.msg === "Password Changed" ? "green" : "yellow"} darken-2`
+      )
+    );
+  } catch (err) {
+    console.log(err);
+  }
+};
 export const addMedrep = (
   firstName,
   lastName,
