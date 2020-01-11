@@ -21,6 +21,10 @@ module.exports = Announcement = mongoose.model(
     desc: {
       type: String,
       required: true
+    },
+    postponed: {
+      type: Boolean,
+      default: false
     }
   })
 );
