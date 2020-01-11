@@ -6,9 +6,13 @@ import { loadUser } from "../../../actions/auth";
 import moment from "moment";
 
 class RegionPerformance extends React.Component {
+  state = {
+    area: ""
+  };
   async componentDidMount() {
     await this.props.loadUser();
-    this.props.getRegional(this.props.user.area, moment().format("YYYY"));
+    await this.props.getRegional(this.props.user.area, moment().format("YYYY"));
+    this.setState({ area: this.props.user.area });
   }
   render() {
     return (
@@ -62,7 +66,7 @@ class RegionPerformance extends React.Component {
             options={{
               title: {
                 display: true,
-                text: "North Luzon",
+                text: this.state.area,
                 fontSize: 25
               },
               layout: {

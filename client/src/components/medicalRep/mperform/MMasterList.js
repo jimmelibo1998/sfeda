@@ -100,8 +100,18 @@ class MMasterList extends React.Component {
 
   onChange = async e => {
     await this.setState({ [e.target.id]: e.target.value });
-    console.log(this.state);
-    this.props.getMonthMasterlist(this.state.month + " " + this.state.year);
+    if (
+      this.state.month + " " + this.state.year !==
+      moment().format("MMMM YYYY")
+    ) {
+      await this.setState({ addButtonDisabled: true });
+    } else {
+      await this.setState({ addButtonDisabled: false });
+    }
+    await this.props.clearMasterlist();
+    await this.props.getMonthMasterlist(
+      this.state.month + " " + this.state.year
+    );
   };
 
   render() {

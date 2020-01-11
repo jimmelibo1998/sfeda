@@ -7,6 +7,20 @@ import setAlert from "./alert";
 import myServer from "../apis/myServer";
 import moment from "moment";
 
+export const fetchAnnouncementsByArea = area => async dispatch => {
+  try {
+    let res = await myServer.get(`/api/announcements/area/${area}`);
+    let payload = res.data.filter(
+      ann =>
+        new Date(moment(ann.end).format("YYYY-MM-DD")) >=
+        new Date(moment().format("YYYY-MM-DD"))
+    );
+    dispatch({ type: ANNOUNCEMENTS_FETCHED, payload: payload });
+  } catch (er) {
+    console.log(er);
+    dispatch(setAlert("Announements not fetched", "deep-orange accent-1"));
+  }
+};
 export const postponeAnnouncement = id => async dispatch => {
   try {
     let res = await myServer.put(`/api/announcements/${id}`);
@@ -21,7 +35,9 @@ export const fetchAnnouncements = () => async dispatch => {
   try {
     let res = await myServer.get("/api/announcements");
     let payload = res.data.filter(
-      ann => ann.end >= moment().format("YYYY-MM-DD")
+      ann =>
+        new Date(moment(ann.end).format("YYYY-MM-DD")) >=
+        new Date(moment().format("YYYY-MM-DD"))
     );
     dispatch({
       type: ANNOUNCEMENTS_FETCHED,

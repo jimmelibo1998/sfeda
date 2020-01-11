@@ -65,11 +65,7 @@ export const updateVisited = (dcrDoctorId, visited, doctorId) => async (
 
   console.log(visited);
   try {
-    let res = await myServer.put(
-      `/api/dcr/doctors/visited/${dcrDoctorId}`,
-      body,
-      config
-    );
+    await myServer.put(`/api/dcr/doctors/visited/${dcrDoctorId}`, body, config);
     await dispatch(fetchDcrDoctors(getState().masterlist.activeDcr._id));
     await dispatch(updateTotalVisitsPoints());
     if (doctorId) {

@@ -5,8 +5,7 @@ import {
   NO_CALLS_FETCH_FAILED,
   EXCLUDED_DATE_REMOVED,
   REMOVE_DATE_FAILED,
-  NO_CALL_CLEARED,
-  ALREADY_EXCLUDED
+  NO_CALL_CLEARED
 } from "../actions/types";
 import myServer from "../apis/myServer";
 import setAlert from "./alert";

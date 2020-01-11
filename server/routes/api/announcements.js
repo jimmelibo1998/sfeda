@@ -9,6 +9,22 @@ const mongoose = require("mongoose");
 const Announcement = require("../../models/Announcement");
 const MedRepAccount = require("../../models/MedRepAccount");
 
+//@route GET/api/announcements/area/:area
+//@desc  FETCH ANNOUNCEMENTS BY ID
+//@access Private
+router.get("/area/:area", async (req, res) => {
+  try {
+    let announcements = await Announcement.find({
+      $or: [{ area: "All" }, { area: req.params.area }],
+      postponed: false
+    });
+    res.json(announcements);
+  } catch (err) {
+    console.error(err.message);
+    res.send("Server Error");
+  }
+});
+
 //@route PUT /api/announcements
 //@desc  Postpone announcement
 //@access Private

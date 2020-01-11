@@ -16,7 +16,6 @@ import {
   clearMasterlist,
   getMonthMasterlist
 } from "../../../actions/masterlist";
-import moment from "moment";
 
 import history from "../../../history";
 

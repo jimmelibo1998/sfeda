@@ -1,60 +1,62 @@
 import React from "react";
+import { connect } from "react-redux";
+import { fetchAnnouncementsByArea } from "../../../actions/announcements";
+import { loadUser } from "../../../actions/auth";
+import moment from "moment";
 
 class Announcements extends React.Component {
+  async componentDidMount() {
+    await this.props.loadUser();
+    this.props.fetchAnnouncementsByArea(this.props.user.area);
+  }
+  renderAnnouncements = () => {
+    return this.props.announcements.map(ann => {
+      return (
+        <div className="col s12 m4" key={ann._id}>
+          <div
+            style={{
+              minHeight: "250px",
+              maxHeight: "250px",
+              overflow: "auto"
+            }}
+            className="card-panel"
+          >
+            <h4 className="green-text">{ann.title}</h4>
+            <p>
+              <span className="light-green-text">
+                {moment(ann.start).format("MMMM Do YYYY")}
+              </span>{" "}
+              -{" "}
+              <span className="light-green-text">
+                {moment(ann.end).format("MMMM Do YYYY")}
+              </span>
+            </p>
+            <p>{ann.desc}</p>
+          </div>
+        </div>
+      );
+    });
+  };
   render() {
     return (
       <div className="row">
         <div className="col s12">
-          <h5 className="center green-text text-darken-3">Announcements</h5>
-          <div className="divider"></div>
-        </div>
-        <div className="col s12">
-          <div className="card blue-grey darken-1">
-            <div className="card-content white-text">
-              <span className="card-title">Meeting</span>
-              <p>
-                I am a very simple card. I am good at containing small bits of
-                information. I am convenient because I require little markup to
-                use effectively.
-              </p>
-            </div>
-          </div>
-        </div>
+          <div
+            className="card-panel teal lighten-3"
+            style={{ maxHeight: "500px", overflow: "auto" }}
+          >
+            {this.props.announcements.length > 0 ? (
+              <h5 className="white-text">Announcements</h5>
+            ) : (
+              ""
+            )}
 
-        <div className="col s12">
-          <div className="card blue-grey darken-1">
-            <div className="card-content white-text">
-              <span className="card-title">Holiday</span>
-              <p>
-                I am a very simple card. I am good at containing small bits of
-                information. I am convenient because I require little markup to
-                use effectively.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="col s12">
-          <div className="card blue-grey darken-1">
-            <div className="card-content white-text">
-              <span className="card-title">Short on Stock</span>
-              <p>
-                I am a very simple card. I am good at containing small bits of
-                information. I am convenient because I require little markup to
-                use effectively.
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="col s12">
-          <div className="card blue-grey darken-1">
-            <div className="card-content white-text">
-              <span className="card-title">Urgent Visit</span>
-              <p>
-                I am a very simple card. I am good at containing small bits of
-                information. I am convenient because I require little markup to
-                use effectively.
-              </p>
+            <div className="row">
+              {this.props.announcements.length > 0 ? (
+                this.renderAnnouncements()
+              ) : (
+                <h5 className="center white-text">No Announcements</h5>
+              )}
             </div>
           </div>
         </div>
@@ -62,5 +64,11 @@ class Announcements extends React.Component {
     );
   }
 }
+const mapStateToProps = state => ({
+  user: state.auth.user,
+  announcements: state.announcement.anns
+});
 
-export default Announcements;
+export default connect(mapStateToProps, { fetchAnnouncementsByArea, loadUser })(
+  Announcements
+);

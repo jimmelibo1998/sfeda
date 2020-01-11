@@ -7,7 +7,6 @@ import {
   loadCurrentDoctor,
   clearCurrentDoctor
 } from "../../../actions/currentDoctor";
-import { Autocomplete, Select } from "react-materialize";
 
 class MDoctors extends React.Component {
   async componentDidMount() {

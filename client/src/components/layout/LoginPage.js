@@ -2,7 +2,7 @@ import React, { Fragment, useState } from "react";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { login, loadUser } from "../../actions/auth";
-const LoginPage = ({ login, role, isAuthenticated, alerts }) => {
+const LoginPage = ({ login, role, isAuthenticated, alerts, loadUser }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: ""
@@ -16,7 +16,9 @@ const LoginPage = ({ login, role, isAuthenticated, alerts }) => {
 
   const onSubmit = async e => {
     e.preventDefault();
-    login(email, password);
+    await login(email, password);
+    await loadUser();
+
     setFormData({ email: "", password: "" });
     console.clear();
   };

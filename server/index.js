@@ -4,10 +4,14 @@ const cors = require("cors");
 
 const app = express();
 const bodyParser = require("body-parser");
+var schedule = require("node-schedule");
 
 //Connect to database
 connectDB();
 
+// var j = schedule.scheduleJob("1 * * * * *", function() {
+//   console.log("The answer to life, the universe, and everything!");
+// });
 //body parser
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

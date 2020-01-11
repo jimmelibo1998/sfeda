@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { Select } from "react-materialize";
+import React from "react";
 import { connect } from "react-redux";
 import moment from "moment";
 import { clearActiveMedrep, fetchMedrepPerf } from "../../../actions/reports";
