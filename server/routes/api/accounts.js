@@ -241,4 +241,95 @@ router.post(
   }
 );
 
+//@route PUT /api/accounts/admin/password/:admin
+//@desc  Change Password of Admin
+//@access Private
+router.put(
+  "/admin/password/:admin",
+  [
+    auth,
+    [
+      check("old", "old password is required").exists(),
+      check(
+        "pass1",
+        "First Password is required and must be atleast 6 characters long"
+      ).isLength({
+        min: 6
+      }),
+      check("pass2", "Second Password is required").exists()
+    ]
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty())
+      return res.status(400).json({ errors: errors.array() });
+    let validId = mongoose.Types.ObjectId.isValid(req.params.admin);
+    if (validId === false)
+      return res.status(400).json({ errors: [{ msg: "ObjectId Invalid" }] });
+    try {
+      let admin = await AdminAccount.findById(req.params.admin);
+      if (!admin)
+        return res.status(404).json({ errors: [{ msg: "Admin not found" }] });
+
+      let isMatch = await bcrypt.compare(req.body.old, admin.password);
+      if (!isMatch) return res.json({ msg: "Old password is incorrect" });
+
+      let same = req.body.pass1 === req.body.pass2 ? true : false;
+      if (same === false)
+        return res.json({
+          msg: "Please make sure that new password are the same"
+        });
+
+      const salt = await bcrypt.genSalt(10);
+      admin.password = await bcrypt.hash(req.body.pass1, salt);
+
+      await admin.save();
+      res.json({ msg: "Password Changed" });
+    } catch (err) {
+      res.send(err.message);
+      console.log("Server Error");
+    }
+  }
+);
+
+//@route PUT /api/accounts/admin/info/:admin
+//@desc  Change info of Admin
+//@access Private
+router.put(
+  "/admin/info/:admin",
+  [
+    auth,
+    [
+      check("firstName", "FirstName is required").exists(),
+      check("lastName", "LastName is required").exists(),
+      check("email", "Please enter a valid email").exists()
+    ]
+  ],
+  async (req, res) => {
+    let errors = validationResult(req);
+    if (!errors.isEmpty())
+      return res.status(400).json({ errors: errors.array() });
+    let validId = mongoose.Types.ObjectId.isValid(req.params.admin);
+    if (validId === false)
+      return res.status(400).json({ errors: [{ msg: "OjectId Invalid" }] });
+
+    const { firstName, lastName, email } = req.body;
+    try {
+      let admin = await AdminAccount.findById(req.params.admin);
+      if (!admin)
+        return res.status(404).json({ errors: [{ msg: "Admin not found" }] });
+
+      admin.firstName = firstName;
+      admin.lastName = lastName;
+      admin.email = email;
+
+      await admin.save();
+      res.json(admin);
+    } catch (err) {
+      console.error(err.message);
+      res.send("Server Error");
+    }
+  }
+);
+
 module.exports = router;

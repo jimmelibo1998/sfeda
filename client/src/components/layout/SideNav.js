@@ -95,9 +95,6 @@ const SideNavs = ({ logout, role, user }) => {
                 <img src="./img/cover.jpg" alt="sidenav-cover" />
               </div>
               <Link to="/admin/profile">
-                <img className="circle" src="./img/profile.jpg" alt="profile" />
-              </Link>
-              <Link to="/admin/profile">
                 <span className="white-text name">{displayUserName()}</span>
               </Link>
               <Link to="/admin/profile">
@@ -126,11 +123,11 @@ const SideNavs = ({ logout, role, user }) => {
           </li>
           <li>
             <Link
-              to="/admin/manageadmin"
+              to="/admin/announcements"
               className="light-green-text text-darken-3"
             >
-              <i className="small material-icons left">people_outline</i>
-              Manage Admin
+              <i className="small material-icons left">announcements</i>
+              Announcements
             </Link>
           </li>
           <li className="divider"></li>

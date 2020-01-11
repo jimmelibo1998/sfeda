@@ -8,6 +8,7 @@ import nocall from "./noCalls";
 import noCovers from "./noCover";
 import reports from "./reports";
 import currentDoctor from "./currentDoctor";
+import announcement from "./announcements";
 
 export default combineReducers({
   auth,
@@ -18,5 +19,6 @@ export default combineReducers({
   nocall,
   noCovers,
   reports,
-  currentDoctor
+  currentDoctor,
+  announcement
 });

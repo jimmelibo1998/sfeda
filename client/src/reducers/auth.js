@@ -3,7 +3,8 @@ import {
   LOGIN_FAILED,
   USER_LOADED,
   AUTH_ERROR,
-  LOG_OUT
+  LOG_OUT,
+  ADMIN_ACCOUNT_UPDATED
 } from "../actions/types";
 import jwtDecode from "jwt-decode";
 
@@ -23,6 +24,8 @@ export default function(state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
+    case ADMIN_ACCOUNT_UPDATED:
+      return { ...state, user: payload };
     case USER_LOADED:
       return { ...state, isAuthenticated: true, loading: false, user: payload };
     case LOGIN_SUCCESS:

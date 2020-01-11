@@ -141,7 +141,15 @@ class DCR extends React.Component {
 
             <tbody>
               {" "}
-              {this.props.dcrs.length > 0 ? this.renderNoCovers() : ""}
+              {this.props.dcrs.length > 0 ? (
+                this.renderNoCovers()
+              ) : (
+                <tr>
+                  <td colSpan="5">
+                    <p className="center grey-text">No Calls</p>
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

@@ -66,14 +66,14 @@ class MedRepsTable extends Component {
           <tfoot>
             <tr>
               <td colSpan="6">
-                <button
+                <Link
                   style={{ marginRight: "20px" }}
                   to="/admin/medrep/new"
                   className="waves-effect waves-light btn btn-large perf-btn green darken-1 right"
                 >
                   <i className="material-icons left">person_add</i>
                   Add New
-                </button>
+                </Link>
               </td>
             </tr>
           </tfoot>
