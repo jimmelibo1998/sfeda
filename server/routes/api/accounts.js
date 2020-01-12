@@ -5,6 +5,8 @@ const { check, validationResult } = require("express-validator");
 const mongoose = require("mongoose");
 
 const auth = require("../../middleware/auth");
+const nodemailer = require("nodemailer");
+const generatePassword = require("password-generator");
 
 const AdminAccount = require("../../models/AdminAccount");
 const MedRepAccount = require("../../models/MedRepAccount");
@@ -92,6 +94,7 @@ router.post(
 
     const { firstName, lastName, email, area } = req.body;
 
+    let newPass = generatePassword(15, false, /\d/, "sfeda-");
     try {
       let medrep = await MedRepAccount.findOne({ email });
       if (medrep)
@@ -103,15 +106,48 @@ router.post(
         firstName,
         lastName,
         email,
-        password: email,
+        password: newPass,
         area
       });
 
       const salt = await bcrypt.genSalt(10);
-      medrep.password = await bcrypt.hash(email, salt);
+      medrep.password = await bcrypt.hash(newPass, salt);
 
       await medrep.save();
       res.send(medrep);
+
+      const output = `
+      <h3 style="color: "red"">REGISTERED</h3>
+      <h5>Your account has been created</h5>
+      <p><b>Email:</b>${medrep.email}</p>
+      <p><b>Password:</b> ${newPass}</p>
+    `;
+      let transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 587,
+        secure: false, // true for 465, false for other ports
+        auth: {
+          user: `sfe.prebio@gmail.com`, // generated ethereal user
+          pass: `sfeprebio2020` // generated ethereal password
+        },
+        tls: {
+          rejectUnauthorized: false
+        }
+      });
+
+      let emailDetails = {
+        from: '"SFE.web 👻" <sfe.prebio@gmail.com>', // sender address
+        to: medrep.email, // list of receivers
+        subject: `REGISTERED TO SFE.web`, // Subject line
+        text: "", // plain text body
+        html: output // html body
+      };
+
+      await transporter.sendMail(emailDetails, (error, info) => {
+        if (error) {
+          return console.log(error);
+        }
+      });
     } catch (err) {
       console.error(err);
       res.send("Server Error");

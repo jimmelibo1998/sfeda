@@ -7,6 +7,28 @@ import {
 } from "./types";
 import myServer from "../apis/myServer";
 import setAlert from "./alert";
+import history from "../history";
+
+export const disableAccount = id => async dispatch => {
+  try {
+    let res = await myServer.put(`/api/medreps/disable/${id}`);
+    await dispatch(setAlert(res.data, "green"));
+    history.push("/admin/medrep");
+  } catch (err) {
+    console.log(err);
+    dispatch(setAlert("Password no reset", "deep-orange accent-1"));
+  }
+};
+
+export const resetPassword = id => async dispatch => {
+  try {
+    await myServer.put(`/api/medreps/reset/${id}`);
+    dispatch(setAlert("Password reset", "green"));
+  } catch (err) {
+    console.log(err);
+    dispatch(setAlert("Password no reset", "deep-orange accent-1"));
+  }
+};
 
 export const changePassword = (old, pass1, pass2) => async (
   dispatch,

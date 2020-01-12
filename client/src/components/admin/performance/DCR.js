@@ -140,7 +140,6 @@ class DCR extends React.Component {
             </thead>
 
             <tbody>
-              {" "}
               {this.props.dcrs.length > 0 ? (
                 this.renderNoCovers()
               ) : (

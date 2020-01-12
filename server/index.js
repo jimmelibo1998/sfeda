@@ -4,14 +4,20 @@ const cors = require("cors");
 
 const app = express();
 const bodyParser = require("body-parser");
-var schedule = require("node-schedule");
+const schedule = require("node-schedule");
+const mongoose = require("mongoose");
+const DoctorAccount = require("../server/models/DoctorAccount");
 
 //Connect to database
 connectDB();
 
-// var j = schedule.scheduleJob("1 * * * * *", function() {
-//   console.log("The answer to life, the universe, and everything!");
-// });
+schedule.scheduleJob("1 * *", async function() {
+  let doctors = await DoctorAccount.updateMany(
+    {},
+    { $set: { inMasterlist: false } }
+  );
+  console.log(doctors + "Updated to inMasterlist: false");
+});
 //body parser
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

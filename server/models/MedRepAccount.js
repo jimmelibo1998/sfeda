@@ -23,6 +23,10 @@ module.exports = MedRepAccount = mongoose.model(
       type: String,
       required: true
     },
+    active: {
+      type: Boolean,
+      default: true
+    },
     role: {
       type: String,
       default: "medrep"

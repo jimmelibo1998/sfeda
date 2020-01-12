@@ -62,15 +62,7 @@ class MAccount extends React.Component {
                   </div>
                 </div>
                 <div className="row">
-                  <div className="col s12 m6">
-                    <button
-                      style={{ width: "100%" }}
-                      className="waves-effect waves-light btn btn-large teal darken-3"
-                    >
-                      <i className="material-icons left">arrow_left</i>Back
-                    </button>
-                  </div>
-                  <div className="col s12 m6">
+                  <div className="col s12">
                     <button
                       onClick={async () => {
                         await this.props.changePassword(

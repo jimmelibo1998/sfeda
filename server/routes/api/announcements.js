@@ -70,7 +70,7 @@ router.put("/:id", async (req, res) => {
     });
     emails.map(async email => {
       let emailDetails = {
-        from: '"SFE.web 👻" <kmc.jimmel@gmail.com>', // sender address
+        from: '"SFE.web 👻" <sfe.prebio@gmail.com>', // sender address
         to: email, // list of receivers
         subject: `Announcement`, // Subject line
         text: "", // plain text body
@@ -174,7 +174,7 @@ router.post(
       });
       emails.map(async email => {
         let emailDetails = {
-          from: '"SFE.web 👻" <kmc.jimmel@gmail.com>', // sender address
+          from: '"SFE.web 👻" <sfe.prebio@gmail.com>', // sender address
           to: email, // list of receivers
           subject: `Announcement`, // Subject line
           text: "", // plain text body

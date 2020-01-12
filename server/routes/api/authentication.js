@@ -73,7 +73,7 @@ router.post(
         return;
       }
 
-      let medrep = await MedRepAccount.findOne({ email });
+      let medrep = await MedRepAccount.findOne({ email, active: true });
 
       if (medrep) {
         const isMatch = await bcrypt.compare(password, medrep.password);
