@@ -66,6 +66,11 @@ class MDcrs extends React.Component {
     this.setState({ [e.target.id]: e.target.value });
   };
 
+  filterDcrDoctorAndMasterlistDoctor = id => {
+    let doc = this.props.dcrDoctors.filter(doctor => doctor.doctorId === id);
+    return doc.length > 0 ? true : false;
+  };
+
   renderMasterlistDoctors = () => {
     return this.props.doctorDetails.map(detail => (
       <li className="collection-item" key={detail._id}>
@@ -87,7 +92,15 @@ class MDcrs extends React.Component {
             href="#!"
             className="secondary-content"
           >
-            <i className="material-icons green-text">send</i>
+            <i
+              className={`material-icons ${
+                this.filterDcrDoctorAndMasterlistDoctor(detail._id) === false
+                  ? "green"
+                  : "grey"
+              }-text`}
+            >
+              send
+            </i>
           </a>
         </div>
       </li>

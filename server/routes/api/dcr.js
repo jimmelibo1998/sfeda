@@ -14,6 +14,7 @@ const MdCallsScore = require("../../models/MdCallsScore");
 const DoctorAccount = require("../../models/DoctorAccount");
 const RegularCustomer = require("../../models/RegularCustomer");
 const MedRepAccount = require("../../models/MedRepAccount");
+const MasterListDoctor = require("../../models/MasterListDoctor");
 
 //@route POST /api/dcr/:masterlist/:date
 //@desc  Create DCR
@@ -85,7 +86,24 @@ router.delete(`/remove/doctor/:dcrDoctorId`, auth, async (req, res) => {
     return res.status(400).json({ errors: [{ msg: "ObjectId Invalid" }] });
 
   try {
-    let dcrDoctor = await DCRDoctor.findByIdAndRemove(req.params.dcrDoctorId);
+    let dcrDoctor = await DCRDoctor.findById(req.params.dcrDoctorId);
+    if (!dcrDoctor)
+      return res
+        .status(404)
+        .json({ errors: [{ msg: "DCR Doctor Not found" }] });
+    let dcr = await DCR.findById(dcrDoctor.dcr);
+    if (!dcr)
+      return res.status(404).json({ errors: [{ msg: "DCR Not found" }] });
+
+    let masterlistDoctor = await MasterListDoctor.findOne({
+      masterlist: dcr.masterlist,
+      doctor: dcrDoctor.doctorId
+    });
+
+    masterlistDoctor.inDcr = false;
+    await masterlistDoctor.save();
+
+    dcrDoctor = await DCRDoctor.findByIdAndRemove(req.params.dcrDoctorId);
     res.json(dcrDoctor);
     // let dcrDoctor = await DCRDoctor.findByIdAndRemove(
     //   req.params.dcrDoctorId,
@@ -150,6 +168,18 @@ router.post(
       });
 
       await dcrDoctor.save();
+
+      if (req.body.doctorId) {
+        console.log("HEREEEE");
+        let masterlistDoctor = await MasterListDoctor.findOne({
+          masterlist: dcr.masterlist,
+          doctor: req.body.doctorId
+        });
+
+        masterlistDoctor.inDcr = true;
+        await masterlistDoctor.save();
+      }
+
       res.json(dcrDoctor);
     } catch (err) {
       console.error(err.message);
