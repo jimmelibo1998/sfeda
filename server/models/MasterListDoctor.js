@@ -48,6 +48,10 @@ module.exports = MasterListDoctor = mongoose.model(
     total: {
       type: Number,
       default: 0
+    },
+    inDcr: {
+      type: Boolean,
+      default: false
     }
   })
 );

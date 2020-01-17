@@ -192,13 +192,6 @@ class AddEditAnnouncement extends Component {
                     autoClose: false,
                     container: null,
                     defaultDate: null,
-                    disableDayFn: date => {
-                      if (new Date(this.state.start) >= date) {
-                        return true;
-                      } else {
-                        return false;
-                      }
-                    },
                     disableWeekends: false,
                     events: [],
                     firstDay: 0,

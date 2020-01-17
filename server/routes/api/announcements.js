@@ -41,9 +41,9 @@ router.put("/:id", async (req, res) => {
 
     let medreps;
     if (ann.area !== "All") {
-      medreps = await MedRepAccount.find({ area: ann.area });
+      medreps = await MedRepAccount.find({ area: ann.area, active: true });
     } else {
-      medreps = await MedRepAccount.find();
+      medreps = await MedRepAccount.find({ active: true });
     }
 
     if (!medreps)
@@ -140,9 +140,12 @@ router.post(
       await announcement.save();
       let medreps;
       if (req.params.area !== "All") {
-        medreps = await MedRepAccount.find({ area: req.params.area });
+        medreps = await MedRepAccount.find({
+          area: req.params.area,
+          active: true
+        });
       } else {
-        medreps = await MedRepAccount.find();
+        medreps = await MedRepAccount.find({ active: true });
       }
 
       if (!medreps)
