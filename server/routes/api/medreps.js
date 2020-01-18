@@ -7,6 +7,7 @@ const { check, validationResult } = require("express-validator");
 const MedRepAccount = require("../../models/MedRepAccount");
 const nodemailer = require("nodemailer");
 const generatePassword = require("password-generator");
+const gravatar = require("gravatar");
 
 //@route PUT /api/medreps/disable/:id
 //@desc  disable account
@@ -245,10 +246,17 @@ router.put(
       if (!medrep)
         return res.status(404).json({ errors: [{ msg: "MEdrep not found" }] });
 
+      let url = await gravatar.url(email, {
+        s: "200",
+        r: "pg",
+        d: "mm"
+      });
+
       medrep.firstName = firstName;
       medrep.lastName = lastName;
       medrep.area = area;
       medrep.email = email;
+      medrep.gravatar = url;
 
       await medrep.save();
       res.json(medrep);

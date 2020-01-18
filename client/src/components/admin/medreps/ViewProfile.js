@@ -34,6 +34,16 @@ class ViewProfile extends React.Component {
         <div className="row">
           <div className="col s12 m12 green darken-3">
             <div style={{ textAlign: "center" }}>
+              <br />
+              <img
+                src={
+                  this.props.activeMedrep.userDetails !== null
+                    ? this.props.activeMedrep.userDetails.gravatar
+                    : ""
+                }
+                alt="avatar"
+                class="circle responsive-img"
+              />
               <h3 className="white-text">
                 {this.props.activeMedrep.userDetails !== null
                   ? this.props.activeMedrep.userDetails.firstName +

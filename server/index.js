@@ -7,6 +7,7 @@ const bodyParser = require("body-parser");
 const schedule = require("node-schedule");
 const mongoose = require("mongoose");
 const DoctorAccount = require("../server/models/DoctorAccount");
+const MasterListDoctor = require("../server/models/MasterListDoctor");
 
 //Connect to database
 connectDB();
@@ -17,6 +18,14 @@ schedule.scheduleJob("1 * *", async function() {
     { $set: { inMasterlist: false } }
   );
   console.log(doctors + "Updated to inMasterlist: false");
+});
+
+schedule.scheduleJob("0 * * *", async function() {
+  let doctors = await MasterListDoctor.updateMany(
+    {},
+    { $set: { inDcr: false } }
+  );
+  console.log(doctors + "Updated to inDcr: false");
 });
 //body parser
 app.use(bodyParser.urlencoded({ extended: false }));

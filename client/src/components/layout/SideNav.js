@@ -24,15 +24,14 @@ const SideNavs = ({ logout, role, user }) => {
               <div className="background">
                 <img src="./img/cover.jpg" alt="sidenav-cover" />
               </div>
+              <a href="#user">
+                <img class="circle" src={user ? user.gravatar : ""} />
+              </a>
               <Link to="/admin/profile">
-                <span style={{ fontSize: "20px" }} className="white-text name">
-                  {displayUserName()}
-                </span>
+                <span className="white-text name">{displayUserName()}</span>
               </Link>
               <Link to="/admin/profile">
-                <span style={{ fontSize: "20px" }} className="white-text email">
-                  {displayEmail()}
-                </span>
+                <span className="white-text email">{displayEmail()}</span>
               </Link>
             </div>
           </li>
@@ -94,6 +93,12 @@ const SideNavs = ({ logout, role, user }) => {
               <div className="background">
                 <img src="./img/cover.jpg" alt="sidenav-cover" />
               </div>
+              <a href="#user">
+                <img
+                  class="circle"
+                  src="https://lh3.googleusercontent.com/a-/AAuE7mB7DDVjKPg8JEAsIn4NBzs1DjP3hEuM4eZvL6G_=s96-cc-rg"
+                />
+              </a>
               <Link to="/admin/profile">
                 <span className="white-text name">{displayUserName()}</span>
               </Link>
@@ -117,8 +122,8 @@ const SideNavs = ({ logout, role, user }) => {
               to="/admin/performance"
               className="light-green-text text-darken-3"
             >
-              <i className="small material-icons left">show_chart</i>
-              Performance
+              <i className="small material-icons left">perm_data_setting</i>
+              Reports Settings
             </Link>
           </li>
           <li>

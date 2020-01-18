@@ -7,6 +7,7 @@ const mongoose = require("mongoose");
 const auth = require("../../middleware/auth");
 const nodemailer = require("nodemailer");
 const generatePassword = require("password-generator");
+const gravatar = require("gravatar");
 
 const AdminAccount = require("../../models/AdminAccount");
 const MedRepAccount = require("../../models/MedRepAccount");
@@ -101,13 +102,19 @@ router.post(
         return res
           .status(400)
           .json({ errors: [{ msg: "Medrep Account already exists" }] });
+      let url = await gravatar.url(email, {
+        s: "200",
+        r: "pg",
+        d: "mm"
+      });
 
       medrep = new MedRepAccount({
         firstName,
         lastName,
         email,
         password: newPass,
-        area
+        area,
+        gravatar: url
       });
 
       const salt = await bcrypt.genSalt(10);

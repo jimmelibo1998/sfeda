@@ -30,6 +30,9 @@ module.exports = MedRepAccount = mongoose.model(
     role: {
       type: String,
       default: "medrep"
+    },
+    gravatar: {
+      type: String
     }
   })
 );

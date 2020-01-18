@@ -81,7 +81,7 @@ class Announcements extends Component {
             className="waves-effect waves-light btn btn-large perf-btn green darken-1 right"
             style={{ width: "100%" }}
           >
-            <i className="material-icons left">person_add</i>
+            <i className="material-icons left">library_add</i>
             Add New
           </Link>
           <table className="responsive-table centered striped">
