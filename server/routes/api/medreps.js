@@ -132,7 +132,9 @@ router.put("/reset/:id", auth, async (req, res) => {
 //@access Private
 router.get("/", auth, async (req, res) => {
   try {
-    let medreps = await MedRepAccount.find({ active: true });
+    let medreps = await MedRepAccount.find({ active: true }).sort({
+      lastName: 1
+    });
     if (!medreps)
       return res.status(400).json({ errors: [{ msg: "No medreps fetched" }] });
 

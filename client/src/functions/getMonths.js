@@ -7,6 +7,10 @@ export const months = year => {
   while (dateEnd.diff(dateStart, "months") >= 0) {
     months.push(dateStart.format("MMMM"));
     dateStart.add(1, "month");
+    if (months.length > 12) {
+      months.pop();
+    }
   }
+  console.log(months);
   return months;
 };

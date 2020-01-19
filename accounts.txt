@@ -2,9 +2,37 @@ ADMIN
 email: sfe.prebio@gmail.com - sfeprebio2020
 password: 123456
 
+----------------------------------------------------------
+NORTH LUZON
+Email:dela.tifanny123456@gmail.com
+Password: sfeda-124466376
+
+Email:jharlemory123123@gmail.com
+Password: sfeda-796359835
+----------------------------------------------------------
+
+NORTH GMA
+Email:ordonez.glen123@gmail.com
+Password: sfeda-035768485
+
+Email:jethro.roque123@gmail.com
+Password: sfeda-542408973
+----------------------------------------------------------
 SOUTH GMA
 Email:jimmel.ibo1998@yahoo.com
-Password: sfeda-356468136
+Password: sfeda-440895905
+----------------------------------------------------------
+SOUTH LUZON 1
+Email:aubrey.tizon@yahoo.com
+Password: sfeda-067137695
 
-Email:kmc.jimmel@gmail.com
-Password: sfeda-961787941
+Email:cedrick.martinez123@yahoo.com
+Password: sfeda-658154135
+----------------------------------------------------------
+SOUTH LUZON 2
+Email:johann.manalili123@yahoo.com
+Password: sfeda-184018447
+
+Email:jennie.custodio123@gmail.com
+Password: sfeda-528812199
+----------------------------------------------------------

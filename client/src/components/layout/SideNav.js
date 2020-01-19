@@ -95,7 +95,7 @@ const SideNavs = ({ logout, role, user }) => {
               </div>
               <a href="#user">
                 <img
-                  class="circle"
+                  className="circle"
                   src="https://lh3.googleusercontent.com/a-/AAuE7mB7DDVjKPg8JEAsIn4NBzs1DjP3hEuM4eZvL6G_=s96-cc-rg"
                 />
               </a>

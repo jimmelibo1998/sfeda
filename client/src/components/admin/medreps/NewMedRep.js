@@ -32,7 +32,7 @@ class NewMedRep extends Component {
   onSubmit = () => {
     const { firstName, lastName, area, email } = this.state;
     this.props.addMedrep(firstName, lastName, area, email);
-    this.setState({ firstName: "", lastName: "", area: "", email: "" });
+    this.setState({ firstName: "", lastName: "", email: "" });
   };
 
   onEdit = async () => {

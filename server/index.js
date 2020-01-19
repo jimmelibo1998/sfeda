@@ -11,7 +11,6 @@ const MasterListDoctor = require("../server/models/MasterListDoctor");
 
 //Connect to database
 connectDB();
-
 schedule.scheduleJob("1 * *", async function() {
   let doctors = await DoctorAccount.updateMany(
     {},

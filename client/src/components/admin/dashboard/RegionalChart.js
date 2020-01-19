@@ -20,6 +20,7 @@ class RegionalChart extends Component {
                   "July",
                   "August",
                   "September",
+                  "October",
                   "November",
                   "December"
                 ],

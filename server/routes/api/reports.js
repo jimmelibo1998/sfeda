@@ -131,7 +131,8 @@ router.get("/medrep/perf/:medrepId/:month", auth, async (req, res) => {
   let valid = mongoose.Types.ObjectId.isValid(req.params.medrepId);
   if (valid === false)
     return res.status(400).json({ errors: [{ msg: "ObjectId Invalid" }] });
-
+  console.log(req.params.medrepId);
+  console.log(req.params.month);
   try {
     let medrep = await MedRepAccount.findById(req.params.medrepId);
     if (!medrep)
@@ -142,12 +143,13 @@ router.get("/medrep/perf/:medrepId/:month", auth, async (req, res) => {
       month: req.params.month
     });
 
+    console.log(masterlist);
     let response = {
       callRate: masterlist ? masterlist.callRate : 0,
       callFreq: masterlist ? masterlist.callFreq : 0,
       callReach: masterlist ? masterlist.callReach : 0
     };
-
+    console.log(response);
     res.json(response);
   } catch (err) {
     console.error(err);
