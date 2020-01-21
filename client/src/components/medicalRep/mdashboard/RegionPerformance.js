@@ -45,7 +45,7 @@ class RegionPerformance extends React.Component {
                   lineTension: 0.1
                 },
                 {
-                  label: `Call Rate ${this.props.regional.callReach
+                  label: `Call Reach ${this.props.regional.callReach
                     .slice(-1)
                     .pop()}%`,
                   data: this.props.regional.callReach,
@@ -54,7 +54,7 @@ class RegionPerformance extends React.Component {
                   lineTension: 0.1
                 },
                 {
-                  label: `Call Rate ${this.props.regional.callFreq
+                  label: `Call Frequency ${this.props.regional.callFreq
                     .slice(-1)
                     .pop()}%`,
                   data: this.props.regional.callFreq,

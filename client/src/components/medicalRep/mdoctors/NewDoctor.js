@@ -73,6 +73,7 @@ class NewDoctor extends React.Component {
   };
 
   onSubmit = e => {
+    e.preventDefault();
     const {
       lastname,
       firstname,
@@ -82,7 +83,7 @@ class NewDoctor extends React.Component {
       institution,
       email
     } = this.state;
-    e.preventDefault();
+
     this.props.addDoctor(
       lastname,
       firstname,
@@ -190,7 +191,7 @@ class NewDoctor extends React.Component {
                       outDuration: 250
                     }
                   }}
-                  disabled={this.props.currentDoctor === null ? "true" : ""}
+                  disabled={this.props.currentDoctor === null ? true : false}
                 >
                   <option value="NORTH LUZON">NORTH LUZON</option>
                   <option value="NORTH GMA">NORTH GMA</option>
@@ -243,7 +244,7 @@ class NewDoctor extends React.Component {
                       if (this.props.currentDoctor !== null) {
                         this.updateDoctor();
                       } else {
-                        this.onSubmit();
+                        this.onSubmit(e);
                       }
                     }}
                     className={`waves-effect waves-light btn btn-large ${

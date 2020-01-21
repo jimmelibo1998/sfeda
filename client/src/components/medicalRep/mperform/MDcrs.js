@@ -243,6 +243,7 @@ class MDcrs extends React.Component {
                 <button
                   style={{ width: "100%" }}
                   className="teal darken-4 btn btn-large"
+                  onClick={() => history.push("/medrep/perform/dcr")}
                 >
                   <i className="material-icons left">arrow_left</i>Back
                 </button>

@@ -33,51 +33,60 @@ const LoginPage = ({ login, role, isAuthenticated, alerts, loadUser }) => {
 
   return (
     <Fragment>
-      <div className="row" style={{ marginTop: "10px" }}>
-        <div className="col s12 m6 l4 offset-m3 offset-l4">
-          <div className="card z-depth-3" style={{ marginTop: "10%" }}>
-            <div className="card-action green darken-1 white-text">
-              <h3 className="center"> Login </h3>
-            </div>
-            <form onSubmit={e => onSubmit(e)}>
-              <div className="card-content">
-                <div className="form-field">
-                  <label htmlFor="email">Email</label>
-                  <input
-                    type="text"
-                    id="email"
-                    name="email"
-                    value={email}
-                    onChange={e => onChange(e)}
-                    required
-                  />
-                </div>
-                <br />
-
-                <div className="form-field">
-                  <label htmlFor="password">Password</label>
-                  <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    value={password}
-                    onChange={e => onChange(e)}
-                    required
-                  />
-                </div>
-                <br />
-
-                <div className="form-field">
-                  <button
-                    type="submit"
-                    className="btn-large waves-effect waves-light green darken-1"
-                  >
-                    Login
-                  </button>
-                </div>
-                <br />
+      <div
+        style={{
+          backgroundColor: "#dcedc8",
+          minHeight: "1000px",
+          marginTop: "0"
+        }}
+      >
+        <div className="row" style={{ marginTop: "10px" }}>
+          <div className="col s12 m6 l4 offset-m3 offset-l4">
+            <div className="card z-depth-3" style={{ marginTop: "10%" }}>
+              <div className="card-action green darken-1 white-text">
+                <h3 className="center"> Login </h3>
               </div>
-            </form>
+              <form onSubmit={e => onSubmit(e)}>
+                <div className="card-content">
+                  <div className="form-field">
+                    <label htmlFor="email">Email</label>
+                    <input
+                      type="text"
+                      id="email"
+                      name="email"
+                      value={email}
+                      onChange={e => onChange(e)}
+                      required
+                    />
+                  </div>
+                  <br />
+
+                  <div className="form-field">
+                    <label htmlFor="password">Password</label>
+                    <input
+                      type="password"
+                      id="password"
+                      name="password"
+                      value={password}
+                      onChange={e => onChange(e)}
+                      required
+                    />
+                  </div>
+                  <br />
+
+                  <div className="form-field">
+                    <button
+                      style={{ width: "100%" }}
+                      type="submit"
+                      className="btn btn-large waves-effect waves-light green darken-1"
+                    >
+                      Login
+                    </button>
+                  </div>
+                  <br />
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>

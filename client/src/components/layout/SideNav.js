@@ -25,7 +25,7 @@ const SideNavs = ({ logout, role, user }) => {
                 <img src="./img/cover.jpg" alt="sidenav-cover" />
               </div>
               <a href="#user">
-                <img class="circle" src={user ? user.gravatar : ""} />
+                <img className="circle" src={user ? user.gravatar : ""} />
               </a>
               <Link to="/admin/profile">
                 <span className="white-text name">{displayUserName()}</span>
