@@ -38,7 +38,7 @@ class AdminDashboard extends Component {
     return (
       <Fragment>
         <div className="row">
-          <div className="col s12 m4">
+          <div className="col m12 l4">
             <div className="card-panel white">
               <h5 className="green-text center"> Active Doctors </h5>
               <h2 className="green-text center">
@@ -46,7 +46,7 @@ class AdminDashboard extends Component {
               </h2>
             </div>
           </div>
-          <div className="col s12 m4">
+          <div className="col m12 l4">
             <div className="card-panel white">
               <h5 className="green-text center"> Active Masterlists </h5>
               <h2 className="green-text center">
@@ -54,7 +54,7 @@ class AdminDashboard extends Component {
               </h2>
             </div>
           </div>
-          <div className="col s12 m4">
+          <div className="col m12 l4">
             <div className="card-panel white">
               <h5 className="green-text center"> Active DCRS </h5>
               <h2 className="green-text center">{this.props.current.dcrs}</h2>

@@ -30,6 +30,7 @@ class RegionPerformance extends React.Component {
                 "July",
                 "August",
                 "September",
+                "October",
                 "November",
                 "December"
               ],

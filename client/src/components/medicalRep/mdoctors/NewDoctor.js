@@ -231,7 +231,6 @@ class NewDoctor extends React.Component {
                     name="email"
                     className="validate"
                     placeholder="Email"
-                    disabled="true"
                   />
                 </div>
               </div>

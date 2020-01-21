@@ -208,7 +208,7 @@ class MMasterList extends React.Component {
           </Select>
           <div className="col s12">
             <div className="row">
-              <div className="col s12 m4">
+              <div className="col m12 l4">
                 <div className="card-panel white">
                   <h5 className="green-text center"> Call Frequency </h5>
                   <h2 className="green-text center">
@@ -220,7 +220,7 @@ class MMasterList extends React.Component {
                   </h2>
                 </div>
               </div>
-              <div className="col s12 m4">
+              <div className="col m12 l4">
                 <div className="card-panel white">
                   <h5 className="green-text center"> Call Reach </h5>
                   <h2 className="green-text center">
@@ -232,7 +232,7 @@ class MMasterList extends React.Component {
                   </h2>
                 </div>
               </div>
-              <div className="col s12 m4">
+              <div className="col m12 l4">
                 <div className="card-panel white">
                   <h5 className="green-text center"> Call Rate </h5>
                   <h2 className="green-text center">
@@ -244,7 +244,7 @@ class MMasterList extends React.Component {
                   </h2>
                 </div>
               </div>
-              <div className="col s12 m6">
+              <div className="col m12 l6">
                 <div className="card-panel white">
                   <h5 className="green-text center"> Goal Score </h5>
                   <h2 className="green-text center">
@@ -255,7 +255,7 @@ class MMasterList extends React.Component {
                   </h2>
                 </div>
               </div>
-              <div className="col s12 m6">
+              <div className="col m12 l6">
                 <div className="card-panel white">
                   <h5 className="green-text center"> Current Score </h5>
                   <h2 className="green-text center">
